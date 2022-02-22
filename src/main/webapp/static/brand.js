@@ -144,7 +144,6 @@ function displayBrandList(data) {
         var buttonHtml = '<button onclick="deleteBrand(' + e.id + ')">Delete</button>'
         buttonHtml += ' <button onclick="displayEditBrand(' + e.id + ')">Edit</button>'
         var row = '<tr>'
-            + '<td>' + e.id + '</td>'
             + '<td>' + e.brand + '</td>'
             + '<td>' + e.category + '</td>'
             + '<td>' + buttonHtml + '</td>'
@@ -216,4 +215,3 @@ function init() {
 
 $(document).ready(init);
 $(document).ready(getBrandList);
-

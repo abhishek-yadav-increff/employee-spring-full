@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+    <nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+    <div class="container" style="padding-top:15%;">
+
+
+        <!-- Top row with form-->
+        <div class="row">
+            <!-- <div class="col-2" max-width="20%">
+				<a th:href="@{/ui/employee}" title="Employees">
+					<i class="fas fa-users"></i>
+					<h3>Employees</h3>
+				</a>
+			</div> -->
+            <div class="col-2">
+                <a onclick="genBrandReport()" title="Brand"> <i class="fas fa-trademark"></i>
+                    <h3>Brand</h3>
+                </a>
+            </div>
+            <div class="col-2">
+                <a onclick="genInventoryReport()" title="Inventory"> <i class="fas fa-list"></i>
+                    <h3>Inventory</h3>
+                </a>
+            </div>
+            <div class="col-2">
+                <a th:href="@{/ui/reportsSales}" title="Sales"> <i class="fas fa-shipping-fast"></i>
+                    <h3>Sales</h3>
+                </a>
+            </div>
+        </div>
+
+
+
+    </div> <!-- Container end-->
+
+    <footer th:replace="snippets.html :: name_footer"></footer>
+    <script th:src="@{/static/reports.js}" />
+    </script>
+
+
+</body>
+
+</html>

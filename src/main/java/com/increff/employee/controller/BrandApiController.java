@@ -1,6 +1,7 @@
 package com.increff.employee.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class BrandApiController {
     @ApiOperation(value = "Deletes and Brand")
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.DELETE)
     // /api/1
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) throws ApiException {
         service.delete(id);
     }
 
@@ -48,15 +49,51 @@ public class BrandApiController {
         return convert(p);
     }
 
+    @ApiOperation(value = "Gets an Brand by category")
+    @RequestMapping(path = "/api/brand/byCategory/{category}", method = RequestMethod.GET)
+    public List<BrandData> getByCategory(@PathVariable String category) throws ApiException {
+        List<BrandPojo> p = service.getByCategory(category);
+        if (p.isEmpty()) {
+            throw new ApiException("Category doesn't exist");
+        }
+        return convert(p);
+    }
+
+
+
+    @ApiOperation(value = "Gets an Brand by brand")
+    @RequestMapping(path = "/api/brand/byBrand/{brand}", method = RequestMethod.GET)
+    public List<BrandData> getByBrand(@PathVariable String brand) throws ApiException {
+        List<BrandPojo> p = service.getByBrand(brand);
+        if (p.isEmpty()) {
+            throw new ApiException("Brand doesn't exist");
+        }
+        return convert(p);
+    }
+
+    @ApiOperation(value = "Gets a Brand by brand and category")
+    @RequestMapping(path = "/api/brand/search/{brand}/{category}", method = RequestMethod.GET)
+    public List<BrandData> getListByBrandAndCategory(@PathVariable String brand,
+            @PathVariable String category) throws ApiException {
+
+        List<BrandPojo> p = service.getListByBrandAndCategory(brand, category);
+        // if ((brand == null) || brand.isEmpty()) {
+        // p = service.getByCategory(brand);
+        // } else if ((category == null) || category.isEmpty()) {
+        // p = service.getByBrand(brand);
+        // } else {
+        // p = Arrays.asList(service.getByBrandAndCategory(brand, category));
+        // // p = ;
+        // }
+        return convert(p);
+    }
+
     @ApiOperation(value = "Gets list of all Brands")
     @RequestMapping(path = "/api/brand", method = RequestMethod.GET)
     public List<BrandData> getAll() {
         List<BrandPojo> list = service.getAll();
-        List<BrandData> list2 = new ArrayList<BrandData>();
-        for (BrandPojo p : list) {
-            list2.add(convert(p));
-        }
-        return list2;
+
+        return convert(list);
     }
 
     @ApiOperation(value = "Updates an Brand")
@@ -80,6 +117,14 @@ public class BrandApiController {
         p.setBrand(f.getBrand());
         p.setCategory(f.getCategory());
         return p;
+    }
+
+    private List<BrandData> convert(List<BrandPojo> p) {
+        List<BrandData> list2 = new ArrayList<BrandData>();
+        for (BrandPojo pp : p) {
+            list2.add(convert(pp));
+        }
+        return list2;
     }
 
 }

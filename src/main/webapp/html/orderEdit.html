@@ -1,0 +1,163 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+    <nav th:replace="snippets.html :: name_app_navbar"></nav>
+    <div id="toast-container">
+        <div class="toast" style="overflow:auto;">
+            <div class="alert alert-success" role="alert" id="alert-box">Hello</div>
+        </div>
+    </div>
+    <div class="container overflow-auto">
+
+        <h3>OrderEdits </h3>
+        <!-- Top row with form-->
+        <div class="row">
+            <div class="col-12" id="order-header">
+                <!-- <h1></h1>\ -->
+                <p style="text-align: left; width:49%; display: inline-block;" th:text="${orderId}" id="orderIdSelect"
+                    class="alignleft">
+                </p>
+                <p style="text-align: right; width:50%;  display: inline-block;" id="headingDate" class="alignright">
+                </p>
+            </div>
+            <div class="col-12">
+                <form class="form-inline" id="order-form">
+                    <div class="form-group">
+                        <label for="inputProductBarcode" class="col-sm-2 col-form-label">Product Barcode</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="productBarcode" id="inputProductBarcode"
+                                placeholder="enter product barcode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="quantity" id="inputQuantity"
+                                placeholder="enter quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="inputSellingPrice" class="col-sm-2 col-form-label">SellingPrice</label> -->
+                        <div class="col-sm-10">
+                            <input type="hidden" class="form-control" name="sellingPrice" id="inputSellingPrice"
+                                placeholder="enter sellingPrice" readonly>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id">
+                    <!-- TODO: add order id js -->
+                    <input type="hidden" name="orderId" value="">
+
+                    <button type="button" class="btn btn-primary" id="add-order-item">Add</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="refresh-order-item">Refresh</button>
+                </form>
+            </div>
+
+
+        </div>
+
+
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+
+            <!-- Table -->
+            <div class="col-12">
+                <table class="table table-striped" id="orderEdit-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Selling Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="float-right" id="totalCost"></div>
+        </div>
+        <div>
+            <div class="float-left">
+                <button type="button" class="btn btn-danger" onclick="deleteOrder()">Delete</button>
+            </div>
+            <div class="float-right">
+                <div class="column">
+                    <label class="col-sm-2 col-form-label" id="show-cost">Cost</label>
+                </div>
+                <div class="column">
+                    <button type="button" class="btn btn-primary" onclick="sendOrder()">Place</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- OrderEdit Edit Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="edit-orderEdit-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Order Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" id="orderEdit-edit-form">
+                        <div class="form-group">
+                            <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="productBarcode" placeholder="enter name"
+                                    id="inputProductBarcodeEdit" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label> -->
+                            <div class="col-sm-10">
+                                <input type="hidden" class="form-control" name="quantity" placeholder="enter Quantity"
+                                    id="inputQuantityEdit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputSellingPrice" class="col-sm-2 col-form-label">Selling Price</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sellingPrice"
+                                    placeholder="Enter Seliing Price" id="inputSellingPriceEdit" readonly>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id">
+                        <input type="hidden" name="orderId">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="update-orderEdit">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div> <!-- Container end-->
+
+    <footer th:replace="snippets.html :: name_footer"></footer>
+
+    <script th:src="@{/static/orderEdit.js}" />
+    </script>
+
+</body>
+
+</html>

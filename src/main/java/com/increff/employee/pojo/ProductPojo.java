@@ -5,20 +5,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import com.increff.employee.id.UUIDGenerator;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.GeneratorType;
 
 @Entity
+// @SequenceGenerator(name = "port_genx", sequenceName = "port_genx", initialValue = 1000)
 public class ProductPojo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true)
+
+    // @GeneratedValue(strategy = GenerationType.AUTO)
+    // @Column(unique = true)
+    @GeneratorType(type = UUIDGenerator.class, when = GenerationTime.INSERT)
     private String barcode;
 
     // @ManyToOne(targetEntity = BrandPojo.class)
     // @JoinColumn(name = "brand_category", referencedColumnName = "id", nullable = false)
     private Integer brand_category;
     private String name;
+    @Column(precision = 2)
     private Double mrp;
 
     // @ManyToOne

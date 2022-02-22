@@ -1,20 +1,32 @@
 package com.increff.employee.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-
+// @XmlRootElement(name = "OrderItemForm")
+// @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderItemForm {
-    private int id;
+    private Integer id;
 
     private Integer orderId;
-    private Integer productId;
+    private String productBarcode;
     private Integer quantity;
     private Double sellingPrice;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public String getProductBarcode() {
+        return productBarcode;
+    }
+
+    public void setProductBarcode(String productBarcode) {
+        this.productBarcode = productBarcode;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -26,13 +38,6 @@ public class OrderItemForm {
         this.orderId = orderId;
     }
 
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public Integer getQuantity() {
         return quantity;

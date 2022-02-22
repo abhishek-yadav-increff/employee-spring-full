@@ -34,16 +34,16 @@ public class InventoryApiController {
 
 
     @ApiOperation(value = "Deletes and inventory")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.DELETE)
     // /api/1
-    public void delete(@PathVariable int id) {
-        service.delete(id);
+    public void delete(@PathVariable String barcode) {
+        service.delete(barcode);
     }
 
     @ApiOperation(value = "Gets an inventory by ID")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.GET)
-    public InventoryForm get(@PathVariable int id) throws ApiException {
-        InventoryPojo p = service.get(id);
+    @RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.GET)
+    public InventoryForm get(@PathVariable String barcode) throws ApiException {
+        InventoryPojo p = service.get(barcode);
         return convert(p);
     }
 
@@ -59,24 +59,25 @@ public class InventoryApiController {
     }
 
     @ApiOperation(value = "Updates an inventory")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody InventoryForm f) throws ApiException {
+    @RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.PUT)
+    public void update(@PathVariable String barcode, @RequestBody InventoryForm f)
+            throws ApiException {
         InventoryPojo p = convert(f);
-        service.update(id, p);
+        service.update(barcode, p);
     }
 
 
     private static InventoryForm convert(InventoryPojo p) {
         InventoryForm d = new InventoryForm();
         d.setQuantity(p.getQuantity());
-        d.setId(p.getId());
+        d.setBarcode(p.getBarcode());
         return d;
     }
 
     private static InventoryPojo convert(InventoryForm f) {
         InventoryPojo p = new InventoryPojo();
         p.setQuantity(f.getQuantity());
-        p.setId(f.getId());
+        p.setBarcode(f.getBarcode());
         return p;
     }
 

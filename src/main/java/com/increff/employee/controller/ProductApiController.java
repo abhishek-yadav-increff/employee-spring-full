@@ -26,18 +26,18 @@ public class ProductApiController {
     @Autowired
     private ProductService service;
 
+
     @ApiOperation(value = "Adds an product")
     @RequestMapping(path = "/api/product", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException {
-        ProductPojo p = convert(form);
-        service.add(p);
+        // ProductPojo p = convert(form);
+        service.add(form);
     }
 
 
     @ApiOperation(value = "Deletes and product")
     @RequestMapping(path = "/api/product/{id}", method = RequestMethod.DELETE)
-    // /api/1
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) throws ApiException {
         service.delete(id);
     }
 
@@ -45,16 +45,24 @@ public class ProductApiController {
     @RequestMapping(path = "/api/product/{id}", method = RequestMethod.GET)
     public ProductData get(@PathVariable int id) throws ApiException {
         ProductPojo p = service.get(id);
-        return convert(p);
+        return service.convert(p);
     }
+
+    @ApiOperation(value = "Gets an product by Product Barcode")
+    @RequestMapping(path = "/api/product/byBarcode/{barcode}", method = RequestMethod.GET)
+    public ProductData getByProductBarcode(@PathVariable String barcode) throws ApiException {
+        ProductPojo p = service.getByBarcode(barcode);
+        return service.convert(p);
+    }
+
 
     @ApiOperation(value = "Gets list of all employees")
     @RequestMapping(path = "/api/product", method = RequestMethod.GET)
-    public List<ProductData> getAll() {
+    public List<ProductData> getAll() throws ApiException {
         List<ProductPojo> list = service.getAll();
         List<ProductData> list2 = new ArrayList<ProductData>();
         for (ProductPojo p : list) {
-            list2.add(convert(p));
+            list2.add(service.convert(p));
         }
         return list2;
     }
@@ -62,28 +70,25 @@ public class ProductApiController {
     @ApiOperation(value = "Updates an product")
     @RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
-        ProductPojo p = convert(f);
-        service.update(id, p);
+        service.update(id, f);
     }
 
 
-    private static ProductData convert(ProductPojo p) {
-        ProductData d = new ProductData();
-        d.setBarcode(p.getBarcode());
-        d.setBrand_category(p.getBrand_category());
-        d.setId(p.getId());
-        d.setName(p.getName());
-        d.setMrp(p.getMrp());
-        return d;
-    }
+    // private static ProductData convert(ProductPojo p) {
+    // ProductData d = new ProductData();
+    // BrandPojo brandPojo = brandService.getByBrandAndCategory(d.getBrand(), d.getCategory());
+    // d.setId(p.getId());
+    // d.setName(p.getName());
+    // d.setMrp(p.getMrp());
+    // return d;
+    // }
 
-    private static ProductPojo convert(ProductForm f) {
-        ProductPojo p = new ProductPojo();
-        p.setBarcode(f.getBarcode());
-        p.setBrand_category(f.getBrand_category());
-        p.setName(f.getName());
-        p.setMrp(f.getMrp());
-        return p;
-    }
+    // private static ProductPojo convert(ProductForm f) {
+    // ProductPojo p = new ProductPojo();
+    // p.setBarcode(f.getBarcode());
+    // p.setName(f.getName());
+    // p.setMrp(f.getMrp());
+    // return p;
+    // }
 
 }

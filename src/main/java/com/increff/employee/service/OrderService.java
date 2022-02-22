@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.OrderDao;
+import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 
 @Service
@@ -15,6 +16,8 @@ public class OrderService {
     @Autowired
     private OrderDao dao;
 
+    @Autowired
+    private OrderItemService orderItemService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(OrderPojo p) throws ApiException {
@@ -22,12 +25,20 @@ public class OrderService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(Integer id) throws ApiException {
+        OrderPojo orderPojo = dao.select(id);
+        if (orderPojo.getComplete() == 1) {
+            throw new ApiException("Cannot delete completed order");
+        }
+        List<OrderItemPojo> orderItemPojos = orderItemService.getByOrderId(id);
+        for (OrderItemPojo orderItemPojo : orderItemPojos) {
+            orderItemService.delete(orderItemPojo.getId());
+        }
         dao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo get(int id) throws ApiException {
+    public OrderPojo get(Integer id) throws ApiException {
         return getCheck(id);
     }
 
@@ -37,18 +48,27 @@ public class OrderService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(int id, OrderPojo p) throws ApiException {
+    public void update(Integer id, OrderPojo p) throws ApiException {
         OrderPojo ex = getCheck(id);
-        ex.setTime(p.getTime());
+        // ex.setTime(p.getTime());
         ex.setComplete(p.getComplete());
+        ex.setCost(p.getCost());
         dao.update(ex);
     }
 
     @Transactional
-    public OrderPojo getCheck(int id) throws ApiException {
+    public OrderPojo getCheck(Integer id) throws ApiException {
         OrderPojo p = dao.select(id);
         if (p == null) {
             throw new ApiException("Order with given ID does not exit, id: " + id);
+        }
+        return p;
+    }
+
+    public List<OrderPojo> getByTime(long time, long time2) throws ApiException {
+        List<OrderPojo> p = dao.selectByTime(time, time2);
+        if (p == null) {
+            throw new ApiException("No orders within constrained dates");
         }
         return p;
     }

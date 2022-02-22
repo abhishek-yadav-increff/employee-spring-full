@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.OrderDao;
 import com.increff.employee.dao.OrderItemDao;
-import com.increff.employee.dao.ProductDao;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
+import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.ProductPojo;
 
 @Service
 public class OrderItemService {
@@ -21,39 +23,82 @@ public class OrderItemService {
     private OrderDao orderDao;
 
     @Autowired
-    private ProductDao productDao;
+    private OrderService orderService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private InventoryService inventoryService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(OrderItemPojo p) throws ApiException {
-        if (orderDao.select(p.getOrderId()) == null) {
-            throw new ApiException("Order doesn't exist");
-        }
-        if (productDao.select(p.getProductId()) == null) {
-            throw new ApiException("Product doesn't exist");
-        }
+
+        ProductPojo productPojo = productService.getByBarcode(p.getProductBarcode());
+        p.setSellingPrice(p.getQuantity() * productPojo.getMrp());
         if (p.getQuantity() < 0) {
             throw new ApiException("Quantity can not be negative");
         }
+
+        InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
+        if (inventoryPojo.getQuantity() < p.getQuantity()) {
+            throw new ApiException("Your order exceeds inventory quantity(max: "
+                    + inventoryPojo.getQuantity() + ")!");
+        }
+
+        if (orderDao.select(p.getOrderId()) == null) {
+            throw new ApiException("Order doesn't exist");
+        }
+
+        if (productService.getByBarcode(p.getProductBarcode()) == null) {
+            throw new ApiException("Product doesn't exist");
+        }
+
+        OrderItemPojo pp = dao.getByProductBarcodeAndOrderId(p.getProductBarcode(), p.getOrderId());
+        if (pp != null) {
+            pp.setQuantity(pp.getQuantity() + p.getQuantity());
+            pp.setSellingPrice(pp.getSellingPrice() + p.getSellingPrice());
+            update(pp.getId(), pp);
+        } else {
+            dao.insert(p);
+        }
+
+        inventoryPojo.setQuantity(inventoryPojo.getQuantity() - p.getQuantity());
+        inventoryService.update(inventoryPojo.getBarcode(), inventoryPojo);
+
+        OrderPojo orderPojo = orderService.get(p.getOrderId());
+        orderPojo.setCost(orderPojo.getCost() + p.getSellingPrice());
+        orderService.update(orderPojo.getId(), orderPojo);
+
         // if(inventoryDao.select(p.getProductId()).getQuantity()>=p.getQuantity()){
 
         // }
-        dao.insert(p);
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(int id) throws ApiException {
+
+        OrderItemPojo p = dao.select(id);
+        InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
+        OrderPojo orderPojo = orderService.get(p.getOrderId());
+
+        inventoryPojo.setQuantity(inventoryPojo.getQuantity() + p.getQuantity());
+        inventoryService.update(inventoryPojo.getBarcode(), inventoryPojo);
+
+        orderPojo.setCost(orderPojo.getCost() - p.getSellingPrice());
+        orderService.update(orderPojo.getId(), orderPojo);
+
         dao.delete(id);
     }
 
     @Transactional
-    public void deleteByProductId(int productId) {
-        dao.deleteByProductId(productId);
+    public void deleteByProductBarcode(String productBarcode) {
+        dao.deleteByProductBarcode(productBarcode);
     }
 
     @Transactional
-    public List<OrderItemPojo> getByOrderId(int productId) {
-        return dao.getByOrderId(productId);
+    public List<OrderItemPojo> getByOrderId(int orderId) {
+        return dao.getByOrderId(orderId);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -68,20 +113,38 @@ public class OrderItemService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, OrderItemPojo p) throws ApiException {
+        ProductPojo productPojo = productService.getByBarcode(p.getProductBarcode());
+        p.setSellingPrice(p.getQuantity() * productPojo.getMrp());
+
         if (orderDao.select(p.getOrderId()) == null) {
             throw new ApiException("Order doesn't exist");
         }
-        if (productDao.select(p.getProductId()) == null) {
+        if (productService.getByBarcode(p.getProductBarcode()) == null) {
             throw new ApiException("Product doesn't exist");
         }
         if (p.getQuantity() < 0) {
             throw new ApiException("Quantity can not be negative");
         }
+
         OrderItemPojo ex = getCheck(id);
-        ex.setProductId(p.getProductId());
+        InventoryPojo inventoryPojo = inventoryService.get(ex.getProductBarcode());
+        OrderPojo orderPojo = orderService.get(p.getOrderId());
+
+        Integer maxQuantity = inventoryPojo.getQuantity() + ex.getQuantity();
+        if (p.getQuantity() > maxQuantity) {
+            throw new ApiException("Exceeds Inventory Quantity( max: " + maxQuantity + ")");
+        }
+        inventoryPojo.setQuantity(maxQuantity - p.getQuantity());
+        inventoryService.update(inventoryPojo.getBarcode(), inventoryPojo);
+
+        orderPojo.setCost(orderPojo.getCost() + p.getSellingPrice() - ex.getQuantity());
+        orderService.update(orderPojo.getId(), orderPojo);
+
+        ex.setProductBarcode(p.getProductBarcode());
         ex.setQuantity(p.getQuantity());
         ex.setSellingPrice(p.getSellingPrice());
         dao.update(ex);
+
     }
 
     @Transactional
@@ -92,6 +155,7 @@ public class OrderItemService {
         }
         return p;
     }
+
 
 
 }

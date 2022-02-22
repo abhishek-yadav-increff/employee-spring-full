@@ -1,5 +1,6 @@
 package com.increff.employee.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -30,7 +31,7 @@ public class BrandService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(int id) throws ApiException {
         dao.delete(id);
         List<ProductPojo> productPojos = productService.selectFromBrandId(id);
         for (ProductPojo p : productPojos) {
@@ -69,5 +70,47 @@ public class BrandService {
     protected static void normalize(BrandPojo p) {
         p.setBrand(StringUtil.toLowerCase(p.getBrand()));
         p.setCategory(StringUtil.toLowerCase(p.getCategory()));
+    }
+
+    public List<BrandPojo> getByCategory(String category) throws ApiException {
+        List<BrandPojo> p = dao.selectByCategory(category);
+        if (p == null) {
+            throw new ApiException("Brand with given category:" + category + " does not exist");
+        }
+        return p;
+    }
+
+    public List<BrandPojo> getByBrand(String brand) throws ApiException {
+        List<BrandPojo> p = dao.selectByBrand(brand);
+        if (p == null) {
+            throw new ApiException("Brand Pair with given brand:" + brand + " does not exist");
+        }
+        return p;
+    }
+
+    public BrandPojo getByBrandAndCategory(String brand, String category) throws ApiException {
+        BrandPojo p = dao.selectByBrandAndCategory(brand, category);
+        if (p == null) {
+            throw new ApiException("Brand Category Pair does not exist");
+        }
+        return p;
+    }
+
+    public List<BrandPojo> getListByBrandAndCategory(String brand, String category)
+            throws ApiException {
+        List<BrandPojo> p;
+        if ((brand == null) || brand.isEmpty()) {
+            p = getByCategory(brand);
+        } else if ((category == null) || category.isEmpty()) {
+            p = getByBrand(brand);
+        } else {
+            p = Arrays.asList(getByBrandAndCategory(brand, category));
+            if (p.isEmpty()) {
+                throw new ApiException(
+                        "Brand: " + brand + " and category: " + category + " don't exist together");
+            }
+            // p = ;
+        }
+        return p;
     }
 }

@@ -1,14 +1,22 @@
 package com.increff.employee.model;
 
-
 public class OrderForm {
 
     private Integer id;
     private Long time;
     private Integer complete;
+    private Double cost;
 
     public Integer getId() {
         return id;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public Integer getComplete() {

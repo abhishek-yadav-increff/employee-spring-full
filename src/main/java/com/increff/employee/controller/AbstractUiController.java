@@ -18,6 +18,9 @@ public abstract class AbstractUiController {
 	@Value("${app.baseUrl}")
 	private String baseUrl;
 
+	@Value("${app.orderId}")
+	private String orderId;
+
 	protected ModelAndView mav(String page) {
 		// Get current user
 		UserPrincipal principal = SecurityUtil.getPrincipal();
@@ -30,5 +33,7 @@ public abstract class AbstractUiController {
 		mav.addObject("baseUrl", baseUrl);
 		return mav;
 	}
+
+
 
 }

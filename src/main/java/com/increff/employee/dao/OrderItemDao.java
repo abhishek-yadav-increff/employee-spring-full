@@ -15,13 +15,17 @@ import com.increff.employee.pojo.OrderItemPojo;
 @Repository
 public class OrderItemDao extends AbstractDao {
 
-    private static String delete_id = "delete from OrderItemPojo p where id=:id";
-    private static final String DELETE_BY_PRODUCT_ID =
-            "delete from OrderItemPojo p where productId=:productId";
-    private static String select_id = "select p from OrderItemPojo p where id=:id";
-    private static final String SELECT_BY_ORDER_ID =
-            "select p from OrderItemPojo p where orderId=:orderId";
-    private static String select_all = "select p from OrderItemPojo p";
+    private static final String delete_id = "DELETE FROM OrderItemPojo P WHERE ID=:id";
+    private static final String delete_by_productbarcode =
+            "DELETE FROM OrderItemPojo P WHERE PRODUCTBarcode=:productBarcode";
+    private static final String select_id = "SELECT P FROM OrderItemPojo P WHERE ID=:id";
+    private static final String select_by_order_id =
+            "SELECT P FROM OrderItemPojo P WHERE ORDERID=:orderId";
+    private static final String select_by_product_barcode =
+            "SELECT P FROM OrderItemPojo P WHERE PRODUCTBARCODE=:productBarcode";
+    private static final String select_all = "SELECT P FROM OrderItemPojo P";
+    private static final String select_by_product_barcode_and_orderid =
+            "SELECT P FROM OrderItemPojo P WHERE PRODUCTBARCODE=:productBarcode AND ORDERID=:orderId";
 
     @PersistenceContext
     private EntityManager em;
@@ -37,9 +41,9 @@ public class OrderItemDao extends AbstractDao {
         return query.executeUpdate();
     }
 
-    public int deleteByProductId(int productId) {
-        Query query = em.createQuery(DELETE_BY_PRODUCT_ID);
-        query.setParameter("productId", productId);
+    public int deleteByProductBarcode(String productBarcode) {
+        Query query = em.createQuery(delete_by_productbarcode);
+        query.setParameter("productBarcode", productBarcode);
         return query.executeUpdate();
     }
 
@@ -57,9 +61,24 @@ public class OrderItemDao extends AbstractDao {
     public void update(OrderItemPojo p) {}
 
     public List<OrderItemPojo> getByOrderId(int orderId) {
-        TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ORDER_ID, OrderItemPojo.class);
+        TypedQuery<OrderItemPojo> query = getQuery(select_by_order_id, OrderItemPojo.class);
         query.setParameter("orderId", orderId);
         return query.getResultList();
+    }
+
+    public List<OrderItemPojo> getByProductBarcode(String productBarcode) {
+        TypedQuery<OrderItemPojo> query = getQuery(select_by_product_barcode, OrderItemPojo.class);
+        query.setParameter("productBarcode", productBarcode);
+        return query.getResultList();
+
+    }
+
+    public OrderItemPojo getByProductBarcodeAndOrderId(String productBarcode, Integer orderId) {
+        TypedQuery<OrderItemPojo> query =
+                getQuery(select_by_product_barcode_and_orderid, OrderItemPojo.class);
+        query.setParameter("productBarcode", productBarcode);
+        query.setParameter("orderId", orderId);
+        return getSingle(query);
     }
 
 

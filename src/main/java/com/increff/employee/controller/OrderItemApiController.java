@@ -37,7 +37,7 @@ public class OrderItemApiController {
     @ApiOperation(value = "Deletes and orderItem")
     @RequestMapping(path = "/api/orderItem/{id}", method = RequestMethod.DELETE)
     // /api/1
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) throws ApiException {
         service.delete(id);
     }
 
@@ -83,7 +83,7 @@ public class OrderItemApiController {
         d.setId(p.getId());
         d.setOrderId(p.getOrderId());
         d.setQuantity(p.getQuantity());
-        d.setProductId(p.getProductId());
+        d.setProductBarcode(p.getProductBarcode());
         d.setSellingPrice(p.getSellingPrice());
         return d;
     }
@@ -92,9 +92,17 @@ public class OrderItemApiController {
         OrderItemPojo p = new OrderItemPojo();
         p.setOrderId(f.getOrderId());
         p.setQuantity(f.getQuantity());
-        p.setProductId(f.getProductId());
-        p.setSellingPrice(f.getSellingPrice());
+        p.setProductBarcode(f.getProductBarcode());
+        // p.setSellingPrice(f.getSellingPrice());
+        // p.setId(f.getId());
         return p;
     }
 
+    protected static List<OrderItemForm> convert(List<OrderItemPojo> orderItemPojos) {
+        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
+        for (OrderItemPojo p : orderItemPojos) {
+            list2.add(convert(p));
+        }
+        return list2;
+    }
 }

@@ -4,13 +4,17 @@ function getProductUrl() {
     return baseUrl + "/api/product";
 }
 
+function getBrandUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/brand";
+}
 //BUTTON ACTIONS
 function addProduct(event) {
     //Set the values to update
     var $form = $("#product-form");
     var json = toJson($form);
     var url = getProductUrl();
-
+    console.log(json)
     $.ajax({
         url: url,
         type: 'POST',
@@ -29,14 +33,20 @@ function addProduct(event) {
 
 function updateProduct(event) {
     $('#edit-product-modal').modal('toggle');
+    var $selectBrand = document.getElementById("inputBrand");
+    var $selectCategory = document.getElementById("inputCategory");
+    // console.log("updating edit select");
+    getBrandOptions($selectBrand.value, "inputEditBrand", "inputEditCategory");
+    getBrandOptions($selectCategory.value, "inputEditBrand", "inputEditCategory");
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
     var url = getProductUrl() + "/" + id;
 
     //Set the values to update
     var $form = $("#product-edit-form");
-    var json = toJson($form);
 
+    var json = toJson($form);
+    console.log(json)
     $.ajax({
         url: url,
         type: 'PUT',
@@ -141,12 +151,13 @@ function displayProductList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
+        console.log(e);
         var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
         buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
         var row = '<tr>'
-            + '<td>' + e.id + '</td>'
             + '<td>' + e.barcode + '</td>'
-            + '<td>' + e.brand_category + '</td>'
+            + '<td>' + e.brand + '</td>'
+            + '<td>' + e.category + '</td>'
             + '<td>' + e.mrp + '</td>'
             + '<td>' + e.name + '</td>'
             + '<td>' + buttonHtml + '</td>'
@@ -206,7 +217,85 @@ function displayOrderItem(data) {
     $('#edit-product-modal').modal('toggle');
 }
 
+function getBrandOptions(category, brandElement, categoryElement) {
+    console.log("in getBrandOptions :" + category)
+    var which = "brand"
+    if (category == "None of the options") {
+        console.log("inside if")
+        var url = getBrandUrl()
+        which = "both"
+    } else {
+        var url = getBrandUrl() + "/byCategory/" + category;
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            updateDropDowns(data, which, brandElement, categoryElement);
+        },
+        error: handleAjaxError
+    });
+}
+function getCategoryOptions(brand, brandElement, categoryElement) {
+    console.log("in getCategoryOptions :" + brand)
 
+    var which = "category"
+    if (brand == "None of the options") {
+        var url = getBrandUrl()
+        which = "both"
+    } else {
+        var url = getBrandUrl() + "/byBrand/" + brand;
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            updateDropDowns(data, which, brandElement, categoryElement);
+        },
+        error: handleAjaxError
+    });
+}
+function updateDropDowns(data, which, brandElement, categoryElement) {
+    console.log(data)
+    const categories = new Set();
+    const brands = new Set();
+    for (var i in data) {
+        var e = data[i];
+        brands.add(e.brand);
+        categories.add(e.category);
+    }
+    brands.add("None of the options");
+    categories.add("None of the options");
+    if ((which == 'brand') || (which == "both")) {
+        var selectBrand = document.getElementById(brandElement);
+        removeOptions(selectBrand);
+        brands.forEach(function (value) {
+            var el = document.createElement("option");
+            el.textContent = value;
+            el.value = value;
+            selectBrand.appendChild(el);
+        })
+
+    }
+    if ((which == 'category') || (which == "both")) {
+        var selectCategory = document.getElementById(categoryElement);
+        removeOptions(selectCategory);
+        categories.forEach(function (value) {
+            var el = document.createElement("option");
+            el.textContent = value;
+            el.value = value;
+            selectCategory.appendChild(el);
+        })
+    }
+
+
+}
+function removeOptions(selectElement) {
+    var i, L = selectElement.options.length - 1;
+    for (i = L; i >= 0; i--) {
+        selectElement.remove(i);
+    }
+}
 //INITIALIZATION CODE
 function init() {
     $('#add-product').click(addProduct);
@@ -215,9 +304,37 @@ function init() {
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);
     $('#download-errors').click(downloadErrors);
-    $('#productFile').on('change', updateFileName)
+    $('#productFile').on('change', updateFileName);
+
+    var $selectBrand = document.getElementById("inputBrand");
+    var $selectCategory = document.getElementById("inputCategory");
+    $selectBrand.addEventListener("click", function () {
+        var strUser = $selectBrand.value;
+        console.log(strUser)
+        getCategoryOptions(strUser, "inputBrand", "inputCategory");
+        // $selectBrand.value = "None of the options";
+    });
+    $selectCategory.addEventListener("click", function () {
+        var strUser = $selectCategory.value;
+        getBrandOptions(strUser, "inputBrand", "inputCategory");
+        // $selectCategory.value = strUser;
+    });
+    getBrandOptions($selectBrand.value, "inputBrand", "inputCategory");
+
+
+    var $selectEditBrand = document.getElementById("inputEditBrand");
+    var $selectEditCategory = document.getElementById("inputEditCategory");
+    $selectEditBrand.addEventListener("click", function () {
+        var strUser = $selectEditBrand.value;
+        getCategoryOptions(strUser, "inputEditBrand", "inputEditCategory");
+    });
+    $selectEditCategory.addEventListener("click", function () {
+        var strUser = $selectEditCategory.value;
+        getBrandOptions(strUser, "inputEditBrand", "inputEditCategory");
+    });
 }
 
 $(document).ready(init);
+
 $(document).ready(getProductList);
 

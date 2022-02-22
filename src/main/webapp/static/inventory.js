@@ -30,8 +30,8 @@ function addInventory(event) {
 function updateInventory(event) {
     $('#edit-inventory-modal').modal('toggle');
     //Get the ID
-    var id = $("#inventory-edit-form input[name=id]").val();
-    var url = getInventoryUrl() + "/" + id;
+    var barcode = $("#inventory-edit-form input[name=barcode]").val();
+    var url = getInventoryUrl() + "/" + barcode;
 
     //Set the values to update
     var $form = $("#inventory-edit-form");
@@ -66,9 +66,9 @@ function getInventoryList() {
     });
 }
 
-function deleteInventory(id) {
-    var url = getInventoryUrl() + "/" + id;
-
+function deleteInventory(barcode) {
+    var url = getInventoryUrl() + "/" + barcode;
+    console.log('inside deleteInventory');
     $.ajax({
         url: url,
         type: 'DELETE',
@@ -141,10 +141,10 @@ function displayInventoryList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
-        buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
+        var buttonHtml = '<button onclick="deleteInventory(\'' + e.barcode + '\')">delete</button>'
+        buttonHtml += ' <button onclick="displayEditInventory(\'' + e.barcode + '\')">edit</button>'
         var row = '<tr>'
-            + '<td>' + e.id + '</td>'
+            + '<td>' + e.barcode + '</td>'
             + '<td>' + e.quantity + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
@@ -152,8 +152,8 @@ function displayInventoryList(data) {
     }
 }
 
-function displayEditInventory(id) {
-    var url = getInventoryUrl() + "/" + id;
+function displayEditInventory(barcode) {
+    var url = getInventoryUrl() + "/" + barcode;
     $.ajax({
         url: url,
         type: 'GET',
@@ -195,8 +195,9 @@ function displayUploadData() {
 }
 
 function displayInventory(data) {
+    console.log(data, "in displayInventory")
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
-    $("#inventory-edit-form input[name=id]").val(data.id);
+    $("#inventory-edit-form input[name=barcode]").val(data.barcode);
     $('#edit-inventory-modal').modal('toggle');
 }
 

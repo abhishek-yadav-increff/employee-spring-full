@@ -15,9 +15,11 @@ import com.increff.employee.pojo.OrderPojo;
 @Repository
 public class OrderDao extends AbstractDao {
 
-    private static String delete_id = "delete from OrderPojo p where id=:id";
-    private static String select_id = "select p from OrderPojo p where id=:id";
-    private static String select_all = "select p from OrderPojo p";
+    private static final String delete_id = "DELETE FROM OrderPojo P WHERE ID=:id";
+    private static final String select_id = "SELECT P FROM OrderPojo P WHERE ID=:id";
+    private static final String select_all = "SELECT P FROM OrderPojo P";
+    private static final String select_time =
+            "SELECT P FROM OrderPojo P WHERE TIME BETWEEN :startTime AND :endTime";
 
     @PersistenceContext
     private EntityManager em;
@@ -45,6 +47,14 @@ public class OrderDao extends AbstractDao {
     }
 
     public void update(OrderPojo p) {}
+
+    public List<OrderPojo> selectByTime(long time, long time2) {
+        TypedQuery<OrderPojo> query = getQuery(select_time, OrderPojo.class);
+        query.setParameter("startTime", time);
+        query.setParameter("endTime", time2);
+        return query.getResultList();
+
+    }
 
 
 

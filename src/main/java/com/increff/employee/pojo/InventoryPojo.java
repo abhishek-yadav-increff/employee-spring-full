@@ -9,20 +9,21 @@ import javax.validation.constraints.Min;
 public class InventoryPojo implements Serializable {
 
     @Id
-    private Integer id;
+    private String barcode;
+
     @Min(value = 0, message = "Not enough quantity in Inventory")
     private Integer quantity;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public void setQuantity(Integer quantity) {

@@ -13,9 +13,14 @@ import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao {
 
-    private static String delete_id = "delete from BrandPojo p where id=:id";
-    private static String select_id = "select p from BrandPojo p where id=:id";
-    private static String select_all = "select p from BrandPojo p";
+    private static final String delete_id = "DELETE FROM BrandPojo P WHERE ID=:id";
+    private static final String select_id = "SELECT P FROM BrandPojo P WHERE ID=:id";
+    private static final String select_all = "SELECT P FROM BrandPojo P";
+    private static final String select_brand = "SELECT P FROM BrandPojo P WHERE BRAND=:brand";
+    private static final String select_brand_category =
+            "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
+    private static final String select_category =
+            "SELECT P FROM BrandPojo P WHERE CATEGORY=:category";
 
     @PersistenceContext
     private EntityManager em;
@@ -44,6 +49,26 @@ public class BrandDao extends AbstractDao {
     }
 
     public void update(BrandPojo p) {}
+
+    public List<BrandPojo> selectByCategory(String category) {
+        TypedQuery<BrandPojo> query = getQuery(select_category, BrandPojo.class);
+        query.setParameter("category", category);
+        return query.getResultList();
+    }
+
+    public List<BrandPojo> selectByBrand(String brand) {
+
+        TypedQuery<BrandPojo> query = getQuery(select_brand, BrandPojo.class);
+        query.setParameter("brand", brand);
+        return query.getResultList();
+    }
+
+    public BrandPojo selectByBrandAndCategory(String brand, String category) {
+        TypedQuery<BrandPojo> query = getQuery(select_brand_category, BrandPojo.class);
+        query.setParameter("brand", brand);
+        query.setParameter("category", category);
+        return getSingle(query);
+    }
 
 
 }

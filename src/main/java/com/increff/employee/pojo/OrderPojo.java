@@ -1,6 +1,7 @@
 package com.increff.employee.pojo;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +20,21 @@ public class OrderPojo {
 
     private Integer complete;
 
+    @Column(precision = 2)
+    private Double cost;
+
     public OrderPojo() {
         this.time = new Date().getTime();
         this.complete = 0;
+        this.cost = 0.0;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public Integer getComplete() {

@@ -8,29 +8,46 @@
 
 	<nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-	<div class="container">
+	<div class="container" style="padding-top:15%;">
 
-		<h3>Home</h3>
 
 		<!-- Top row with form-->
 		<div class="row">
+			<!-- <div class="col-2" max-width="20%">
+				<a th:href="@{/ui/employee}" title="Employees">
+					<i class="fas fa-users"></i>
+					<h3>Employees</h3>
+				</a>
+			</div> -->
 			<div class="col-2">
-				<a th:href="@{/ui/employee}" title="Employees"> <i class="fas fa-users"></i> </a>
+				<a th:href="@{/ui/brand}" title="Brand"> <i class="fas fa-trademark"></i>
+					<h3>Brand</h3>
+				</a>
 			</div>
 			<div class="col-2">
-				<a th:href="@{/ui/brand}" title="Brand"> <i class="fas fa-trademark"></i> </a>
+				<a th:href="@{/ui/product}" title="Product"> <i class="fas fa-icons"></i>
+					<h3>Product</h3>
+				</a>
 			</div>
 			<div class="col-2">
-				<a th:href="@{/ui/product}" title="Product"> <i class="fas fa-icons"></i> </a>
+				<a th:href="@{/ui/inventory}" title="Inventory"> <i class="fas fa-list"></i>
+					<h3>Inventory</h3>
+				</a>
 			</div>
 			<div class="col-2">
-				<a th:href="@{/ui/inventory}" title="Inventory"> <i class="fas fa-list"></i> </a>
+				<a th:href="@{/ui/order}" title="Orders"> <i class="fas fa-shipping-fast"></i>
+					<h3>Orders</h3>
+				</a>
 			</div>
 			<div class="col-2">
-				<a th:href="@{/ui/order}" title="Order"> <i class="fas fa-ship"></i> </a>
+				<a th:href="@{/ui/reports}" title="Reports"> <i class="fas fa-receipt"></i>
+					<h3>Reports</h3>
+				</a>
 			</div>
 			<div class="col-2">
-				<a th:href="@{/ui/admin}" title="Admin"> <i class="fas fa-cog"></i> </a>
+				<a th:href="@{/ui/admin}" title="Admin"> <i class="fas fa-cog"></i>
+					<h3>Admin</h3>
+				</a>
 			</div>
 		</div>
 

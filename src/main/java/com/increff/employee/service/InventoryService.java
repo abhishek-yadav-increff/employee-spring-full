@@ -17,31 +17,40 @@ public class InventoryService {
     private InventoryDao dao;
 
     @Autowired
-    private ProductDao productDao;
+    private ProductService productService;
 
     @Autowired
     private OrderItemService orderItemService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(InventoryPojo p) throws ApiException {
-        if (productDao.select(p.getId()) == null) {
-            throw new ApiException("Product doesn't exist");
+        InventoryPojo pp = dao.select(p.getBarcode());
+        if (pp != null) {
+            pp.setQuantity(p.getQuantity() + pp.getQuantity());
+            update(pp.getBarcode(), pp);
+        } else {
+
+            if (productService.getByBarcode(p.getBarcode()) == null) {
+                throw new ApiException("Product doesn't exist");
+            }
+            if (p.getQuantity() < 0) {
+                throw new ApiException("Quantity can not be negative");
+            }
+            dao.insert(p);
         }
-        if (p.getQuantity() < 0) {
-            throw new ApiException("Quantity can not be negative");
-        }
-        dao.insert(p);
+        System.out.println("No errors till dao insert");
     }
 
     @Transactional
-    public void delete(int id) {
-        orderItemService.deleteByProductId(id);
-        dao.delete(id);
+    public void delete(String barcode) {
+        // TODO: cascade order Item
+        // orderItemService.deleteByBarcode(barcode);
+        dao.delete(barcode);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public InventoryPojo get(int id) throws ApiException {
-        return getCheck(id);
+    public InventoryPojo get(String barcode) throws ApiException {
+        return getCheck(barcode);
     }
 
     @Transactional
@@ -50,11 +59,11 @@ public class InventoryService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(int id, InventoryPojo p) throws ApiException {
-        if (productDao.select(p.getId()) == null) {
+    public void update(String barcode, InventoryPojo p) throws ApiException {
+        if (productService.getByBarcode(p.getBarcode()) == null) {
             throw new ApiException("Product doesn't exist");
         }
-        InventoryPojo ex = getCheck(id);
+        InventoryPojo ex = getCheck(barcode);
         if (p.getQuantity() < 0) {
             throw new ApiException("Quantity can not be negative");
         }
@@ -63,10 +72,10 @@ public class InventoryService {
     }
 
     @Transactional
-    public InventoryPojo getCheck(int id) throws ApiException {
-        InventoryPojo p = dao.select(id);
+    public InventoryPojo getCheck(String barcode) throws ApiException {
+        InventoryPojo p = dao.select(barcode);
         if (p == null) {
-            throw new ApiException("Inventory with given ID does not exit, id: " + id);
+            throw new ApiException("Inventory with given ID does not exit, id: " + barcode);
         }
         return p;
     }
