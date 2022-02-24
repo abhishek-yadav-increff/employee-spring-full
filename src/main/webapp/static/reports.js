@@ -9,7 +9,7 @@ function genBrandReport() {
         url: url,
         type: 'GET',
         success: function (data) {
-            generateReport(data, 'brand-report.csv');
+            generateReport(data, 'brand_report.csv');
         },
         error: handleAjaxError
     });
@@ -24,7 +24,7 @@ function genInventoryReport() {
         url: url,
         type: 'GET',
         success: function (data) {
-            generateReport(data, 'inventory-report.csv');
+            generateReport(data, 'inventory_report.csv');
         },
         error: handleAjaxError
     });

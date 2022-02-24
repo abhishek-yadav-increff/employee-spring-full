@@ -14,9 +14,12 @@ public class InventoryPojo implements Serializable {
     @Min(value = 0, message = "Not enough quantity in Inventory")
     private Integer quantity;
 
+
     public Integer getQuantity() {
         return quantity;
     }
+
+
 
     public String getBarcode() {
         return barcode;

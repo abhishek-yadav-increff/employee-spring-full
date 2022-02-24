@@ -20,6 +20,15 @@ function addInventory(event) {
         },
         success: function (response) {
             getInventoryList();
+            $.toast({
+                heading: 'Success',
+                text: 'Successfully added inventory!',
+                // showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
         },
         error: handleAjaxError
     });
@@ -28,7 +37,6 @@ function addInventory(event) {
 }
 
 function updateInventory(event) {
-    $('#edit-inventory-modal').modal('toggle');
     //Get the ID
     var barcode = $("#inventory-edit-form input[name=barcode]").val();
     var url = getInventoryUrl() + "/" + barcode;
@@ -46,6 +54,16 @@ function updateInventory(event) {
         },
         success: function (response) {
             getInventoryList();
+            $.toast({
+                heading: 'Success',
+                text: 'Successfully updated inventory!',
+                // showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
+            $('#edit-inventory-modal').modal('toggle');
         },
         error: handleAjaxError
     });
@@ -74,6 +92,15 @@ function deleteInventory(barcode) {
         type: 'DELETE',
         success: function (data) {
             getInventoryList();
+            $.toast({
+                heading: 'Success',
+                text: 'Successfully deleted inventory!',
+                // showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
         },
         error: handleAjaxError
     });
@@ -98,6 +125,47 @@ function readFileDataCallback(results) {
 function uploadRows() {
     //Update progress
     updateUploadDialog();
+
+    if (processCount == fileData.length) {
+        if (errorData.length == 0) {
+            displayUploadData();
+            getInventoryList();
+            $.toast({
+                heading: 'Success',
+                text: 'All files successfully added!',
+                showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
+        } else if (errorData.length == processCount) {
+            $.toast({
+                heading: 'Error',
+                text: 'No data was added!',
+                // showHideTransition: 'slide',
+                hideAfter: false,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'error'
+            });
+            getInventoryList();
+            document.getElementById("download-errors").disabled = false;
+
+        } else {
+            $.toast({
+                heading: 'Warning',
+                text: 'Only some rows were added!',
+                // showHideTransition: 'slide',
+                hideAfter: false,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'warning'
+            });
+            document.getElementById("download-errors").disabled = false;
+        }
+        return;
+    }
     //If everything processed then return
     if (processCount == fileData.length) {
         return;
@@ -105,9 +173,13 @@ function uploadRows() {
 
     //Process next row
     var row = fileData[processCount];
+    var row2 = {
+        barcode: row["Barcode"],
+        quantity: row["Quantity"],
+    }
     processCount++;
 
-    var json = JSON.stringify(row);
+    var json = JSON.stringify(row2);
     var url = getInventoryUrl();
 
     //Make ajax call
@@ -122,7 +194,8 @@ function uploadRows() {
             uploadRows();
         },
         error: function (response) {
-            row.error = response.responseText
+            var jsonError = JSON.parse(response.responseText)
+            row.Error = jsonError.message
             errorData.push(row);
             uploadRows();
         }
@@ -131,7 +204,7 @@ function uploadRows() {
 }
 
 function downloadErrors() {
-    writeFileData(errorData);
+    writeFileData(errorData, "inventory_error.tsv");
 }
 
 //UI DISPLAY METHODS
@@ -141,10 +214,10 @@ function displayInventoryList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        var buttonHtml = '<button onclick="deleteInventory(\'' + e.barcode + '\')">delete</button>'
-        buttonHtml += ' <button onclick="displayEditInventory(\'' + e.barcode + '\')">edit</button>'
+        var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditInventory(\'' + e.barcode + '\')">Edit</button>'
         var row = '<tr>'
             + '<td>' + e.barcode + '</td>'
+            + '<td>' + e.name + '</td>'
             + '<td>' + e.quantity + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
@@ -175,6 +248,8 @@ function resetUploadDialog() {
     errorData = [];
     //Update counts	
     updateUploadDialog();
+    document.getElementById("process-data").disabled = true;
+    document.getElementById("download-errors").disabled = true;
 }
 
 function updateUploadDialog() {
@@ -198,19 +273,42 @@ function displayInventory(data) {
     console.log(data, "in displayInventory")
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
     $("#inventory-edit-form input[name=barcode]").val(data.barcode);
+    document.getElementById('inputEditBarcode').innerHTML = data.barcode;
+
     $('#edit-inventory-modal').modal('toggle');
 }
-
-
+function refreshInventoryList() {
+    getInventoryList();
+    $.toast({
+        heading: 'Success',
+        text: 'Refreshed!',
+        // showHideTransition: 'slide',
+        hideAfter: 3000,
+        allowToastClose: true,
+        position: 'top-right',
+        icon: 'success'
+    });
+    resetInputLabel();
+}
+function resetInputLabel() {
+    document.getElementById('inputBarcode').value = '';
+    document.getElementById('inputQuantity').value = '';
+}
 //INITIALIZATION CODE
 function init() {
     $('#add-inventory').click(addInventory);
     $('#update-inventory').click(updateInventory);
-    $('#refresh-data').click(getInventoryList);
+    $('#refresh-data').click(refreshInventoryList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);
     $('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName)
+    document.getElementById('inventoryFile').addEventListener('input', function (evt) {
+        var file = $('#inventoryFile')[0].files[0];
+        if (file.name != null) {
+            document.getElementById("process-data").disabled = false;
+        }
+    });
 }
 
 $(document).ready(init);

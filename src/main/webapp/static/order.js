@@ -27,31 +27,31 @@ function addOrder(event) {
     return false;
 }
 
-function updateOrder(event) {
-    $('#edit-order-modal').modal('toggle');
-    //Get the ID
-    var id = $("#order-edit-form input[name=id]").val();
-    var url = getOrderUrl() + "/" + id;
+// function updateOrder(event) {
+//     $('#edit-order-modal').modal('toggle');
+//     //Get the ID
+//     var id = $("#order-edit-form input[name=id]").val();
+//     var url = getOrderUrl() + "/" + id;
 
-    //Set the values to update
-    var $form = $("#order-edit-form");
-    var json = toJson($form);
+//     //Set the values to update
+//     var $form = $("#order-edit-form");
+//     var json = toJson($form);
 
-    $.ajax({
-        url: url,
-        type: 'PUT',
-        data: json,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        success: function (response) {
-            getOrderList();
-        },
-        error: handleAjaxError
-    });
+//     $.ajax({
+//         url: url,
+//         type: 'PUT',
+//         data: json,
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         success: function (response) {
+//             getOrderList();
+//         },
+//         error: handleAjaxError
+//     });
 
-    return false;
-}
+//     return false;
+// }
 
 
 function getOrderList() {
@@ -82,7 +82,7 @@ function deleteOrder(id) {
 
 //UI DISPLAY METHODS
 function editOrder(orderId) {
-    window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + orderId);
+    window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + orderId + "#edit");
 
 }
 function displayOrderList(data) {
@@ -91,8 +91,11 @@ function displayOrderList(data) {
     for (var i in data) {
         var e = data[i];
         console.log(e.id)
-        var invoiceButtonHtml = '<button onclick="showInvoice(' + e.id + ')">invoice</button>'
-        var editButtonHtml = ' <button onclick="editOrder(' + e.id + ')">edit</button>'
+        var invoiceButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="showInvoice(' + e.id + ')">Invoice</button>'
+        var editButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="editOrder(' + e.id + ')">Edit</button>'
+
+        // var invoiceButtonHtml = '<button onclick="showInvoice(' + e.id + ')">invoice</button>'
+        // var editButtonHtml = ' <button onclick="editOrder(' + e.id + ')">edit</button>'
         var row = '<tr>'
             + '<td> <a href="http://localhost:9000/employee/ui/orderPreview/' + e.id + '">' + e.id + '</a> </td>'
             + '<td>' + e.time + '</td>'
@@ -106,6 +109,7 @@ function displayOrderList(data) {
 
 function createNewOrder() {
     var url = getOrderUrl();
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -114,11 +118,9 @@ function createNewOrder() {
         },
         success: function (data) {
             console.log(data)
-            window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + data);
-
+            window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + data + "#success");
         },
         error: function (err) {
-
         }
     });
 

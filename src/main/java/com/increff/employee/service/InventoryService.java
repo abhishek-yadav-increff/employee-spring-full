@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.InventoryDao;
-import com.increff.employee.dao.ProductDao;
+import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 
 @Service
@@ -19,23 +19,20 @@ public class InventoryService {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private OrderItemService orderItemService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(InventoryPojo p) throws ApiException {
+        if (productService.getByBarcode(p.getBarcode()) == null) {
+            throw new ApiException("Product doesn't exist");
+        }
+        if (p.getQuantity() < 0) {
+            throw new ApiException("Quantity can not be negative");
+        }
         InventoryPojo pp = dao.select(p.getBarcode());
         if (pp != null) {
             pp.setQuantity(p.getQuantity() + pp.getQuantity());
             update(pp.getBarcode(), pp);
         } else {
-
-            if (productService.getByBarcode(p.getBarcode()) == null) {
-                throw new ApiException("Product doesn't exist");
-            }
-            if (p.getQuantity() < 0) {
-                throw new ApiException("Quantity can not be negative");
-            }
             dao.insert(p);
         }
         System.out.println("No errors till dao insert");
@@ -63,10 +60,10 @@ public class InventoryService {
         if (productService.getByBarcode(p.getBarcode()) == null) {
             throw new ApiException("Product doesn't exist");
         }
-        InventoryPojo ex = getCheck(barcode);
         if (p.getQuantity() < 0) {
             throw new ApiException("Quantity can not be negative");
         }
+        InventoryPojo ex = getCheck(barcode);
         ex.setQuantity(p.getQuantity());
         dao.update(ex);
     }
@@ -74,10 +71,22 @@ public class InventoryService {
     @Transactional
     public InventoryPojo getCheck(String barcode) throws ApiException {
         InventoryPojo p = dao.select(barcode);
+
         if (p == null) {
             throw new ApiException("Inventory with given ID does not exit, id: " + barcode);
         }
         return p;
     }
+
+    @Transactional
+    public InventoryForm convert(InventoryPojo p) throws ApiException {
+        InventoryForm d = new InventoryForm();
+        d.setQuantity(p.getQuantity());
+        d.setBarcode(p.getBarcode());
+        String name = productService.getByBarcode(d.getBarcode()).getName();
+        d.setName(name);
+        return d;
+    }
+
 
 }

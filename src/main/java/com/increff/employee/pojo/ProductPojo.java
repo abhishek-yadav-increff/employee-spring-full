@@ -17,21 +17,14 @@ public class ProductPojo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // @GeneratedValue(strategy = GenerationType.AUTO)
-    // @Column(unique = true)
     @GeneratorType(type = UUIDGenerator.class, when = GenerationTime.INSERT)
     private String barcode;
 
-    // @ManyToOne(targetEntity = BrandPojo.class)
-    // @JoinColumn(name = "brand_category", referencedColumnName = "id", nullable = false)
     private Integer brand_category;
     private String name;
-    @Column(precision = 2)
-    private Double mrp;
 
-    // @ManyToOne
-    // @JoinColumn(name = "fk_brandPojo")
-    // private BrandPojo brandPojo;
+    @Column(scale = 2)
+    private Double mrp;
 
     public Integer getId() {
         return this.id;
@@ -72,7 +65,5 @@ public class ProductPojo {
     public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
-
-
 
 }

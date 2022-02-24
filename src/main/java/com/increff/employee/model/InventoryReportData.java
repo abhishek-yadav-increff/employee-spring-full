@@ -1,6 +1,6 @@
-package com.increff.employee.dto;
+package com.increff.employee.model;
 
-public class InventoryReportDto {
+public class InventoryReportData {
 
     private String brand;
     private String category;

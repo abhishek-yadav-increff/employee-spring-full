@@ -1,7 +1,6 @@
 package com.increff.employee.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class BrandApiController {
 
     @ApiOperation(value = "Gets list of all Brands")
     @RequestMapping(path = "/api/brand", method = RequestMethod.GET)
-    public List<BrandData> getAll() {
+    public List<BrandData> getAll() throws ApiException {
         List<BrandPojo> list = service.getAll();
 
         return convert(list);

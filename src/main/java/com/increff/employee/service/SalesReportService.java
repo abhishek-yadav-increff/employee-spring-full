@@ -12,7 +12,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.increff.employee.dto.SalesReportDto;
+import com.increff.employee.model.SalesReportData;
 import com.increff.employee.model.SalesReportForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.OrderItemPojo;
@@ -36,14 +36,25 @@ public class SalesReportService {
     private OrderItemService orderItemService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<SalesReportDto> get(SalesReportForm data) throws ApiException {
+    public List<SalesReportData> get(SalesReportForm data) throws ApiException {
         logger.info("Inside Sales Report");
         Map<String, Integer> quantity = new HashMap<String, Integer>();
         Map<String, Double> revenue = new HashMap<String, Double>();
 
 
+        if (data.startDate.equals("NaN")) {
+            data.startDate = "0000000000000";
+        }
+        if (data.endDate.equals("NaN")) {
+            data.endDate = "9999999999999";
+        }
+        logger.info("Start Date: " + data.startDate);
+        logger.info("End Date: " + data.endDate);
         Date startDate = new Date(Long.parseLong(data.startDate));
         Date endDate = new Date(Long.parseLong(data.endDate) + (1000 * 60 * 60 * 24) - 1);
+        if (startDate.compareTo(endDate) > 0) {
+            throw new ApiException("Start date should be less than end date!");
+        }
         logger.info("Start Date: " + startDate.toString());
         logger.info("End Date: " + endDate.toString());
 
@@ -60,48 +71,30 @@ public class SalesReportService {
         List<OrderPojo> orderPojos = orderService.getByTime(startDate.getTime(), endDate.getTime());
         logger.info("Size or orders in that duration: " + orderPojos.size());
         for (OrderPojo orderPojo : orderPojos) {
-            if (orderPojo.getComplete() == 1) {
-                logger.info("OrderId: " + orderPojo.getId());
-                List<OrderItemPojo> temps = orderItemService.getByOrderId(orderPojo.getId());
-                for (OrderItemPojo temp : temps) {
-                    Integer bcId = productService.getByBarcode(temp.getProductBarcode())
-                            .getBrand_category();
-                    logger.info("\tOrderItemId: " + temp.getId() + ", Brand_catID: " + bcId);
-                    if (brandCategoryIds.contains(bcId)) {
-                        String category = brandService.get(bcId).getCategory();
-                        quantity.put(category,
-                                quantity.getOrDefault(category, 0) + temp.getQuantity());
-                        revenue.put(category,
-                                revenue.getOrDefault(category, 0.0) + temp.getSellingPrice());
-                        logger.info(
-                                "\tOrderItemIdStored: " + temp.getId() + ", Category: " + category);
-                    }
+            logger.info("OrderId: " + orderPojo.getId());
+            List<OrderItemPojo> temps = orderItemService.getByOrderId(orderPojo.getId());
+            for (OrderItemPojo temp : temps) {
+                Integer bcId =
+                        productService.getByBarcode(temp.getProductBarcode()).getBrand_category();
+                logger.info("\tOrderItemId: " + temp.getId() + ", Brand_catID: " + bcId);
+                if (brandCategoryIds.contains(bcId)) {
+                    String category = brandService.get(bcId).getCategory();
+                    quantity.put(category, quantity.getOrDefault(category, 0) + temp.getQuantity());
+                    revenue.put(category,
+                            revenue.getOrDefault(category, 0.0) + temp.getSellingPrice());
+                    logger.info("\tOrderItemIdStored: " + temp.getId() + ", Category: " + category);
                 }
             }
         }
 
-        List<SalesReportDto> salesReportDtos = new ArrayList<SalesReportDto>();
-        quantity.forEach((k, v) -> salesReportDtos.add(new SalesReportDto(k, v, revenue.get(k))));
+        List<SalesReportData> salesReportDtos = new ArrayList<SalesReportData>();
+        quantity.forEach((k, v) -> salesReportDtos.add(new SalesReportData(k, v, revenue.get(k))));
 
         return salesReportDtos;
         // List<SalesPojo> inventoryPojos = inventoryService.getAll();
 
     }
 
-    // public static List<SalesReportDto> convert(List<SalesPojo> inventoryPojos) {
-    // List<SalesReportDto> inventoryReportDtos = new ArrayList<SalesReportDto>();
-    // for (SalesPojo inventoryPojo : inventoryPojos) {
-    // inventoryReportDtos.add(convert(inventoryPojo));
-    // }
-    // return inventoryReportDtos;
-    // }
-
-    // public static SalesReportDto convert(SalesPojo inventoryPojo) {
-    // SalesReportDto p = new SalesReportDto();
-    // p.setBarcode(inventoryPojo.getBarcode());
-    // p.setQuantity(inventoryPojo.getQuantity());
-    // return p;
-    // }
 
 
 }

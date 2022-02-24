@@ -23,6 +23,9 @@ public class BrandService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
+        if (dao.checkIfExists(p)) {
+            throw new ApiException("Same brand-category already exists!");
+        }
         normalize(p);
         if (StringUtil.isEmpty(p.getBrand()) || StringUtil.isEmpty(p.getCategory())) {
             throw new ApiException("Brand and Category cannot be empty");
@@ -45,13 +48,20 @@ public class BrandService {
     }
 
     @Transactional
-    public List<BrandPojo> getAll() {
+    public List<BrandPojo> getAll() throws ApiException {
+        List<BrandPojo> p = dao.selectAll();
+        if (p == null) {
+            throw new ApiException("No brand-category in database!");
+        }
         return dao.selectAll();
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandPojo p) throws ApiException {
         normalize(p);
+        if (dao.checkIfExists(p)) {
+            throw new ApiException("Same brand-category already exists!");
+        }
         BrandPojo ex = getCheck(id);
         ex.setBrand(p.getBrand());
         ex.setCategory(p.getCategory());
@@ -62,7 +72,7 @@ public class BrandService {
     public BrandPojo getCheck(int id) throws ApiException {
         BrandPojo p = dao.select(id);
         if (p == null) {
-            throw new ApiException("Brand with given ID does not exit, id: " + id);
+            throw new ApiException("Brand with given ID does not exist, id: " + id);
         }
         return p;
     }
@@ -89,6 +99,12 @@ public class BrandService {
     }
 
     public BrandPojo getByBrandAndCategory(String brand, String category) throws ApiException {
+        if (brand == null) {
+            throw new ApiException("Brand can not be empty!");
+        }
+        if (category == null) {
+            throw new ApiException("Category can not be empty!");
+        }
         BrandPojo p = dao.selectByBrandAndCategory(brand, category);
         if (p == null) {
             throw new ApiException("Brand Category Pair does not exist");
@@ -99,17 +115,14 @@ public class BrandService {
     public List<BrandPojo> getListByBrandAndCategory(String brand, String category)
             throws ApiException {
         List<BrandPojo> p;
-        if ((brand == null) || brand.isEmpty()) {
-            p = getByCategory(brand);
+        if (((brand == null) || brand.isEmpty()) && ((category == null) || category.isEmpty())) {
+            p = getAll();
+        } else if ((brand == null) || brand.isEmpty()) {
+            p = getByCategory(category);
         } else if ((category == null) || category.isEmpty()) {
             p = getByBrand(brand);
         } else {
             p = Arrays.asList(getByBrandAndCategory(brand, category));
-            if (p.isEmpty()) {
-                throw new ApiException(
-                        "Brand: " + brand + " and category: " + category + " don't exist together");
-            }
-            // p = ;
         }
         return p;
     }

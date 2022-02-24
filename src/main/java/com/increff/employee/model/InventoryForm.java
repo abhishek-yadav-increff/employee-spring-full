@@ -4,10 +4,19 @@ public class InventoryForm {
 
     private String barcode;
     private Integer quantity;
+    private String name;
 
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBarcode() {
@@ -22,5 +31,7 @@ public class InventoryForm {
         this.quantity = quantity;
     }
 
-
+    public String toString() {
+        return getBarcode() + " " + getName() + " " + getQuantity();
+    }
 }

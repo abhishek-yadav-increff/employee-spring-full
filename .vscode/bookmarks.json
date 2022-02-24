@@ -4,8 +4,18 @@
 			"path": "src/main/webapp/static/product.js",
 			"bookmarks": [
 				{
-					"line": 234,
+					"line": 320,
 					"column": 10,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/main/webapp/static/orderEdit.js",
+			"bookmarks": [
+				{
+					"line": 124,
+					"column": 28,
 					"label": ""
 				}
 			]

@@ -20,13 +20,26 @@ function addBrand(event) {
         },
         success: function (response) {
             getBrandList();
+            $.toast({
+                heading: 'Success',
+                text: 'Successfully added!',
+                // showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
+            resetInputLabel();
         },
         error: handleAjaxError
     });
 
     return false;
 }
-
+function resetInputLabel() {
+    document.getElementById('inputBrand').value = '';
+    document.getElementById('inputCategory').value = '';
+}
 function updateBrand(event) {
     $('#edit-brand-modal').modal('toggle');
     //Get the ID
@@ -53,6 +66,19 @@ function updateBrand(event) {
     return false;
 }
 
+function refreshBrandList() {
+    getBrandList();
+    $.toast({
+        heading: 'Success',
+        text: 'Refreshed!',
+        // showHideTransition: 'slide',
+        hideAfter: 3000,
+        allowToastClose: true,
+        position: 'top-right',
+        icon: 'success'
+    });
+    resetInputLabel();
+}
 
 function getBrandList() {
     var url = getBrandUrl();
@@ -100,14 +126,55 @@ function uploadRows() {
     updateUploadDialog();
     //If everything processed then return
     if (processCount == fileData.length) {
+        if (errorData.length == 0) {
+            displayUploadData();
+            getBrandList();
+            $.toast({
+                heading: 'Success',
+                text: 'All files successfully added!',
+                showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
+        } else if (errorData.length == processCount) {
+            $.toast({
+                heading: 'Error',
+                text: 'No data was added!',
+                // showHideTransition: 'slide',
+                hideAfter: false,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'error'
+            });
+            getBrandList();
+            document.getElementById("download-errors").disabled = false;
+
+        } else {
+            $.toast({
+                heading: 'Warning',
+                text: 'Only some rows were added!',
+                // showHideTransition: 'slide',
+                hideAfter: false,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'warning'
+            });
+            document.getElementById("download-errors").disabled = false;
+        }
         return;
     }
 
     //Process next row
     var row = fileData[processCount];
+    var row2 = {
+        brand: row["Brand"],
+        category: row["Category"]
+    }
     processCount++;
 
-    var json = JSON.stringify(row);
+    var json = JSON.stringify(row2);
     var url = getBrandUrl();
 
     //Make ajax call
@@ -122,7 +189,9 @@ function uploadRows() {
             uploadRows();
         },
         error: function (response) {
-            row.error = response.responseText
+            var jsonError = JSON.parse(response.responseText)
+            row.Error = jsonError.message
+
             errorData.push(row);
             uploadRows();
         }
@@ -131,7 +200,7 @@ function uploadRows() {
 }
 
 function downloadErrors() {
-    writeFileData(errorData);
+    writeFileData(errorData, "brand_error.tsv");
 }
 
 //UI DISPLAY METHODS
@@ -139,10 +208,11 @@ function downloadErrors() {
 function displayBrandList(data) {
     var $tbody = $('#brand-table').find('tbody');
     $tbody.empty();
+    data.reverse();
     for (var i in data) {
         var e = data[i];
-        var buttonHtml = '<button onclick="deleteBrand(' + e.id + ')">Delete</button>'
-        buttonHtml += ' <button onclick="displayEditBrand(' + e.id + ')">Edit</button>'
+        // var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">Edit</button>'
+        var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
         var row = '<tr>'
             + '<td>' + e.brand + '</td>'
             + '<td>' + e.category + '</td>'
@@ -175,6 +245,10 @@ function resetUploadDialog() {
     errorData = [];
     //Update counts	
     updateUploadDialog();
+
+    document.getElementById("process-data").disabled = true;
+    document.getElementById("download-errors").disabled = true;
+
 }
 
 function updateUploadDialog() {
@@ -206,11 +280,17 @@ function displayBrand(data) {
 function init() {
     $('#add-brand').click(addBrand);
     $('#update-brand').click(updateBrand);
-    $('#refresh-data').click(getBrandList);
+    $('#refresh-data').click(refreshBrandList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);
     $('#download-errors').click(downloadErrors);
-    $('#brandFile').on('change', updateFileName)
+    $('#brandFile').on('change', updateFileName);
+    document.getElementById('brandFile').addEventListener('input', function (evt) {
+        var file = $('#brandFile')[0].files[0];
+        if (file.name != null) {
+            document.getElementById("process-data").disabled = false;
+        }
+    });
 }
 
 $(document).ready(init);

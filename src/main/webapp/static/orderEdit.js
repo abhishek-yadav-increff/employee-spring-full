@@ -106,7 +106,7 @@ function deleteOrderItem(id, orderId) {
         url: url,
         type: 'DELETE',
         success: function (data) {
-            getOrderItemListByOrderId(orderId);
+            getOrder(orderId);
         },
         error: handleAjaxError
     });
@@ -114,7 +114,9 @@ function deleteOrderItem(id, orderId) {
 
 
 function getOrderId() {
-    return document.getElementById('orderIdSelect').innerHTML;
+    var tempArr = document.getElementById('orderIdSelect').innerHTML.split(" ");
+    console.log(tempArr);
+    return tempArr[tempArr.length - 1];
 }
 function getOrderUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -127,26 +129,20 @@ function getOrder(orderId) {
         type: 'GET',
         success: function (data) {
             displayOrder(data);
+            displayCost(data);
+            getOrderItemListByOrderId(data.id)
         },
         error: function (err) {
-            window.location.replace("http://localhost:9000/employee/ui/orderCreate/");
-
-
-            // setTimesout(function () { alert("Order ID doesn't exist!"); }, 10000);
-            // console.log(alertMessage("asd"));
-            // alert("Order ID doesn't exist!")
-            // $.toaster({ priority: 'danger', title: 'Redirected', message: "The given Order ID doesn't exist" });
-            $.toast({
-                heading: 'Failed to load Edit Order Page',
-                text: "The provided Order ID: " + orderId + ", doesn't exists",
-                showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'error'
-            });
-
-
+            window.location.replace("http://localhost:9000/employee/ui/order");
+            // $.toast({
+            //     heading: 'Failed to load Edit Order Page',
+            //     text: "The provided Order ID: " + orderId + ", doesn't exists",
+            //     showHideTransition: 'slide',
+            //     hideAfter: false,
+            //     allowToastClose: true,
+            //     position: 'top-right',
+            //     icon: 'error'
+            // });
         }
     });
 }
@@ -178,7 +174,16 @@ function addOrderItem() {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            getOrderItemListByOrderId(orderId);
+            getOrder(orderId);
+            $.toast({
+                heading: 'Success',
+                text: 'Successfully added order item!',
+                // showHideTransition: 'slide',
+                hideAfter: 3000,
+                allowToastClose: true,
+                position: 'top-right',
+                icon: 'success'
+            });
         },
         error: handleAjaxError
     });
@@ -187,7 +192,6 @@ function addOrderItem() {
 }
 function getOrderItemListByOrderId() {
     var url = getOrderEditUrl() + "/orderId/" + orderId;
-    var orderUrl = getOrderUrl() + "/" + orderId;
     $.ajax({
         url: url,
         type: 'GET',
@@ -196,18 +200,10 @@ function getOrderItemListByOrderId() {
         },
         error: handleAjaxError
     });
-    $.ajax({
-        url: orderUrl,
-        type: 'GET',
-        success: function (data) {
-            displayCost(data);
-        },
-        error: handleAjaxError
-    });
 }
 function displayCost(data) {
     $label = document.getElementById("show-cost");
-    $label.innerHTML = data.cost;
+    $label.innerHTML = "Cost: " + data.cost;
 
 }
 function editOrderItem(id, orderId) {
@@ -228,6 +224,8 @@ function displayOrderItem(data) {
     $("#orderEdit-edit-form input[name=id]").val(data.id);
     $("#orderEdit-edit-form input[name=orderId]").val(data.orderId);
     $("#orderEdit-edit-form input[name=productBarcode]").val(data.productBarcode);
+    document.getElementById('inputProductBarcodeEdit').innerHTML = data.productBarcode;
+
     $('#edit-orderEdit-modal').modal('toggle');
 }
 function displayOrderItemList(data) {
@@ -237,8 +235,9 @@ function displayOrderItemList(data) {
     for (var i in data) {
         var e = data[i];
         console.log(e.id)
-        var buttonHtml = '<button onclick="deleteOrderItem(' + e.id + ',' + e.orderId + ')">delete</button>'
-        buttonHtml += ' <button onclick="editOrderItem(' + e.id + ',' + e.orderId + ')">edit</button>'
+        var buttonHtml = ' <button type="button" class="btn btn-warning btn-sm"  onclick="deleteOrderItem(' + e.id + ',' + e.orderId + ')">Delete</button>'
+        buttonHtml += ' <button type="button" class="btn btn-secondary btn-sm"  onclick="editOrderItem(' + e.id + ',' + e.orderId + ')">Edit</button>'
+
         var row = '<tr>'
             + '<td>' + e.productBarcode + '</td>'
             + '<td>' + e.quantity + '</td>'
@@ -298,7 +297,7 @@ function updateOrderEdit() {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            getOrderItemListByOrderId(orderId);
+            getOrder(orderId);
         },
         error: handleAjaxError
     });
@@ -306,15 +305,33 @@ function updateOrderEdit() {
     return false;
 }
 //INITIALIZATION CODE
-function setEventListeners(inputProductBarcode, inputQuantity, inputSellingPrice) {
-    document.getElementById(inputProductBarcode).addEventListener('change', getProduct);
-    document.getElementById(inputProductBarcode).inputQuantityElement = inputQuantity;
-    document.getElementById(inputProductBarcode).inputSellingPriceElement = inputSellingPrice;
-    document.getElementById(inputProductBarcode).inputProductBarcodeElement = inputProductBarcode;
-    document.getElementById(inputQuantity).addEventListener('change', getProduct);
-    document.getElementById(inputQuantity).inputQuantityElement = inputQuantity;
-    document.getElementById(inputQuantity).inputSellingPriceElement = inputSellingPrice;
-    document.getElementById(inputQuantity).inputProductBarcodeElement = inputProductBarcode;
+// function setEventListeners(inputProductBarcode, inputQuantity, inputSellingPrice) {
+//     document.getElementById(inputProductBarcode).addEventListener('change', getProduct);
+//     document.getElementById(inputProductBarcode).inputQuantityElement = inputQuantity;
+//     document.getElementById(inputProductBarcode).inputSellingPriceElement = inputSellingPrice;
+//     document.getElementById(inputProductBarcode).inputProductBarcodeElement = inputProductBarcode;
+//     document.getElementById(inputQuantity).addEventListener('change', getProduct);
+//     document.getElementById(inputQuantity).inputQuantityElement = inputQuantity;
+//     document.getElementById(inputQuantity).inputSellingPriceElement = inputSellingPrice;
+//     document.getElementById(inputQuantity).inputProductBarcodeElement = inputProductBarcode;
+// }
+function refreshOrderItemList() {
+    getOrder(orderId);
+    resetInputLabel();
+    $.toast({
+        heading: 'Success',
+        text: 'Refreshed!',
+        // showHideTransition: 'slide',
+        hideAfter: 3000,
+        allowToastClose: true,
+        position: 'top-right',
+        icon: 'success'
+    });
+}
+function resetInputLabel() {
+    document.getElementById('inputProductBarcode').value = '';
+    document.getElementById('inputQuantity').value = '';
+
 }
 function init() {
     orderId = getOrderId();
@@ -324,7 +341,19 @@ function init() {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }
     getOrder(orderId);
+    // if (window.location.hash == '#success') {
+    //     $.toast({
+    //         heading: 'Success',
+    //         text: "Order created!",
+    //         showHideTransition: 'slide',
+    //         hideAfter: 3000,
+    //         allowToastClose: true,
+    //         position: 'top-right',
+    //         icon: 'success'
+    //     });
+    // }
     $('#add-order-item').click(addOrderItem);
+    $('#refresh-data').click(refreshOrderItemList);
     // setEventListeners('inputProductBarcode', 'inputQuantity', 'inputSellingPrice');
     // setEventListeners('inputProductBarcodeEdit', 'inputQuantityEdit', 'inputSellingPriceEdit');
     $('#update-orderEdit').click(updateOrderEdit);
@@ -333,10 +362,8 @@ function init() {
     // $('#process-data').click(processData);
     // $('#download-errors').click(downloadErrors);
     // $('#orderEditFile').on('change', updateFileName)
-    getOrderItemListByOrderId();
 }
 var orderId;
 $(document).ready(init);
 
-// $(document).ready(getOrderItemListByOrderId);
 

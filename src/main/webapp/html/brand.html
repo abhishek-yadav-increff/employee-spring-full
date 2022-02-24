@@ -13,31 +13,27 @@
         <h3>Brands</h3>
 
         <!-- Top row with form-->
-        <div class="row">
-            <div class="col-12">
-                <form class="form-inline" id="brand-form">
-                    <div class="form-group">
-                        <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="brand" id="inputBrand"
-                                placeholder="enter brand">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="category" id="inputCategory"
-                                placeholder="enter category">
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" id="add-brand">Add</button>
-                    &nbsp;
-                    <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
-                    &nbsp;
-                    <button type="button" class="btn btn-primary" id="upload-data">Upload</button>
-                </form>
+        <form id="brand-form">
+            <div class="row" style="padding-left: 30px; padding-right: 15px;">
+                <label for="inputBrand" class="col-form-label justify-content-start">Brand</label>
+                <input type="text" class="col form-control" name="brand" id="inputBrand" placeholder="Enter Brand">
             </div>
-        </div>
+            <div class="row" style="padding-left: 30px; padding-right: 15px;">
+                <label for="inputCategory" class="col-form-label justify-content-start">Category</label>
+                <input type="text" class="col form-control" name="category" id="inputCategory"
+                    placeholder="Enter Category">
+            </div>
+            <div class="row">
+                <div class="col text-right">
+                    <button type="button" class="btn btn-primary btn-sm" id="add-brand">Add</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary btn-sm" id="refresh-data">Refresh</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary btn-sm" id="upload-data">Upload</button>
+                </div>
+            </div>
+        </form>
+        <!-- </div> -->
 
 
         <!-- Blank Row -->
@@ -47,14 +43,14 @@
         <div class="row">
 
             <!-- Table -->
-            <div class="col-12">
+            <div class="col">
                 <table class="table table-striped" id="brand-table">
                     <thead>
                         <tr>
                             <!-- <th scope="col">ID</th> -->
                             <th scope="col">Brand</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,26 +72,22 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-inline" id="brand-edit-form">
-                            <div class="form-group">
-                                <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="brand" placeholder="enter brand">
-                                </div>
+                        <form id="brand-edit-form">
+                            <div class="row">
+                                <label for="inputBrand" class="col-form-label justify-content-start">Brand</label>
+                                <input type="text" class="col form-control" name="brand" placeholder="Enter Brand">
                             </div>
-                            <div class="form-group">
-                                <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="category"
-                                        placeholder="enter category">
-                                </div>
+                            <div class="row">
+                                <label for="inputCategory" class="col-form-label justify-content-start">Category</label>
+                                <input type="text" class="col form-control" name="category"
+                                    placeholder="Enter Category">
                             </div>
                             <input type="hidden" name="id">
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="update-brand">Update</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="update-brand">Update</button>
                     </div>
                 </div>
             </div>
@@ -117,7 +109,8 @@
                     <div class="modal-body">
                         <div class="employee-file">
                             <input type="file" class="custom-file-input" id="brandFile">
-                            <label class="custom-file-label" for="employeeFile" id="brandFileName">Choose
+                            <label class="custom-file-label" for="employeeFile" id="brandFileName"
+                                style="width: 100%;">Choose
                                 file</label>
                         </div>
                         <a th:href="@{/sample/brand.tsv}" target="_blank">Download Sample</a>
@@ -128,9 +121,10 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-                        <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="process-data" disabled>Upload</button>
+                        <button type="button" class="btn btn-warning btn-sm" id="download-errors" disabled>Download
+                            Errors</button>
                     </div>
                 </div>
             </div>

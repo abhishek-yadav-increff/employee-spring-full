@@ -15,15 +15,17 @@ function toJson($form) {
 
 function handleAjaxError(response) {
     var response = JSON.parse(response.responseText);
-    $.toast({
-        heading: 'Failure',
-        text: response.message,
-        showHideTransition: 'slide',
-        hideAfter: false,
-        allowToastClose: true,
-        position: 'top-right',
-        icon: 'error'
-    });
+    if (response != null) {
+        $.toast({
+            heading: 'Failure',
+            text: response.message,
+            // showHideTransition: 'slide',
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
 }
 
 function readFileData(file, callback) {
@@ -39,7 +41,7 @@ function readFileData(file, callback) {
 }
 
 
-function writeFileData(arr) {
+function writeFileData(arr, filename) {
     var config = {
         quoteChar: '',
         escapeChar: '',
@@ -51,13 +53,13 @@ function writeFileData(arr) {
     var fileUrl = null;
 
     if (navigator.msSaveBlob) {
-        fileUrl = navigator.msSaveBlob(blob, 'download.tsv');
+        fileUrl = navigator.msSaveBlob(blob, filename);
     } else {
         fileUrl = window.URL.createObjectURL(blob);
     }
     var tempLink = document.createElement('a');
     tempLink.href = fileUrl;
-    tempLink.setAttribute('download', 'download.tsv');
+    tempLink.setAttribute('download', filename);
     tempLink.click();
 }
 //INITIALIZATION CODE

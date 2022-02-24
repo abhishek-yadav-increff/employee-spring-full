@@ -2,7 +2,6 @@ package com.increff.employee.model;
 
 
 import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
 
 // @XmlRootElement(name = "OrderItemForms")
 public class OrderItemForms {

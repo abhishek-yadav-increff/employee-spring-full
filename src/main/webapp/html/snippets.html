@@ -34,10 +34,10 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-1" th:fragment="name_site_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo.png}" class="d-inline-block align-top" alt="" style="max-width:15%;">
+    <img th:src="@{/static/logo.png}" class="d-inline-block align-top" alt="" style="max-height: 45px;">
   </a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+  <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
     aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -49,12 +49,12 @@
       </li>
     </ul>
 
-  </div>
+  </div> -->
 </nav>
 
 <nav class="navbar navbar-expand-lg navbar-light mb-1" th:fragment="name_app_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo.png}" class="d-inline-block align-top" alt="" style="max-width:15%;">
+    <img th:src="@{/static/logo.png}" class="d-inline-block align-top" alt="" style="max-height:45px;">
   </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
@@ -84,9 +84,9 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/reports}">Reports</a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/admin}">Admin</a>
-      </li>
+      </li> -->
 
       <div class="d-flex" style="height: 50px;">
         <div class="vr"></div>
@@ -96,9 +96,9 @@
           [[${info.getEmail()}]]
         </li>
         <div class="vr"></div>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" th:href="@{/session/logout}">Logout</a>
-        </li>
+        </li> -->
       </ul>
 
 

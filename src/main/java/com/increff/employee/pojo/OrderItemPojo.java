@@ -8,7 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(name = "portt_gen", sequenceName = "portt_gen", initialValue = 100000)
+@SequenceGenerator(name = "portt_gen", sequenceName = "portt_gen", initialValue = 100000,
+        allocationSize = 1)
 public class OrderItemPojo {
 
     @Id
@@ -18,6 +19,7 @@ public class OrderItemPojo {
     private Integer orderId;
     private String productBarcode;
     private Integer quantity;
+
     @Column(precision = 2)
     private Double sellingPrice;
 
@@ -44,8 +46,6 @@ public class OrderItemPojo {
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
-
-
 
     public Integer getQuantity() {
         return quantity;

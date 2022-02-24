@@ -15,14 +15,17 @@ import com.increff.employee.pojo.ProductPojo;
 @Repository
 public class ProductDao extends AbstractDao {
 
-    private static String delete_id = "DELETE FROM ProductPojo P WHERE ID=:id";
-    private static String select_id = "SELECT P FROM ProductPojo P WHERE ID=:id";
-    private static String select_barcode = "SELECT P FROM ProductPojo P WHERE BARCODE=:barcode";
-    private static String select_all = "SELECT P FROM ProductPojo P";
+    private static final String delete_id = "DELETE FROM ProductPojo P WHERE ID=:id";
+    private static final String select_id = "SELECT P FROM ProductPojo P WHERE ID=:id";
+    private static final String select_barcode =
+            "SELECT P FROM ProductPojo P WHERE BARCODE=:barcode";
+    private static final String select_all = "SELECT P FROM ProductPojo P";
     private static final String SELECT_FROM_BRAND_ID =
             "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
     private static final String DELETE_FROM_BRAND_ID =
             "DELETE FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
+    private static final String select_duplicate =
+            "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:bcID AND NAME=:name AND MRP=:mrp";
 
     @PersistenceContext
     private EntityManager em;
@@ -70,6 +73,18 @@ public class ProductDao extends AbstractDao {
         TypedQuery<ProductPojo> query = getQuery(select_barcode, ProductPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);
+    }
+
+    public boolean checkIfExists(ProductPojo p) {
+        TypedQuery<ProductPojo> query = getQuery(select_duplicate, ProductPojo.class);
+        query.setParameter("name", p.getName());
+        query.setParameter("mrp", p.getMrp());
+        query.setParameter("bcID", p.getBrand_category());
+        if (getSingle(query) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

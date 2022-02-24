@@ -13,7 +13,9 @@ function getOrderEditUrl() {
 
 
 function getOrderId() {
-    return document.getElementById('orderIdSelect').innerHTML;
+    var tempArr = document.getElementById('orderIdSelect').innerHTML.split(" ");
+    console.log(tempArr);
+    return tempArr[tempArr.length - 1];
 }
 function getOrderUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -55,11 +57,12 @@ function displayButton(data) {
         document.getElementById("editButton").onclick = function () {
             window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + data.id);
         };
-
+        console.log("http://localhost:9000/employee/ui/orderEdit/" + data.id);
     }
 }
 function displayOrder(data) {
-    var timeStr = new Date(data.time).toLocaleString();
+    var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+    var timeStr = new Date(data.time).toLocaleString(undefined, options);
     var $headingDate = $('#headingDate');
     $headingDate.text(timeStr);
 }
@@ -77,7 +80,7 @@ function getOrderItemListByOrderId() {
 }
 function displayCost(data) {
     $label = document.getElementById("show-cost");
-    $label.innerHTML = data.cost;
+    $label.innerHTML = "Cost: " + data.cost;
 }
 
 
@@ -100,7 +103,7 @@ function displayOrderItemList(data) {
 function init() {
     orderId = getOrderId();
 
-    console.log(orderId);
+    // console.log(orderId);
     if (isNaN(orderId)) {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }

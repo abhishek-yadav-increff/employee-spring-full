@@ -14,7 +14,7 @@ import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryService;
-
+import com.increff.employee.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -24,6 +24,9 @@ public class InventoryApiController {
 
     @Autowired
     private InventoryService service;
+
+    @Autowired
+    private ProductService productService;
 
     @ApiOperation(value = "Adds an inventory")
     @RequestMapping(path = "/api/inventory", method = RequestMethod.POST)
@@ -44,17 +47,18 @@ public class InventoryApiController {
     @RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.GET)
     public InventoryForm get(@PathVariable String barcode) throws ApiException {
         InventoryPojo p = service.get(barcode);
-        return convert(p);
+        return service.convert(p);
     }
 
     @ApiOperation(value = "Gets list of all inventory")
     @RequestMapping(path = "/api/inventory", method = RequestMethod.GET)
-    public List<InventoryForm> getAll() {
+    public List<InventoryForm> getAll() throws ApiException {
         List<InventoryPojo> list = service.getAll();
         List<InventoryForm> list2 = new ArrayList<InventoryForm>();
         for (InventoryPojo p : list) {
-            list2.add(convert(p));
+            list2.add(service.convert(p));
         }
+        System.out.print(list2);
         return list2;
     }
 
@@ -67,14 +71,13 @@ public class InventoryApiController {
     }
 
 
-    private static InventoryForm convert(InventoryPojo p) {
-        InventoryForm d = new InventoryForm();
-        d.setQuantity(p.getQuantity());
-        d.setBarcode(p.getBarcode());
-        return d;
-    }
-
-    private static InventoryPojo convert(InventoryForm f) {
+    public static InventoryPojo convert(InventoryForm f) throws ApiException {
+        if (f.getBarcode() == null) {
+            throw new ApiException("Barcode can not be empty!");
+        }
+        if (f.getQuantity() == null) {
+            throw new ApiException("Quantity can not be empty!");
+        }
         InventoryPojo p = new InventoryPojo();
         p.setQuantity(f.getQuantity());
         p.setBarcode(f.getBarcode());

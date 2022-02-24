@@ -12,41 +12,44 @@
 
 
 		<!-- Top row with form-->
-		<div class="row">
-			<!-- <div class="col-2" max-width="20%">
-				<a th:href="@{/ui/employee}" title="Employees">
-					<i class="fas fa-users"></i>
-					<h3>Employees</h3>
-				</a>
-			</div> -->
-			<div class="col-2">
-				<a th:href="@{/ui/brand}" title="Brand"> <i class="fas fa-trademark"></i>
-					<h3>Brand</h3>
-				</a>
-			</div>
-			<div class="col-2">
-				<a th:href="@{/ui/product}" title="Product"> <i class="fas fa-icons"></i>
-					<h3>Product</h3>
+		<div class="row" style="justify-content: center;">
+			<div class="col-3" style="justify-content: center;">
+				<a th:href="@{/ui/brand}" title="Brand">
+					<div class="row">
+						<i class="fas fa-trademark icon-size"></i>
+					</div>
+					<div class="row">
+						<h5>Brand</h5>
+					</div>
 				</a>
 			</div>
-			<div class="col-2">
-				<a th:href="@{/ui/inventory}" title="Inventory"> <i class="fas fa-list"></i>
-					<h3>Inventory</h3>
+			<div class="col-3">
+				<a th:href="@{/ui/product}" title="Product"> <i class="fas fa-icons icon-size"></i>
+					<span>Product</span>
 				</a>
 			</div>
-			<div class="col-2">
-				<a th:href="@{/ui/order}" title="Orders"> <i class="fas fa-shipping-fast"></i>
-					<h3>Orders</h3>
+			<div class="col-3">
+				<a th:href="@{/ui/inventory}" title="Inventory"> <i class="fas fa-list icon-size"></i>
+					<span>Inventory</span>
 				</a>
 			</div>
-			<div class="col-2">
-				<a th:href="@{/ui/reports}" title="Reports"> <i class="fas fa-receipt"></i>
-					<h3>Reports</h3>
+		</div>
+		&nbsp;
+		<div class="row" style="justify-content: center;">
+
+			<div class="col-3">
+				<a th:href="@{/ui/order}" title="Orders"> <i class="fas fa-shipping-fast icon-size"></i>
+					<span>Orders</span>
 				</a>
 			</div>
-			<div class="col-2">
-				<a th:href="@{/ui/admin}" title="Admin"> <i class="fas fa-cog"></i>
-					<h3>Admin</h3>
+			<div class="col-3">
+				<a th:href="@{/ui/reports}" title="Reports"> <i class="fas fa-receipt icon-size"></i>
+					<span>Reports</span>
+				</a>
+			</div>
+			<div class="col-3">
+				<a th:href="@{/ui/admin}" title="Admin"> <i class="fas fa-cog icon-size"></i>
+					<span>Admin</span>
 				</a>
 			</div>
 		</div>

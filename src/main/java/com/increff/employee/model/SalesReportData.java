@@ -1,12 +1,12 @@
-package com.increff.employee.dto;
+package com.increff.employee.model;
 
-public class SalesReportDto {
+public class SalesReportData {
 
     private String category;
     private Integer quantity;
     private Double revenue;
 
-    public SalesReportDto(String category, Integer quantity, Double revenue) {
+    public SalesReportData(String category, Integer quantity, Double revenue) {
         this.category = category;
         this.quantity = quantity;
         this.revenue = revenue;

@@ -9,14 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(name = "port_gen", sequenceName = "port_gen", initialValue = 1000)
+@SequenceGenerator(name = "port_gen", sequenceName = "port_gen", initialValue = 1000,
+        allocationSize = 1)
 public class OrderPojo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "port_gen")
     private Integer id;
 
-    private Long time;
+    private Long timeMilis;
 
     private Integer complete;
 
@@ -24,7 +25,7 @@ public class OrderPojo {
     private Double cost;
 
     public OrderPojo() {
-        this.time = new Date().getTime();
+        this.timeMilis = new Date().getTime();
         this.complete = 0;
         this.cost = 0.0;
     }
@@ -54,11 +55,11 @@ public class OrderPojo {
     }
 
     public Long getTime() {
-        return time;
+        return timeMilis;
     }
 
     public void setTime(Long time) {
-        this.time = time;
+        this.timeMilis = time;
     }
 
 
