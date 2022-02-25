@@ -27,31 +27,7 @@ function addOrder(event) {
     return false;
 }
 
-// function updateOrder(event) {
-//     $('#edit-order-modal').modal('toggle');
-//     //Get the ID
-//     var id = $("#order-edit-form input[name=id]").val();
-//     var url = getOrderUrl() + "/" + id;
 
-//     //Set the values to update
-//     var $form = $("#order-edit-form");
-//     var json = toJson($form);
-
-//     $.ajax({
-//         url: url,
-//         type: 'PUT',
-//         data: json,
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         success: function (response) {
-//             getOrderList();
-//         },
-//         error: handleAjaxError
-//     });
-
-//     return false;
-// }
 
 
 function getOrderList() {

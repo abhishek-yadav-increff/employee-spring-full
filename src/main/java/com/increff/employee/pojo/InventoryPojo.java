@@ -11,7 +11,7 @@ public class InventoryPojo implements Serializable {
     @Id
     private String barcode;
 
-    @Min(value = 0, message = "Not enough quantity in Inventory")
+    @Min(value = 0)
     private Integer quantity;
 
 

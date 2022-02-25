@@ -15,6 +15,8 @@ public class BrandPojo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+
     private String brand;
     private String category;
     // @OneToMany(targetEntity = ProductPojo.class, mappedBy = "brand_category")

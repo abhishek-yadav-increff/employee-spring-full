@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.OrderForm;
-import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.model.OrderItemForms;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
@@ -69,7 +69,7 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "Deletes and order")
-    @RequestMapping(path = "/api/order/sendOrder/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/order/senddOrder/{id}", method = RequestMethod.PUT)
     // /api/1
     public void sendOrder(@PathVariable int id) throws ApiException {
         OrderPojo p = service.get(id);
@@ -97,21 +97,15 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "Stores order as xml object")
-    @RequestMapping(path = "/api/order/storeOrder/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/order/sendOrder/{id}", method = RequestMethod.PUT)
     public void storeOrder(@PathVariable Integer id)
             throws JAXBException, FileNotFoundException, ApiException {
-        OrderPojo p = service.get(id);
-        p.setComplete(1);
-        service.update(id, p);
-        List<OrderItemPojo> orderItemPojos = orderItemService.getByOrderId(id);
-        OrderItemForms orderItemForms = new OrderItemForms();
-        orderItemForms.setOrderItemForms(OrderItemApiController.convert(orderItemPojos));
-        JAXBContext context = JAXBContext.newInstance(OrderItemForms.class, OrderItemForm.class);
-        Marshaller jaxbMarshaller = context.createMarshaller();
-        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        OutputStream os = new FileOutputStream("Order_" + id.toString() + ".xml");
-        jaxbMarshaller.marshal(orderItemForms, os);
-        jaxbMarshaller.marshal(orderItemForms, new PrintWriter(System.out));
+        service.setComplete(id);
+        String fname = service.generateXML(id);
+        service.generatePdf(fname);
+        // OrderPojo p = service.get(id);
+        // p.setComplete(1);
+        // service.update(id, p);
 
     }
 

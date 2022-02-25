@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.increff.employee.model.OrderItemData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.service.ApiException;
@@ -43,29 +42,29 @@ public class OrderItemApiController {
 
     @ApiOperation(value = "Gets an orderItem by ID")
     @RequestMapping(path = "/api/orderItem/{id}", method = RequestMethod.GET)
-    public OrderItemData get(@PathVariable int id) throws ApiException {
+    public OrderItemForm get(@PathVariable int id) throws ApiException {
         OrderItemPojo p = service.get(id);
-        return convert(p);
+        return service.convert(p);
     }
 
     @ApiOperation(value = "Gets an orderItem by ID")
     @RequestMapping(path = "/api/orderItem/orderId/{id}", method = RequestMethod.GET)
-    public List<OrderItemData> getByOrderId(@PathVariable int id) throws ApiException {
+    public List<OrderItemForm> getByOrderId(@PathVariable int id) throws ApiException {
         List<OrderItemPojo> orderItemPojos = service.getByOrderId(id);
-        List<OrderItemData> list2 = new ArrayList<OrderItemData>();
+        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
         for (OrderItemPojo p : orderItemPojos) {
-            list2.add(convert(p));
+            list2.add(service.convert(p));
         }
         return list2;
     }
 
     @ApiOperation(value = "Gets list of all employees")
     @RequestMapping(path = "/api/orderItem", method = RequestMethod.GET)
-    public List<OrderItemData> getAll() {
+    public List<OrderItemForm> getAll() throws ApiException {
         List<OrderItemPojo> list = service.getAll();
-        List<OrderItemData> list2 = new ArrayList<OrderItemData>();
+        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
         for (OrderItemPojo p : list) {
-            list2.add(convert(p));
+            list2.add(service.convert(p));
         }
         return list2;
     }
@@ -78,15 +77,6 @@ public class OrderItemApiController {
     }
 
 
-    private static OrderItemData convert(OrderItemPojo p) {
-        OrderItemData d = new OrderItemData();
-        d.setId(p.getId());
-        d.setOrderId(p.getOrderId());
-        d.setQuantity(p.getQuantity());
-        d.setProductBarcode(p.getProductBarcode());
-        d.setSellingPrice(p.getSellingPrice());
-        return d;
-    }
 
     private static OrderItemPojo convert(OrderItemForm f) {
         OrderItemPojo p = new OrderItemPojo();
@@ -98,11 +88,5 @@ public class OrderItemApiController {
         return p;
     }
 
-    protected static List<OrderItemForm> convert(List<OrderItemPojo> orderItemPojos) {
-        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
-        for (OrderItemPojo p : orderItemPojos) {
-            list2.add(convert(p));
-        }
-        return list2;
-    }
+
 }

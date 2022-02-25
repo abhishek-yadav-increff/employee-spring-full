@@ -10,7 +10,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GeneratorType;
 
 @Entity
-// @SequenceGenerator(name = "port_genx", sequenceName = "port_genx", initialValue = 1000)
 public class ProductPojo {
 
     @Id
@@ -20,7 +19,8 @@ public class ProductPojo {
     @GeneratorType(type = UUIDGenerator.class, when = GenerationTime.INSERT)
     private String barcode;
 
-    private Integer brand_category;
+    private Integer brandCategoryId;
+
     private String name;
 
     @Column(scale = 2)
@@ -43,11 +43,11 @@ public class ProductPojo {
     }
 
     public Integer getBrand_category() {
-        return this.brand_category;
+        return this.brandCategoryId;
     }
 
     public void setBrand_category(Integer brand_category) {
-        this.brand_category = brand_category;
+        this.brandCategoryId = brand_category;
     }
 
     public String getName() {

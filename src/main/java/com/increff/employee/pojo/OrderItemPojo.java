@@ -20,7 +20,7 @@ public class OrderItemPojo {
     private String productBarcode;
     private Integer quantity;
 
-    @Column(precision = 2)
+    @Column(scale = 2)
     private Double sellingPrice;
 
     public int getId() {

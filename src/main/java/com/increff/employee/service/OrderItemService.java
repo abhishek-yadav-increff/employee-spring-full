@@ -1,5 +1,6 @@
 package com.increff.employee.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.OrderItemDao;
+import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
@@ -167,6 +169,27 @@ public class OrderItemService {
         return p;
     }
 
+    @Transactional
+    public OrderItemForm convert(OrderItemPojo p) throws ApiException {
+        OrderItemForm d = new OrderItemForm();
+        d.setId(p.getId());
+        d.setOrderId(p.getOrderId());
+        d.setQuantity(p.getQuantity());
+        d.setProductBarcode(p.getProductBarcode());
+        d.setMrp(
+                String.format("%.2f", productService.getByBarcode(p.getProductBarcode()).getMrp()));
+        d.setSellingPrice(String.format("%.2f", p.getSellingPrice()));
+        d.setName(productService.getByBarcode(p.getProductBarcode()).getName());
+        return d;
+    }
 
+    @Transactional
+    public List<OrderItemForm> convert(List<OrderItemPojo> orderItemPojos) throws ApiException {
+        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
+        for (OrderItemPojo p : orderItemPojos) {
+            list2.add(convert(p));
+        }
+        return list2;
+    }
 
 }

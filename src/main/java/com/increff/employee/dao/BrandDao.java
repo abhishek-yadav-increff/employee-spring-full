@@ -17,10 +17,10 @@ public class BrandDao extends AbstractDao {
     private static final String select_id = "SELECT P FROM BrandPojo P WHERE ID=:id";
     private static final String select_all = "SELECT P FROM BrandPojo P";
     private static final String select_brand = "SELECT P FROM BrandPojo P WHERE BRAND=:brand";
-    private static final String select_brand_category =
-            "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
     private static final String select_category =
             "SELECT P FROM BrandPojo P WHERE CATEGORY=:category";
+    private static final String select_brand_category =
+            "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
     private static final String select_duplicate =
             "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
     @PersistenceContext
@@ -72,7 +72,7 @@ public class BrandDao extends AbstractDao {
     }
 
     public boolean checkIfExists(BrandPojo p) {
-        TypedQuery<BrandPojo> query = getQuery(select_duplicate, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(select_brand_category, BrandPojo.class);
         query.setParameter("brand", p.getBrand());
         query.setParameter("category", p.getCategory());
         if (getSingle(query) != null) {

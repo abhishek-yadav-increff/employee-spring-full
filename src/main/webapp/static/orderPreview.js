@@ -108,7 +108,17 @@ function init() {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }
     getOrder(orderId);
-
+    if (window.location.hash == '#checkout') {
+        $.toast({
+            heading: 'Success',
+            text: "Order completed!",
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    }
 }
 var orderId;
 $(document).ready(init);

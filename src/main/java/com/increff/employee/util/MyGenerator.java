@@ -1,4 +1,4 @@
-package com.increff.employee.pojo;
+package com.increff.employee.util;
 
 import java.io.Serializable;
 import java.util.UUID;

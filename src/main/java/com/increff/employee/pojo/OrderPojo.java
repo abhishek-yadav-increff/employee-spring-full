@@ -19,14 +19,14 @@ public class OrderPojo {
 
     private Long timeMilis;
 
-    private Integer complete;
+    private Integer isCompleted;
 
     @Column(precision = 2)
     private Double cost;
 
     public OrderPojo() {
         this.timeMilis = new Date().getTime();
-        this.complete = 0;
+        this.isCompleted = 0;
         this.cost = 0.0;
     }
 
@@ -39,11 +39,11 @@ public class OrderPojo {
     }
 
     public Integer getComplete() {
-        return complete;
+        return isCompleted;
     }
 
     public void setComplete(Integer complete) {
-        this.complete = complete;
+        this.isCompleted = complete;
     }
 
     public Integer getId() {

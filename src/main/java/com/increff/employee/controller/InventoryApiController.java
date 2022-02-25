@@ -14,7 +14,6 @@ import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryService;
-import com.increff.employee.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -24,9 +23,6 @@ public class InventoryApiController {
 
     @Autowired
     private InventoryService service;
-
-    @Autowired
-    private ProductService productService;
 
     @ApiOperation(value = "Adds an inventory")
     @RequestMapping(path = "/api/inventory", method = RequestMethod.POST)

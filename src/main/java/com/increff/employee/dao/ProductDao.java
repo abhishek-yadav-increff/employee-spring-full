@@ -24,7 +24,7 @@ public class ProductDao extends AbstractDao {
             "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
     private static final String DELETE_FROM_BRAND_ID =
             "DELETE FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
-    private static final String select_duplicate =
+    private static final String select_brandCategoryId_name_mrp =
             "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:bcID AND NAME=:name AND MRP=:mrp";
 
     @PersistenceContext
@@ -76,7 +76,8 @@ public class ProductDao extends AbstractDao {
     }
 
     public boolean checkIfExists(ProductPojo p) {
-        TypedQuery<ProductPojo> query = getQuery(select_duplicate, ProductPojo.class);
+        TypedQuery<ProductPojo> query =
+                getQuery(select_brandCategoryId_name_mrp, ProductPojo.class);
         query.setParameter("name", p.getName());
         query.setParameter("mrp", p.getMrp());
         query.setParameter("bcID", p.getBrand_category());

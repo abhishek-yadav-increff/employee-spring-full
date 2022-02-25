@@ -51,7 +51,7 @@ function getOrderEditList() {
 
 function deleteOrder() {
     var url = getOrderUrl() + "/" + orderId;
-    console.log('inside deleteOrder');
+    // console.log('inside deleteOrder');
     $.ajax({
         url: url,
         type: 'DELETE',
@@ -64,13 +64,13 @@ function deleteOrder() {
 }
 function sendOrder() {
     var url = getOrderUrl() + "/sendOrder/" + orderId;
-    console.log('inside sendOrder');
+    // console.log('inside sendOrder');
 
     $.ajax({
         url: url,
         type: 'PUT',
         success: function (data) {
-            window.location.replace("http://localhost:9000/employee/ui/order");
+            window.location.replace("http://localhost:9000/employee/ui/orderPreview/" + orderId + "#checkout");
 
         },
         error: handleAjaxError
@@ -240,7 +240,7 @@ function displayOrderItemList(data) {
 
         var row = '<tr>'
             + '<td>' + e.productBarcode + '</td>'
-            + '<td>' + e.quantity + '</td>'
+            + '<td>' + e.quantity.toFixed(2) + '</td>'
             + '<td>' + e.sellingPrice + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
@@ -341,17 +341,17 @@ function init() {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }
     getOrder(orderId);
-    // if (window.location.hash == '#success') {
-    //     $.toast({
-    //         heading: 'Success',
-    //         text: "Order created!",
-    //         showHideTransition: 'slide',
-    //         hideAfter: 3000,
-    //         allowToastClose: true,
-    //         position: 'top-right',
-    //         icon: 'success'
-    //     });
-    // }
+    if (window.location.hash == '#success') {
+        $.toast({
+            heading: 'Success',
+            text: "Order created!",
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    }
     $('#add-order-item').click(addOrderItem);
     $('#refresh-data').click(refreshOrderItemList);
     // setEventListeners('inputProductBarcode', 'inputQuantity', 'inputSellingPrice');

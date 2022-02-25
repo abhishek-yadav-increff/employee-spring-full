@@ -23,23 +23,23 @@ public class BrandService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
+        normalize(p);
         if (dao.checkIfExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
-        normalize(p);
         if (StringUtil.isEmpty(p.getBrand()) || StringUtil.isEmpty(p.getCategory())) {
-            throw new ApiException("Brand and Category cannot be empty");
+            throw new ApiException("Brand and Category cannot be empty!");
         }
         dao.insert(p);
     }
 
     @Transactional
     public void delete(int id) throws ApiException {
-        dao.delete(id);
         List<ProductPojo> productPojos = productService.selectFromBrandId(id);
         for (ProductPojo p : productPojos) {
             productService.delete(p.getId());
         }
+        dao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
