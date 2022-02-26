@@ -13,10 +13,7 @@ public class ProductDtoHelper {
 
     public static ProductPojo normalize(ProductPojo productPojo) {
         productPojo.setName(CommonsHelper.normalize(productPojo.getName()));
-        BigDecimal bigDecimal =
-                new BigDecimal(productPojo.getMrp()).setScale(2, RoundingMode.HALF_DOWN);
-        Double scaledDouble = bigDecimal.doubleValue();
-        productPojo.setMrp(scaledDouble);
+        productPojo.setMrp(CommonsHelper.normalize(productPojo.getMrp()));
         return productPojo;
     }
 
