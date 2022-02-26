@@ -21,27 +21,23 @@ public class InventoryService {
 
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(InventoryPojo p) throws ApiException {
-        if (productService.getByBarcode(p.getBarcode()) == null) {
-            throw new ApiException("Product doesn't exist!");
-        }
-        if (p.getQuantity() <= 0) {
+    public void add(InventoryPojo inventoryPojoNew) throws ApiException {
+        productService.getByBarcode(inventoryPojoNew.getBarcode());
+        if (inventoryPojoNew.getQuantity() <= 0) {
             throw new ApiException("Quantity must be positive!");
         }
-        InventoryPojo pp = dao.select(p.getBarcode());
-        if (pp != null) {
-            pp.setQuantity(p.getQuantity() + pp.getQuantity());
-            update(pp.getBarcode(), pp);
+        InventoryPojo inventoryPojoOld = dao.select(inventoryPojoNew.getBarcode());
+        if (inventoryPojoOld != null) {
+            inventoryPojoOld
+                    .setQuantity(inventoryPojoNew.getQuantity() + inventoryPojoOld.getQuantity());
+            update(inventoryPojoOld.getBarcode(), inventoryPojoOld);
         } else {
-            dao.insert(p);
+            dao.insert(inventoryPojoNew);
         }
-        System.out.println("No errors till dao insert");
     }
 
     @Transactional
     public void delete(String barcode) {
-        // TODO: cascade order Item
-        // orderItemService.deleteByBarcode(barcode);
         dao.delete(barcode);
     }
 
@@ -57,13 +53,11 @@ public class InventoryService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(String barcode, InventoryPojo p) throws ApiException {
-        if (productService.getByBarcode(p.getBarcode()) == null) {
-            throw new ApiException("Product doesn't exist");
-        }
+        productService.getByBarcode(p.getBarcode());
         if (p.getQuantity() < 0) {
             throw new ApiException("Quantity can not be negative");
         }
-        InventoryPojo ex = getCheck(barcode);
+        InventoryPojo ex = get(barcode);
         ex.setQuantity(p.getQuantity());
         dao.update(ex);
     }
@@ -71,7 +65,6 @@ public class InventoryService {
     @Transactional
     public InventoryPojo getCheck(String barcode) throws ApiException {
         InventoryPojo p = dao.select(barcode);
-
         if (p == null) {
             throw new ApiException("Inventory with given ID does not exit, id: " + barcode);
         }

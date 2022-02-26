@@ -13,9 +13,15 @@ public class InventoryDtoHelper {
         InventoryForm d = new InventoryForm();
         d.setQuantity(p.getQuantity());
         d.setBarcode(p.getBarcode());
-        // String name = productService.getByBarcode(d.getBarcode()).getName();
         d.setName(name);
         return d;
+    }
+
+    public static InventoryPojo convert(InventoryForm f) {
+        InventoryPojo p = new InventoryPojo();
+        p.setQuantity(f.getQuantity());
+        p.setBarcode(f.getBarcode());
+        return p;
     }
 
 }
