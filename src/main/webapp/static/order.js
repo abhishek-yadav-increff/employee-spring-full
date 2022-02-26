@@ -66,15 +66,14 @@ function displayOrderList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e.id)
+        // console.log(e.id)
         var invoiceButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="showInvoice(' + e.id + ')">Invoice</button>'
         var editButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="editOrder(' + e.id + ')">Edit</button>'
-
-        // var invoiceButtonHtml = '<button onclick="showInvoice(' + e.id + ')">invoice</button>'
-        // var editButtonHtml = ' <button onclick="editOrder(' + e.id + ')">edit</button>'
+        var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+        var timeStr = new Date(e.time).toLocaleString(undefined, options);
         var row = '<tr>'
             + '<td> <a href="http://localhost:9000/employee/ui/orderPreview/' + e.id + '">' + e.id + '</a> </td>'
-            + '<td>' + e.time + '</td>'
+            + '<td>' + timeStr + '</td>'
             + '<td>' + e.cost + '</td>'
             + '<td>' + ((e.complete == 1) ? "Completed" : "In Progress") + '</td>'
             + '<td>' + ((e.complete == 1) ? invoiceButtonHtml : editButtonHtml) + '</td>'
@@ -82,7 +81,38 @@ function displayOrderList(data) {
         $tbody.append(row);
     }
 }
-
+function base64ToArrayBuffer(base64) {
+    var binaryString = window.atob(base64);
+    var binaryLen = binaryString.length;
+    var bytes = new Uint8Array(binaryLen);
+    for (var i = 0; i < binaryLen; i++) {
+        var ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+    }
+    return bytes;
+}
+function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], { type: "application/pdf" });
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = reportName;
+    link.download = fileName;
+    link.click();
+};
+function showInvoice(orderId) {
+    var url = getOrderUrl() + "/getPdf/" + orderId;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            var sampleArr = base64ToArrayBuffer(data);
+            saveByteArray("Invoice_" + orderId, sampleArr);
+        },
+        error: function (err) {
+            window.location.replace("http://localhost:9000/employee/ui/order");
+        }
+    });
+}
 function createNewOrder() {
     var url = getOrderUrl();
 

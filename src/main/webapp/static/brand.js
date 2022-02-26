@@ -1,12 +1,48 @@
+// Validation
+function validateForm() {
+    if (document.getElementById("inputBrand").value == "") {
+        toast(false, 'Brand must not be empty!');
+    }
+    else if (document.getElementById("inputCategory").value == "") {
+        toast(false, 'Category must not be empty!');
+    }
+    else {
+        return true;
+    }
+    return false;
+}
 
+// Utility
 function getBrandUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/brand";
 }
 
+function toast(successState, message) {
+    if (successState == true) {
+        $.toast({
+            heading: 'Success',
+            text: message,
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    } else {
+        $.toast({
+            heading: 'Failure',
+            text: message,
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
+}
 //BUTTON ACTIONS
 function addBrand(event) {
-    //Set the values to update
+    if (!validateForm()) { return; }
     var $form = $("#brand-form");
     var json = toJson($form);
     var url = getBrandUrl();
@@ -20,28 +56,19 @@ function addBrand(event) {
         },
         success: function (response) {
             getBrandList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully added!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
-            resetInputLabel();
+            toast(true, "Successfully added!");
+            resetInputBrand();
         },
         error: handleAjaxError
     });
 
     return false;
 }
-function resetInputLabel() {
+function resetInputBrand() {
     document.getElementById('inputBrand').value = '';
     document.getElementById('inputCategory').value = '';
 }
 function updateBrand(event) {
-    $('#edit-brand-modal').modal('toggle');
     //Get the ID
     var id = $("#brand-edit-form input[name=id]").val();
     var url = getBrandUrl() + "/" + id;
@@ -58,7 +85,10 @@ function updateBrand(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            $('#edit-brand-modal').modal('toggle');
+            toast(true, "Successfully pdated!");
             getBrandList();
+
         },
         error: handleAjaxError
     });
@@ -68,19 +98,12 @@ function updateBrand(event) {
 
 function refreshBrandList() {
     getBrandList();
-    $.toast({
-        heading: 'Success',
-        text: 'Refreshed!',
-        // showHideTransition: 'slide',
-        hideAfter: 3000,
-        allowToastClose: true,
-        position: 'top-right',
-        icon: 'success'
-    });
-    resetInputLabel();
+    toast(true, 'Refreshed!');
+    resetInputBrand();
 }
 
 function getBrandList() {
+    console.log("getting");
     var url = getBrandUrl();
     $.ajax({
         url: url,
@@ -129,39 +152,16 @@ function uploadRows() {
         if (errorData.length == 0) {
             displayUploadData();
             getBrandList();
-            $.toast({
-                heading: 'Success',
-                text: 'All files successfully added!',
-                showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'All files successfully added!');
         } else if (errorData.length == processCount) {
-            $.toast({
-                heading: 'Error',
-                text: 'No data was added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'error'
-            });
             getBrandList();
             document.getElementById("download-errors").disabled = false;
+            toast(false, "No data was added!");
 
         } else {
-            $.toast({
-                heading: 'Warning',
-                text: 'Only some rows were added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'warning'
-            });
+            getBrandList();
             document.getElementById("download-errors").disabled = false;
+            toast(false, "Only some rows were added!");
         }
         return;
     }
@@ -208,6 +208,7 @@ function downloadErrors() {
 function displayBrandList(data) {
     var $tbody = $('#brand-table').find('tbody');
     $tbody.empty();
+    data.sort(function (a, b) { return a.id - b.id; });
     data.reverse();
     for (var i in data) {
         var e = data[i];

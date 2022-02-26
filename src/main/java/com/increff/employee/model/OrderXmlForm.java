@@ -13,7 +13,7 @@ public class OrderXmlForm {
     private Integer id;
     private String date;
     private String total;
-    private List<OrderItemForm> items;
+    private List<OrderItemXmlForm> items;
 
     @XmlElement
     public Integer getId() {
@@ -21,11 +21,11 @@ public class OrderXmlForm {
     }
 
     @XmlElement
-    public List<OrderItemForm> getItems() {
+    public List<OrderItemXmlForm> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItemForm> items) {
+    public void setItems(List<OrderItemXmlForm> items) {
         this.items = items;
     }
 

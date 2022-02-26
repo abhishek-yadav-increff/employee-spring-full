@@ -9,30 +9,44 @@
     <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
     <div class="container" style="padding-top:15%;">
-
-
-        <!-- Top row with form-->
         <div class="row" style="justify-content: center;">
-            <div class="col-2">
-                <a href="javascript:void(0)" onclick="genBrandReport()" title="Brand"> <i class="fas fa-trademark"></i>
-                    <h3>Brand</h3>
+            <div class="col-3">
+                <a href="javascript:void(0)" onclick="genBrandReport()" title="Brand">
+                    <div class="co-3">
+                        <div class="row" style="justify-content: center;">
+                            <i class="fas fa-trademark icon-size"></i>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <h4>Brand</h4>
+                        </div>
+                    </div>
                 </a>
             </div>
-            <div class="col-2">
-                <a href="javascript:void(0)" onclick="genInventoryReport()" title="Inventory"> <i
-                        class="fas fa-list"></i>
-                    <h3>Inventory</h3>
+            <div class="col-3">
+                <a href="javascript:void(0)" onclick="genInventoryReport()" title="Inventory">
+                    <div class="co-3">
+                        <div class="row" style="justify-content: center;">
+                            <i class="fas fa-list  icon-size"></i>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <h4>Inventory</h4>
+                        </div>
+                    </div>
                 </a>
             </div>
-            <div class="col-2">
-                <a th:href="@{/ui/reportsSales}" title="Sales"> <i class="fas fa-shipping-fast"></i>
-                    <h3>Sales</h3>
+            <div class="col-3">
+                <a th:href="@{/ui/reportsSales}" title="Sales">
+                    <div class="co-3">
+                        <div class="row" style="justify-content: center;">
+                            <i class="fas fa-shipping-fast icon-size"></i>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <h4>Sales</h4>
+                        </div>
+                    </div>
                 </a>
             </div>
         </div>
-
-
-
     </div> <!-- Container end-->
 
     <footer th:replace="snippets.html :: name_footer"></footer>

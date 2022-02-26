@@ -15,11 +15,11 @@ import com.increff.employee.pojo.InventoryPojo;
 @Repository
 public class InventoryDao extends AbstractDao {
 
-    private static final String delete_barcode =
+    private static final String DELETE_BARCODE =
             "DELETE FROM InventoryPojo P WHERE BARCODE=:barcode";
-    private static final String select_barcode =
+    private static final String SELECT_BARCODE =
             "SELECT P FROM InventoryPojo P WHERE BARCODE=:barcode";
-    private static final String select_all = "SELECT P FROM InventoryPojo P";
+    private static final String SELECT_ALL = "SELECT P FROM InventoryPojo P";
 
     @PersistenceContext
     private EntityManager em;
@@ -31,21 +31,21 @@ public class InventoryDao extends AbstractDao {
 
     @Transactional
     public int delete(String barcode) {
-        Query query = em.createQuery(delete_barcode);
+        Query query = em.createQuery(DELETE_BARCODE);
         query.setParameter("barcode", barcode);
         return query.executeUpdate();
     }
 
     @Transactional
     public InventoryPojo select(String barcode) {
-        TypedQuery<InventoryPojo> query = getQuery(select_barcode, InventoryPojo.class);
+        TypedQuery<InventoryPojo> query = getQuery(SELECT_BARCODE, InventoryPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);
     }
 
     @Transactional
     public List<InventoryPojo> selectAll() {
-        TypedQuery<InventoryPojo> query = getQuery(select_all, InventoryPojo.class);
+        TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
         return query.getResultList();
     }
 

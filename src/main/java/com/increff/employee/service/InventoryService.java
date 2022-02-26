@@ -23,10 +23,10 @@ public class InventoryService {
     @Transactional(rollbackOn = ApiException.class)
     public void add(InventoryPojo p) throws ApiException {
         if (productService.getByBarcode(p.getBarcode()) == null) {
-            throw new ApiException("Product doesn't exist");
+            throw new ApiException("Product doesn't exist!");
         }
-        if (p.getQuantity() < 0) {
-            throw new ApiException("Quantity can not be negative");
+        if (p.getQuantity() <= 0) {
+            throw new ApiException("Quantity must be positive!");
         }
         InventoryPojo pp = dao.select(p.getBarcode());
         if (pp != null) {

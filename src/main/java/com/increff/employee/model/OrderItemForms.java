@@ -8,14 +8,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class OrderItemForms {
 
-    List<OrderItemForm> orderItemFormData;
+    List<OrderItemXmlForm> orderItemFormData;
 
     @XmlElement
-    public List<OrderItemForm> getOrderItemFormData() {
+    public List<OrderItemXmlForm> getOrderItemFormData() {
         return orderItemFormData;
     }
 
-    public void setOrderItemFormData(List<OrderItemForm> orderItemFormData) {
+    public void setOrderItemFormData(List<OrderItemXmlForm> orderItemFormData) {
         this.orderItemFormData = orderItemFormData;
     }
 

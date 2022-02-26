@@ -8,12 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(name = "portt_gen", sequenceName = "portt_gen", initialValue = 100000,
-        allocationSize = 1)
+@SequenceGenerator(name = "order_item_id_generator", sequenceName = "order_item_id_generator",
+        initialValue = 100000, allocationSize = 1)
 public class OrderItemPojo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "portt_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "order_item_id_generator")
     private int id;
 
     private Integer orderId;

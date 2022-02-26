@@ -59,10 +59,18 @@ public class ProductApiController {
     @ApiOperation(value = "Gets list of all employees")
     @RequestMapping(path = "/api/product", method = RequestMethod.GET)
     public List<ProductData> getAll() throws ApiException {
+        System.out.print("here");
         List<ProductPojo> list = service.getAll();
+        System.out.print("after getAll");
+        for (ProductPojo p : list) {
+            System.out.print(p.getBarcode());
+        }
         List<ProductData> list2 = new ArrayList<ProductData>();
         for (ProductPojo p : list) {
+            System.out.print("before convert");
+
             list2.add(service.convert(p));
+            System.out.print(p.getId());
         }
         return list2;
     }

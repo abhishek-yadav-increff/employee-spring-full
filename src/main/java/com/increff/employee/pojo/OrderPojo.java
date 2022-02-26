@@ -9,12 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(name = "port_gen", sequenceName = "port_gen", initialValue = 1000,
-        allocationSize = 1)
+@SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_generator",
+        initialValue = 1000, allocationSize = 1)
 public class OrderPojo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "port_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "order_id_generator")
     private Integer id;
 
     private Long timeMilis;

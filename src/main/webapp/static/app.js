@@ -75,5 +75,43 @@ function init() {
         window.location.href = "http://localhost:9000/employee/ui/reports/sales";
     });
 }
+function toast(successState, message) {
+    if (successState == true) {
+        $.toast({
+            heading: 'Success',
+            text: message,
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    } else {
+        $.toast({
+            heading: 'Failure',
+            text: message,
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
+}
+function getProductUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/product";
+}
 
+function getBrandUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/brand";
+}
+function getBrandReportUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/brandreport";
+}
+function getInventoryReportUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/inventoryreport";
+}
 $(document).ready(init);

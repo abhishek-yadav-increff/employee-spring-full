@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.increff.employee.model.OrderItemForm;
+import com.increff.employee.model.OrderItemXmlForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderItemService;
@@ -27,7 +27,7 @@ public class OrderItemApiController {
 
     @ApiOperation(value = "Adds an orderItem")
     @RequestMapping(path = "/api/orderItem", method = RequestMethod.POST)
-    public void add(@RequestBody OrderItemForm form) throws ApiException {
+    public void add(@RequestBody OrderItemXmlForm form) throws ApiException {
         OrderItemPojo p = convert(form);
         service.add(p);
     }
@@ -44,14 +44,14 @@ public class OrderItemApiController {
     @RequestMapping(path = "/api/orderItem/{id}", method = RequestMethod.GET)
     public OrderItemForm get(@PathVariable int id) throws ApiException {
         OrderItemPojo p = service.get(id);
-        return service.convert(p);
+        return service.convertForm(p);
     }
 
     @ApiOperation(value = "Gets an orderItem by ID")
     @RequestMapping(path = "/api/orderItem/orderId/{id}", method = RequestMethod.GET)
-    public List<OrderItemForm> getByOrderId(@PathVariable int id) throws ApiException {
+    public List<OrderItemXmlForm> getByOrderId(@PathVariable int id) throws ApiException {
         List<OrderItemPojo> orderItemPojos = service.getByOrderId(id);
-        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
+        List<OrderItemXmlForm> list2 = new ArrayList<OrderItemXmlForm>();
         for (OrderItemPojo p : orderItemPojos) {
             list2.add(service.convert(p));
         }
@@ -60,9 +60,9 @@ public class OrderItemApiController {
 
     @ApiOperation(value = "Gets list of all employees")
     @RequestMapping(path = "/api/orderItem", method = RequestMethod.GET)
-    public List<OrderItemForm> getAll() throws ApiException {
+    public List<OrderItemXmlForm> getAll() throws ApiException {
         List<OrderItemPojo> list = service.getAll();
-        List<OrderItemForm> list2 = new ArrayList<OrderItemForm>();
+        List<OrderItemXmlForm> list2 = new ArrayList<OrderItemXmlForm>();
         for (OrderItemPojo p : list) {
             list2.add(service.convert(p));
         }
@@ -71,14 +71,14 @@ public class OrderItemApiController {
 
     @ApiOperation(value = "Updates an orderItem")
     @RequestMapping(path = "/api/orderItem/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody OrderItemForm f) throws ApiException {
+    public void update(@PathVariable int id, @RequestBody OrderItemXmlForm f) throws ApiException {
         OrderItemPojo p = convert(f);
         service.update(id, p);
     }
 
 
 
-    private static OrderItemPojo convert(OrderItemForm f) {
+    private static OrderItemPojo convert(OrderItemXmlForm f) {
         OrderItemPojo p = new OrderItemPojo();
         p.setOrderId(f.getOrderId());
         p.setQuantity(f.getQuantity());

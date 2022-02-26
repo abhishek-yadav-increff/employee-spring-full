@@ -1,5 +1,26 @@
 
-
+function toast(successState, message) {
+    if (successState == true) {
+        $.toast({
+            heading: 'Success',
+            text: message,
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    } else {
+        $.toast({
+            heading: 'Failure',
+            text: message,
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
+}
 
 function getOrderEditUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -33,23 +54,14 @@ function getOrder(orderId) {
         },
         error: function (err) {
             window.location.replace("http://localhost:9000/employee/ui/order");
-
-
-            // setTimesout(function () { alert("Order ID doesn't exist!"); }, 10000);
-            // console.log(alertMessage("asd"));
-            // alert("Order ID doesn't exist!")
-            // $.toaster({ priority: 'danger', title: 'Redirected', message: "The given Order ID doesn't exist" });
-
         }
     });
 }
 function displayButton(data) {
     if (data.complete == 1) {
         document.getElementById('buttonElement').innerHTML = `
-        <button type="button" class="btn btn-primary" id="invoiceButton">Invoice</button>`;
-        document.getElementById("invoiceButton").onclick = function () {
-            window.location.replace("http://localhost:9000/employee/ui/order");
-        };
+        <button type="button" class="btn btn-primary" id="invoiceButton" onclick="getBytePdf(`+ orderId + `)">Invoice</button>`;
+
 
     } else {
         document.getElementById('buttonElement').innerHTML = `
@@ -66,7 +78,24 @@ function displayOrder(data) {
     var $headingDate = $('#headingDate');
     $headingDate.text(timeStr);
 }
-
+function base64ToArrayBuffer(base64) {
+    var binaryString = window.atob(base64);
+    var binaryLen = binaryString.length;
+    var bytes = new Uint8Array(binaryLen);
+    for (var i = 0; i < binaryLen; i++) {
+        var ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+    }
+    return bytes;
+}
+function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], { type: "application/pdf" });
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = reportName;
+    link.download = fileName;
+    link.click();
+};
 function getOrderItemListByOrderId() {
     var url = getOrderEditUrl() + "/orderId/" + orderId;
     $.ajax({
@@ -99,7 +128,20 @@ function displayOrderItemList(data) {
     }
 }
 
-
+function getBytePdf(orderId) {
+    var url = getOrderUrl() + "/getPdf/" + orderId;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            var sampleArr = base64ToArrayBuffer(data);
+            saveByteArray("Invoice_" + orderId, sampleArr);
+        },
+        error: function (err) {
+            window.location.replace("http://localhost:9000/employee/ui/order");
+        }
+    });
+}
 function init() {
     orderId = getOrderId();
 
@@ -109,15 +151,7 @@ function init() {
     }
     getOrder(orderId);
     if (window.location.hash == '#checkout') {
-        $.toast({
-            heading: 'Success',
-            text: "Order completed!",
-            showHideTransition: 'slide',
-            hideAfter: 3000,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'success'
-        });
+        toast(true, "Order completed!");
     }
 }
 var orderId;

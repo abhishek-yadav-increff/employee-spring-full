@@ -5,10 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +27,6 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.increff.employee.controller.OrderItemApiController;
 import com.increff.employee.dao.OrderDao;
 import com.increff.employee.model.OrderItemForms;
 import com.increff.employee.model.OrderXmlForm;
@@ -118,14 +114,14 @@ public class OrderService {
         List<OrderItemPojo> orderItemPojos = orderItemService.getByOrderId(id);
         OrderItemForms orderItemForms = new OrderItemForms();
         orderItemForms.setOrderItemFormData(orderItemService.convert(orderItemPojos));
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
-        Date date = Calendar.getInstance().getTime();
+        // DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
         OrderXmlForm orderXmlForm = new OrderXmlForm();
         orderXmlForm.setId(p.getId());
         orderXmlForm.setTotal(String.format("%.2f", p.getCost()));
         orderXmlForm.setItems(orderItemService.convert(orderItemPojos));
-        orderXmlForm.setDate(dateFormat.format(date));
+        orderXmlForm.setDate(simpleDateFormat.format(new Date()));
 
         JAXBContext context = JAXBContext.newInstance(OrderXmlForm.class);
         Marshaller jaxbMarshaller = context.createMarshaller();

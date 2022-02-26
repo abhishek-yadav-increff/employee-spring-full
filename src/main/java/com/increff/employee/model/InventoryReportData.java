@@ -6,9 +6,19 @@ public class InventoryReportData {
     private String category;
     private String barcode;
     private Integer quantity;
+    private String name;
+
 
     public String getBrand() {
         return brand;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setBrand(String brand) {

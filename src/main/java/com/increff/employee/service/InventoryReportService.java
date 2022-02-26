@@ -34,6 +34,7 @@ public class InventoryReportService {
             BrandPojo brandPojo = brandService.get(productPojo.getBrand_category());
             inventoryReportDto.setBrand(brandPojo.getBrand());
             inventoryReportDto.setCategory(brandPojo.getCategory());
+            inventoryReportDto.setName(productPojo.getName());
         }
         return inventoryReportDtos;
     }

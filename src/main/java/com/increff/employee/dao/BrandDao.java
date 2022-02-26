@@ -13,16 +13,15 @@ import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao {
 
-    private static final String delete_id = "DELETE FROM BrandPojo P WHERE ID=:id";
-    private static final String select_id = "SELECT P FROM BrandPojo P WHERE ID=:id";
-    private static final String select_all = "SELECT P FROM BrandPojo P";
-    private static final String select_brand = "SELECT P FROM BrandPojo P WHERE BRAND=:brand";
-    private static final String select_category =
+    private static final String DELETE_ID = "DELETE FROM BrandPojo P WHERE ID=:id";
+    private static final String SELECT_ID = "SELECT P FROM BrandPojo P WHERE ID=:id";
+    private static final String SELECT_ALL = "SELECT P FROM BrandPojo P";
+    private static final String SELECT_BRAND = "SELECT P FROM BrandPojo P WHERE BRAND=:brand";
+    private static final String SELECT_CATEGORY =
             "SELECT P FROM BrandPojo P WHERE CATEGORY=:category";
-    private static final String select_brand_category =
+    private static final String SELECT_BRAND_CATEGORY =
             "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
-    private static final String select_duplicate =
-            "SELECT P FROM BrandPojo P WHERE BRAND=:brand AND CATEGORY=:category";
+
     @PersistenceContext
     private EntityManager em;
 
@@ -32,47 +31,47 @@ public class BrandDao extends AbstractDao {
     }
 
     public int delete(int id) {
-        Query query = em.createQuery(delete_id);
+        Query query = em.createQuery(DELETE_ID);
         query.setParameter("id", id);
         return query.executeUpdate();
     }
 
     public BrandPojo select(int id) {
-        TypedQuery<BrandPojo> query = getQuery(select_id, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_ID, BrandPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
 
     public List<BrandPojo> selectAll() {
-        TypedQuery<BrandPojo> query = getQuery(select_all, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
         return query.getResultList();
     }
 
     public void update(BrandPojo p) {}
 
     public List<BrandPojo> selectByCategory(String category) {
-        TypedQuery<BrandPojo> query = getQuery(select_category, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_CATEGORY, BrandPojo.class);
         query.setParameter("category", category);
         return query.getResultList();
     }
 
     public List<BrandPojo> selectByBrand(String brand) {
 
-        TypedQuery<BrandPojo> query = getQuery(select_brand, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_BRAND, BrandPojo.class);
         query.setParameter("brand", brand);
         return query.getResultList();
     }
 
     public BrandPojo selectByBrandAndCategory(String brand, String category) {
-        TypedQuery<BrandPojo> query = getQuery(select_brand_category, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_BRAND_CATEGORY, BrandPojo.class);
         query.setParameter("brand", brand);
         query.setParameter("category", category);
         return getSingle(query);
     }
 
     public boolean checkIfExists(BrandPojo p) {
-        TypedQuery<BrandPojo> query = getQuery(select_brand_category, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_BRAND_CATEGORY, BrandPojo.class);
         query.setParameter("brand", p.getBrand());
         query.setParameter("category", p.getCategory());
         if (getSingle(query) != null) {

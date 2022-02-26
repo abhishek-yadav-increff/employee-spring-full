@@ -4,8 +4,13 @@
 			"path": "src/main/webapp/static/product.js",
 			"bookmarks": [
 				{
-					"line": 320,
+					"line": 313,
 					"column": 10,
+					"label": ""
+				},
+				{
+					"line": 375,
+					"column": 9,
 					"label": ""
 				}
 			]
@@ -14,7 +19,7 @@
 			"path": "src/main/webapp/static/orderEdit.js",
 			"bookmarks": [
 				{
-					"line": 124,
+					"line": 135,
 					"column": 28,
 					"label": ""
 				}

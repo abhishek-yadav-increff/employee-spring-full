@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.BrandDao;
 import com.increff.employee.pojo.BrandPojo;
-import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 
 @Service
@@ -18,28 +17,20 @@ public class BrandService {
     @Autowired
     private BrandDao dao;
 
-    @Autowired
-    private ProductService productService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
-        normalize(p);
         if (dao.checkIfExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
-        if (StringUtil.isEmpty(p.getBrand()) || StringUtil.isEmpty(p.getCategory())) {
+        if (StringUtil.isEmpty(p.getBrand()) && StringUtil.isEmpty(p.getCategory())) {
             throw new ApiException("Brand and Category cannot be empty!");
+        } else if (StringUtil.isEmpty(p.getBrand())) {
+            throw new ApiException("Brand cannot be empty!");
+        } else if (StringUtil.isEmpty(p.getCategory())) {
+            throw new ApiException("Category cannot be empty!");
         }
         dao.insert(p);
-    }
-
-    @Transactional
-    public void delete(int id) throws ApiException {
-        List<ProductPojo> productPojos = productService.selectFromBrandId(id);
-        for (ProductPojo p : productPojos) {
-            productService.delete(p.getId());
-        }
-        dao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -49,16 +40,15 @@ public class BrandService {
 
     @Transactional
     public List<BrandPojo> getAll() throws ApiException {
-        List<BrandPojo> p = dao.selectAll();
-        if (p == null) {
+        List<BrandPojo> brandPojos = dao.selectAll();
+        if (brandPojos == null) {
             throw new ApiException("No brand-category in database!");
         }
-        return dao.selectAll();
+        return brandPojos;
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandPojo p) throws ApiException {
-        normalize(p);
         if (dao.checkIfExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
@@ -66,6 +56,15 @@ public class BrandService {
         ex.setBrand(p.getBrand());
         ex.setCategory(p.getCategory());
         dao.update(ex);
+    }
+
+    public Boolean checkIfAlreadyExists(BrandPojo brandPojo) {
+        BrandPojo brandPojo2 =
+                dao.selectByBrandAndCategory(brandPojo.getBrand(), brandPojo.getCategory());
+        if (brandPojo2 == null)
+            return false;
+        else
+            return true;
     }
 
     @Transactional
@@ -77,10 +76,6 @@ public class BrandService {
         return p;
     }
 
-    protected static void normalize(BrandPojo p) {
-        p.setBrand(StringUtil.toLowerCase(p.getBrand()));
-        p.setCategory(StringUtil.toLowerCase(p.getCategory()));
-    }
 
     public List<BrandPojo> getByCategory(String category) throws ApiException {
         List<BrandPojo> p = dao.selectByCategory(category);

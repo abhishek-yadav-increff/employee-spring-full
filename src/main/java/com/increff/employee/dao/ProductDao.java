@@ -15,17 +15,17 @@ import com.increff.employee.pojo.ProductPojo;
 @Repository
 public class ProductDao extends AbstractDao {
 
-    private static final String delete_id = "DELETE FROM ProductPojo P WHERE ID=:id";
-    private static final String select_id = "SELECT P FROM ProductPojo P WHERE ID=:id";
-    private static final String select_barcode =
+    private static final String DELETE_ID = "DELETE FROM ProductPojo P WHERE ID=:id";
+    private static final String SELECT_ID = "SELECT P FROM ProductPojo P WHERE ID=:id";
+    private static final String SELECT_BARCODE =
             "SELECT P FROM ProductPojo P WHERE BARCODE=:barcode";
-    private static final String select_all = "SELECT P FROM ProductPojo P";
+    private static final String SELECT_ALL = "SELECT P FROM ProductPojo P";
     private static final String SELECT_FROM_BRAND_ID =
-            "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
+            "SELECT P FROM ProductPojo P WHERE BRANDCATEGORYID=:brandId";
     private static final String DELETE_FROM_BRAND_ID =
-            "DELETE FROM ProductPojo P WHERE BRAND_CATEGORY=:brandId";
-    private static final String select_brandCategoryId_name_mrp =
-            "SELECT P FROM ProductPojo P WHERE BRAND_CATEGORY=:bcID AND NAME=:name AND MRP=:mrp";
+            "DELETE FROM ProductPojo P WHERE BRANDCATEGORYID=:brandId";
+    private static final String SELECT_BRANDCATEGORYID_NAME_MRP =
+            "SELECT P FROM ProductPojo P WHERE BRANDCATEGORYID=:bcID AND NAME=:name AND MRP=:mrp";
 
     @PersistenceContext
     private EntityManager em;
@@ -36,13 +36,13 @@ public class ProductDao extends AbstractDao {
     }
 
     public int delete(int id) {
-        Query query = em.createQuery(delete_id);
+        Query query = em.createQuery(DELETE_ID);
         query.setParameter("id", id);
         return query.executeUpdate();
     }
 
     public ProductPojo select(int id) {
-        TypedQuery<ProductPojo> query = getQuery(select_id, ProductPojo.class);
+        TypedQuery<ProductPojo> query = getQuery(SELECT_ID, ProductPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
@@ -63,21 +63,21 @@ public class ProductDao extends AbstractDao {
 
 
     public List<ProductPojo> selectAll() {
-        TypedQuery<ProductPojo> query = getQuery(select_all, ProductPojo.class);
+        TypedQuery<ProductPojo> query = getQuery(SELECT_ALL, ProductPojo.class);
         return query.getResultList();
     }
 
     public void update(ProductPojo p) {}
 
     public ProductPojo selectByBarcode(String barcode) {
-        TypedQuery<ProductPojo> query = getQuery(select_barcode, ProductPojo.class);
+        TypedQuery<ProductPojo> query = getQuery(SELECT_BARCODE, ProductPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);
     }
 
     public boolean checkIfExists(ProductPojo p) {
         TypedQuery<ProductPojo> query =
-                getQuery(select_brandCategoryId_name_mrp, ProductPojo.class);
+                getQuery(SELECT_BRANDCATEGORYID_NAME_MRP, ProductPojo.class);
         query.setParameter("name", p.getName());
         query.setParameter("mrp", p.getMrp());
         query.setParameter("bcID", p.getBrand_category());

@@ -1,4 +1,4 @@
-
+// Utility
 function getProductUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/product";
@@ -8,13 +8,50 @@ function getBrandUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/brand";
 }
+function toast(successState, message) {
+    if (successState == true) {
+        $.toast({
+            heading: 'Success',
+            text: message,
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    } else {
+        $.toast({
+            heading: 'Failure',
+            text: message,
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
+}
+//VALIDATION
+function validateForm() {
+    if (document.getElementById("inputMrp").value == "") {
+        toast(false, 'MRP must not be empty!');
+    }
+    else if (document.getElementById("inputName").value == "") {
+        toast(false, 'Name must not be empty!');
+    }
+    else {
+        return true;
+    }
+    return false;
+}
 //BUTTON ACTIONS
 function addProduct(event) {
     //Set the values to update
+    if (!validateForm()) { return; }
+
     var $form = $("#product-form");
     var json = toJson($form);
     var url = getProductUrl();
-    console.log(json)
+    // console.log(json)
     $.ajax({
         url: url,
         type: 'POST',
@@ -23,16 +60,10 @@ function addProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            resetInputProduct();
             getProductList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully added product!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, "Successfully added product!");
+
         },
         error: handleAjaxError
     });
@@ -41,7 +72,6 @@ function addProduct(event) {
 }
 
 async function updateProduct(event) {
-    $('#edit-product-modal').modal('toggle');
 
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
@@ -51,7 +81,7 @@ async function updateProduct(event) {
     var $form = $("#product-edit-form");
 
     var json = toJson($form);
-    console.log(json)
+    // console.log(json)
     $.ajax({
         url: url,
         type: 'PUT',
@@ -60,16 +90,9 @@ async function updateProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            $('#edit-product-modal').modal('toggle');
             getProductList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully updated product!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'Successfully updated product!');
         },
         error: handleAjaxError
     });
@@ -98,15 +121,7 @@ function deleteProduct(id) {
         type: 'DELETE',
         success: function (data) {
             getProductList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully deleted product!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'Successfully deleted product!');
         },
         error: handleAjaxError
     });
@@ -136,39 +151,15 @@ function uploadRows() {
         if (errorData.length == 0) {
             displayUploadData();
             getProductList();
-            $.toast({
-                heading: 'Success',
-                text: 'All files successfully added!',
-                showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'All files successfully added!');
         } else if (errorData.length == processCount) {
-            $.toast({
-                heading: 'Error',
-                text: 'No data was added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'error'
-            });
             getProductList();
             document.getElementById("download-errors").disabled = false;
+            toast(false, 'No data was added!');
 
         } else {
-            $.toast({
-                heading: 'Warning',
-                text: 'Only some rows were added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'warning'
-            });
             document.getElementById("download-errors").disabled = false;
+            toast(false, 'Only some rows were added!');
         }
         return;
     }
@@ -221,17 +212,19 @@ function downloadErrors() {
 function displayProductList(data) {
     var $tbody = $('#product-table').find('tbody');
     $tbody.empty();
+    data.sort(function (a, b) { return a.id - b.id; });
+    data.reverse();
     for (var i in data) {
         var e = data[i];
-        console.log(e);
+        // console.log(e);
         var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditProduct(' + e.id + ')">Edit</button>'
 
         var row = '<tr>'
+            + '<td>' + e.name + '</td>'
             + '<td>' + e.barcode + '</td>'
             + '<td id="brandForEdit' + e.id + '">' + e.brand + '</td>'
             + '<td id="categoryForEdit' + e.id + '">' + e.category + '</td>'
-            + '<td>' + e.mrp + '</td>'
-            + '<td>' + e.name + '</td>'
+            + '<td>' + e.mrp.toFixed(2) + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
         $tbody.append(row);
@@ -304,10 +297,10 @@ async function displayOrderItem(data) {
 }
 
 async function getBrandOptions(category, brandElement, categoryElement) {
-    console.log("in getBrandOptions :" + category)
+    // console.log("in getBrandOptions :" + category)
     var which = "brand"
     if (category == "None of the options") {
-        console.log("inside if")
+        // console.log("inside if")
         var url = getBrandUrl()
         which = "both"
     } else {
@@ -323,7 +316,7 @@ async function getBrandOptions(category, brandElement, categoryElement) {
     });
 }
 async function getCategoryOptions(brand, brandElement, categoryElement) {
-    console.log("in getCategoryOptions :" + brand)
+    // console.log("in getCategoryOptions :" + brand)
 
     var which = "category"
     if (brand == "None of the options") {
@@ -342,7 +335,8 @@ async function getCategoryOptions(brand, brandElement, categoryElement) {
     });
 }
 async function updateDropDowns(data, which, brandElement, categoryElement) {
-    console.log(data)
+    // console.log(data)
+    data.sort(function (a, b) { return a.id - b.id; });
     const categories = new Set();
     const brands = new Set();
     for (var i in data) {
@@ -359,7 +353,6 @@ async function updateDropDowns(data, which, brandElement, categoryElement) {
             el.value = value;
             selectBrand.appendChild(el);
         })
-
     }
     if ((which == 'category') || (which == "both")) {
         var selectCategory = document.getElementById(categoryElement);
@@ -382,22 +375,13 @@ function removeOptions(selectElement) {
 }
 function refreshProductList() {
     getProductList();
-    $.toast({
-        heading: 'Success',
-        text: 'Refreshed!',
-        // showHideTransition: 'slide',
-        hideAfter: 3000,
-        allowToastClose: true,
-        position: 'top-right',
-        icon: 'success'
-    });
-    resetInputLabel();
+    toast(true, "Refreshed!");
+    resetInputProduct();
 }
-async function resetInputLabel() {
-    var $selectBrand = document.getElementById("inputBrand");
+async function resetInputProduct() {
 
+    var $selectBrand = document.getElementById("inputBrand");
     await getBrandOptions("None of the options", "inputBrand", "inputCategory");
-    // console.log("initing categories by brand: " + $selectBrand.value);
     getCategoryOptions($selectBrand.value, "inputBrand", "inputCategory");
     document.getElementById('inputMrp').value = '';
     document.getElementById('inputName').value = '';
@@ -416,16 +400,11 @@ async function init() {
     var $selectBrand = document.getElementById("inputBrand");
     $selectBrand.addEventListener("change", function () {
         var strUser = $selectBrand.value;
-        console.log(strUser)
+        // console.log(strUser)
         getCategoryOptions(strUser, "inputBrand", "inputCategory");
     });
-    // $selectCategory.addEventListener("click", function () {
-    //     var strUser = $selectCategory.value;
-    //     getBrandOptions(strUser, "inputBrand", "inputCategory");
-    //     // $selectCategory.value = strUser;
-    // });
     await getBrandOptions("None of the options", "inputBrand", "inputCategory");
-    console.log("initing categories by brand: " + $selectBrand.value);
+    // console.log("initing categories by brand: " + $selectBrand.value);
     getCategoryOptions($selectBrand.value, "inputBrand", "inputCategory");
 
     var $selectEditBrand = document.getElementById("inputEditBrand");
@@ -433,10 +412,7 @@ async function init() {
         var strUser = $selectEditBrand.value;
         getCategoryOptions(strUser, "inputEditBrand", "inputEditCategory");
     });
-    // $selectEditCategory.addEventListener("click", function () {
-    //     var strUser = $selectEditCategory.value;
-    //     getBrandOptions(strUser, "inputEditBrand", "inputEditCategory");
-    // });
+
     document.getElementById('productFile').addEventListener('input', function (evt) {
         var file = $('#productFile')[0].files[0];
         if (file.name != null) {

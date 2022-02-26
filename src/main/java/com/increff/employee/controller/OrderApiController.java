@@ -1,29 +1,23 @@
 package com.increff.employee.controller;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.OrderForm;
-import com.increff.employee.model.OrderItemForms;
-import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.OrderItemService;
 import com.increff.employee.service.OrderService;
 
 import io.swagger.annotations.Api;
@@ -36,15 +30,8 @@ public class OrderApiController {
     @Autowired
     private OrderService service;
 
-    @Autowired
-    private OrderItemService orderItemService;
 
-    // @ApiOperation(value = "Adds an order")
-    // @RequestMapping(path = "/api/order", method = RequestMethod.POST)
-    // public void add() throws ApiException {
-    // OrderPojo p = new OrderPojo();
-    // service.add(p);
-    // }
+
     @ApiOperation(value = "Adds an order")
     @RequestMapping(value = "/api/order", method = RequestMethod.POST)
     public Integer add() throws ApiException, IOException {
@@ -52,12 +39,6 @@ public class OrderApiController {
         OrderPojo p = new OrderPojo();
         service.add(p);
         return p.getId();
-        // // important line
-        // res.sendRedirect("http://localhost:9000/employee/ui/orderEdit/" + p.getId().toString());
-        // // return "redirect:/ui/orderEdit/" + p.getId();
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.setLocation(URI.create("employee/ui/orderEdit/" + p.getId().toString()));
-        // return new ResponseEntity<>(headers, HttpStatus.RESET_CONTENT);
     }
 
 
@@ -68,15 +49,6 @@ public class OrderApiController {
         service.delete(id);
     }
 
-    @ApiOperation(value = "Deletes and order")
-    @RequestMapping(path = "/api/order/senddOrder/{id}", method = RequestMethod.PUT)
-    // /api/1
-    public void sendOrder(@PathVariable int id) throws ApiException {
-        OrderPojo p = service.get(id);
-        p.setComplete(1);
-        service.update(id, p);
-
-    }
 
     @ApiOperation(value = "Gets an order by ID")
     @RequestMapping(path = "/api/order/{id}", method = RequestMethod.GET)
@@ -107,6 +79,22 @@ public class OrderApiController {
         // p.setComplete(1);
         // service.update(id, p);
 
+    }
+
+    @ApiOperation(value = "Gets pdf order Invoice")
+    @RequestMapping(path = "/api/order/getPdf/{id}", method = RequestMethod.GET)
+    public @ResponseBody byte[] getPdf(@PathVariable Integer id) throws ApiException, IOException {
+        String filepath =
+                "/home/abhk943/Documents/increff/employee-spring-full2/xml_data/generated_pdf/order_"
+                        + id.toString() + ".pdf";
+        try {
+            byte[] inFileBytes = Files.readAllBytes(Paths.get(filepath));
+            byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(inFileBytes);
+            return encoded;
+        } catch (IOException e) {
+            System.out.print(e.toString());
+        }
+        return null;
     }
 
 

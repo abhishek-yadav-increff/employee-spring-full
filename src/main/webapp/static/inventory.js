@@ -4,8 +4,46 @@ function getInventoryUrl() {
     return baseUrl + "/api/inventory";
 }
 
+function toast(successState, message) {
+    if (successState == true) {
+        $.toast({
+            heading: 'Success',
+            text: message,
+            showHideTransition: 'slide',
+            hideAfter: 3000,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'success'
+        });
+    } else {
+        $.toast({
+            heading: 'Failure',
+            text: message,
+            hideAfter: false,
+            allowToastClose: true,
+            position: 'top-right',
+            icon: 'error'
+        });
+    }
+}
+
+//VALIDATION
+function validateForm() {
+    var quantity = document.getElementById("inputQuantity").value;
+    if (document.getElementById("inputBarcode").value == "") {
+        toast(false, 'Brand must not be empty!');
+    }
+    else if ((quantity == "") || (quantity <= 0)) {
+        toast(false, 'Category must not be empty!');
+    }
+    else {
+        return true;
+    }
+    return false;
+}
 //BUTTON ACTIONS
 function addInventory(event) {
+    if (!validateForm()) { return; }
     //Set the values to update
     var $form = $("#inventory-form");
     var json = toJson($form);
@@ -19,16 +57,9 @@ function addInventory(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            resetInputInventory();
             getInventoryList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully added inventory!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'Successfully added inventory!');
         },
         error: handleAjaxError
     });
@@ -53,17 +84,9 @@ function updateInventory(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            getInventoryList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully updated inventory!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
             $('#edit-inventory-modal').modal('toggle');
+            getInventoryList();
+            toast(true, 'Successfully updated inventory!');
         },
         error: handleAjaxError
     });
@@ -92,15 +115,7 @@ function deleteInventory(barcode) {
         type: 'DELETE',
         success: function (data) {
             getInventoryList();
-            $.toast({
-                heading: 'Success',
-                text: 'Successfully deleted inventory!',
-                // showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'Successfully deleted inventory!');
         },
         error: handleAjaxError
     });
@@ -130,39 +145,14 @@ function uploadRows() {
         if (errorData.length == 0) {
             displayUploadData();
             getInventoryList();
-            $.toast({
-                heading: 'Success',
-                text: 'All files successfully added!',
-                showHideTransition: 'slide',
-                hideAfter: 3000,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'success'
-            });
+            toast(true, 'All files successfully added');
         } else if (errorData.length == processCount) {
-            $.toast({
-                heading: 'Error',
-                text: 'No data was added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'error'
-            });
+            document.getElementById("download-errors").disabled = false;
             getInventoryList();
-            document.getElementById("download-errors").disabled = false;
-
+            toast(false, 'No data was added!');
         } else {
-            $.toast({
-                heading: 'Warning',
-                text: 'Only some rows were added!',
-                // showHideTransition: 'slide',
-                hideAfter: false,
-                allowToastClose: true,
-                position: 'top-right',
-                icon: 'warning'
-            });
             document.getElementById("download-errors").disabled = false;
+            toast(false, 'Only some rows were added!');
         }
         return;
     }
@@ -216,8 +206,8 @@ function displayInventoryList(data) {
         var e = data[i];
         var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditInventory(\'' + e.barcode + '\')">Edit</button>'
         var row = '<tr>'
-            + '<td>' + e.barcode + '</td>'
             + '<td>' + e.name + '</td>'
+            + '<td>' + e.barcode + '</td>'
             + '<td>' + e.quantity + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
@@ -273,24 +263,18 @@ function displayInventory(data) {
     console.log(data, "in displayInventory")
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
     $("#inventory-edit-form input[name=barcode]").val(data.barcode);
-    document.getElementById('inputEditBarcode').innerHTML = data.barcode;
+    $("#inventory-edit-form input[name=name]").val(data.name);
+    document.getElementById('inputEditName').innerHTML = data.name;
 
     $('#edit-inventory-modal').modal('toggle');
 }
 function refreshInventoryList() {
+    resetInputInventory();
     getInventoryList();
-    $.toast({
-        heading: 'Success',
-        text: 'Refreshed!',
-        // showHideTransition: 'slide',
-        hideAfter: 3000,
-        allowToastClose: true,
-        position: 'top-right',
-        icon: 'success'
-    });
-    resetInputLabel();
+    toast(true, 'Refreshed!');
 }
-function resetInputLabel() {
+function resetInputInventory() {
+    console.log("reloading");
     document.getElementById('inputBarcode').value = '';
     document.getElementById('inputQuantity').value = '';
 }

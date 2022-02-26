@@ -72,8 +72,13 @@ public class ProductService {
     }
 
     @Transactional
-    public List<ProductPojo> getAll() {
-        return dao.selectAll();
+    public List<ProductPojo> getAll() throws ApiException {
+        try {
+            return dao.selectAll();
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     @Transactional
@@ -124,20 +129,23 @@ public class ProductService {
     }
 
     public ProductData convert(ProductPojo p) throws ApiException {
+
         ProductData d = new ProductData();
         BrandPojo brandPojo = brandService.get(p.getBrand_category());
+
         d.setBrand(brandPojo.getBrand());
         d.setCategory(brandPojo.getCategory());
         d.setBarcode(p.getBarcode());
         d.setId(p.getId());
         d.setName(p.getName());
         d.setMrp(p.getMrp());
-        System.out.println(p.getBarcode());
-        System.out.println(p.getId());
+
+
         return d;
     }
 
     public ProductPojo convert(ProductForm f) throws ApiException {
+
         ProductPojo p = new ProductPojo();
         BrandPojo brandPojo = brandService.getByBrandAndCategory(f.getBrand(), f.getCategory());
         if (brandPojo == null) {
@@ -156,6 +164,7 @@ public class ProductService {
         BigDecimal bd = new BigDecimal(f.getMrp()).setScale(2, RoundingMode.HALF_DOWN);
         Double newDouble = bd.doubleValue();
         p.setMrp(newDouble);
+
 
         return p;
     }

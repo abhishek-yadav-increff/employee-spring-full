@@ -11,7 +11,10 @@
     <div class="container">
 
         <h3>Inventory</h3>
-
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
         <!-- Top row with form-->
         <form id="inventory-form">
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
@@ -48,8 +51,8 @@
                 <table class="table table-striped" id="inventory-table">
                     <thead>
                         <tr>
-                            <th scope="col">Barcode</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Barcode</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -75,6 +78,7 @@
                     <div class="modal-body">
                         <form id="inventory-edit-form">
                             <input type="hidden" class="form-control" name="barcode" id="inputSetBarcode">
+                            <input type="hidden" class="form-control" name="name" id="inputSetName">
                             <div class="row">
                                 <label for="inputEditBarcode"
                                     class="col-form-label justify-content-start">Barcode</label>
@@ -82,12 +86,15 @@
                                     class="col-form-label justify-content-start">Barcode</label>
                             </div>
                             <div class="row">
+                                <label for="inputEditName" class="col-form-label justify-content-start">Name</label>
+                                <label id="inputEditName" class="col-form-label justify-content-start">Name</label>
+                            </div>
+                            <div class="row">
                                 <label for="inputEditQuantity"
                                     class="col-form-label justify-content-start">Quantity</label>
                                 <input type="number" class="col form-control" name="quantity"
                                     placeholder="Enter Quantity">
                             </div>
-
                         </form>
                     </div>
                     <div class="modal-footer">

@@ -1,11 +1,5 @@
 package com.increff.employee.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-@XmlRootElement(name = "orderitem")
 // @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderItemForm {
     private Integer id;
@@ -16,21 +10,30 @@ public class OrderItemForm {
     private String sellingPrice;
     private String name;
 
-    @XmlTransient
     public Integer getId() {
         return id;
     }
 
-    @XmlElement
-    public String getSellingPrice() {
-        return sellingPrice;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setSellingPrice(String sellingPrice) {
-        this.sellingPrice = sellingPrice;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    @XmlElement
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getProductBarcode() {
+        return productBarcode;
+    }
+
+    public void setProductBarcode(String productBarcode) {
+        this.productBarcode = productBarcode;
+    }
+
     public String getMrp() {
         return mrp;
     }
@@ -39,48 +42,29 @@ public class OrderItemForm {
         this.mrp = mrp;
     }
 
-    @XmlElement
-    public String getName() {
-        return name;
-    }
-
-    @XmlElement
-    public String getProductBarcode() {
-        return productBarcode;
-    }
-
-    @XmlTransient
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    @XmlElement
     public Integer getQuantity() {
         return quantity;
-    }
-
-
-
-    public void setProductBarcode(String productBarcode) {
-        this.productBarcode = productBarcode;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
     }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
+    public String getSellingPrice() {
+        return sellingPrice;
+    }
 
+    public void setSellingPrice(String sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
+
 
 }

@@ -60,7 +60,9 @@
                 <table class="table table-striped" id="orderEdit-table">
                     <thead>
                         <tr>
+                            <th scope="col">Name</th>
                             <th scope="col">Barcode</th>
+                            <th scope="col">MRP</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Selling Price</th>
                             <th scope="col">Action</th>
@@ -83,21 +85,7 @@
             <button type="button" class="btn btn-primary btn-sm" onclick="sendOrder()">Checkout</button>
         </div>
 
-        <!-- <div>
-            <div class="float-left">
-                <button type="button" class="btn btn-danger btn-sm" onclick="deleteOrder()">Delete</button>
-            </div>
-            <div class="float-right">
-                <div class="row">
-                    <div class="col">
-                        <label id="show-cost">Cost</label>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="sendOrder()">Place</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+
 
 
         <!-- OrderEdit Edit Modal -->
@@ -113,20 +101,25 @@
                     <div class="modal-body">
                         <form id="orderEdit-edit-form">
                             <div class="row">
+                                <label class="col-form-label justify-content-start">Name</label>
+                                <label id="inputNameEdit" class="col-form-label justify-content-start"></label>
+                            </div>
+                            <div class="row">
                                 <label class="col-form-label justify-content-start">Barcode</label>
                                 <label id="inputProductBarcodeEdit"
                                     class="col-form-label justify-content-start"></label>
                             </div>
                             <div class="row">
-                                <label for="inputSellingPrice"
+                                <label for="inputQuantityEdit"
                                     class="col-form-label justify-content-start">Quantity</label>
                                 <input type="number" class="col form-control" name="quantity"
-                                    placeholder="Enter Seliing Price" id="inputQuantityEdit">
+                                    placeholder="Enter Quantity" id="inputQuantityEdit">
                             </div>
                             <input type="hidden" name="productBarcode" id="inputProductBarcodeSet">
-                            <input type="hidden" name="sellingPrice" id="inputSellingPriceEdit">
+                            <input type="hidden" name="sellingPrice">
                             <input type="hidden" name="id">
                             <input type="hidden" name="orderId">
+                            <input type="hidden" name="name">
                         </form>
                     </div>
                     <div class="modal-footer">
