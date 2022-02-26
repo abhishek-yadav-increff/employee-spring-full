@@ -35,9 +35,10 @@ public class BrandDtoHelper {
 
     }
 
-    public static void normalize(BrandPojo brandPojo) {
+    public static BrandPojo normalize(BrandPojo brandPojo) {
         brandPojo.setBrand(CommonsHelper.normalize(brandPojo.getBrand()));
         brandPojo.setCategory(CommonsHelper.normalize(brandPojo.getCategory()));
+        return brandPojo;
     }
 
 }

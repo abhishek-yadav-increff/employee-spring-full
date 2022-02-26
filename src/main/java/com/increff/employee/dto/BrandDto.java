@@ -1,7 +1,6 @@
 package com.increff.employee.dto;
 
 import java.util.List;
-import javax.transaction.Transactional;
 import com.increff.employee.dto.helper.BrandDtoHelper;
 import com.increff.employee.dto.helper.CommonsHelper;
 import com.increff.employee.model.BrandData;
@@ -23,7 +22,7 @@ public class BrandDto {
 
     public void add(BrandForm brandForm) throws ApiException {
         BrandPojo brandPojo = BrandDtoHelper.convert(brandForm);
-        BrandDtoHelper.normalize(brandPojo);
+        brandPojo = BrandDtoHelper.normalize(brandPojo);
         brandService.add(brandPojo);
     }
 
@@ -59,7 +58,7 @@ public class BrandDto {
 
     public void update(int id, BrandForm f) throws ApiException {
         BrandPojo p = BrandDtoHelper.convert(f);
-        BrandDtoHelper.normalize(p);
+        p = BrandDtoHelper.normalize(p);
         brandService.update(id, p);
     }
 }

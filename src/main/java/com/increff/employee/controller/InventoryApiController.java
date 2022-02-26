@@ -29,6 +29,7 @@ public class InventoryApiController {
     public void add(@RequestBody InventoryForm form) throws ApiException {
         InventoryPojo p = convert(form);
         service.add(p);
+
     }
 
 
