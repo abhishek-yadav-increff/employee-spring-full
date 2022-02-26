@@ -31,10 +31,10 @@ function toast(successState, message) {
 function validateForm() {
     var quantity = document.getElementById("inputQuantity").value;
     if (document.getElementById("inputBarcode").value == "") {
-        toast(false, 'Brand must not be empty!');
+        toast(false, 'Barcode must not be empty!');
     }
     else if ((quantity == "") || (quantity <= 0)) {
-        toast(false, 'Category must not be empty!');
+        toast(false, 'Quantity must not be empty!');
     }
     else {
         return true;

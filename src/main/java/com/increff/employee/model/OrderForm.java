@@ -4,7 +4,7 @@ public class OrderForm {
 
     private Integer id;
     private Long time;
-    private Integer complete;
+    private Integer isCompleted;
     private Double cost;
 
     public Integer getId() {
@@ -20,11 +20,11 @@ public class OrderForm {
     }
 
     public Integer getComplete() {
-        return complete;
+        return isCompleted;
     }
 
     public void setComplete(Integer complete) {
-        this.complete = complete;
+        this.isCompleted = complete;
     }
 
     public void setId(Integer id) {

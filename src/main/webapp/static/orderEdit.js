@@ -87,7 +87,7 @@ function deleteOrder() {
         url: url,
         type: 'DELETE',
         success: function (data) {
-            window.location.replace("http://localhost:9000/employee/ui/order");
+            window.location.replace("http://localhost:9000/employee/ui/order#delete");
 
         },
         error: handleAjaxError
@@ -117,6 +117,7 @@ function deleteOrderItem(id, orderId) {
         url: url,
         type: 'DELETE',
         success: function (data) {
+            toast(true, "Order item successfully deleted!");
             getOrder(orderId);
         },
         error: handleAjaxError
