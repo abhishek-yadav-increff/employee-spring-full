@@ -71,8 +71,8 @@ function addProduct(event) {
     return false;
 }
 
-async function updateProduct(event) {
-
+function updateProduct(event) {
+    console.log("in updateProduct");
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
     var url = getProductUrl() + "/" + id;
@@ -81,7 +81,7 @@ async function updateProduct(event) {
     var $form = $("#product-edit-form");
 
     var json = toJson($form);
-    // console.log(json)
+    console.log(json)
     $.ajax({
         url: url,
         type: 'PUT',
@@ -90,6 +90,7 @@ async function updateProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            // console.log(response)sssss
             $('#edit-product-modal').modal('toggle');
             getProductList();
             toast(true, 'Successfully updated product!');
@@ -389,8 +390,8 @@ async function resetInputProduct() {
 }
 //INITIALIZATION CODE
 async function init() {
-    $('#add-product').click(addProduct);
-    $('#update-product').click(updateProduct);
+    $('#product-form').submit(addProduct);
+    $('#product-edit-form').submit(updateProduct);
     $('#refresh-data').click(refreshProductList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);

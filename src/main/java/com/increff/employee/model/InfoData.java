@@ -1,39 +1,39 @@
-package com.increff.employee.model;
+// package com.increff.employee.model;
 
-import java.io.Serializable;
+// import java.io.Serializable;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
+// import org.springframework.context.annotation.Scope;
+// import org.springframework.context.annotation.ScopedProxyMode;
+// import org.springframework.stereotype.Component;
 
-@Component
-@Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
-public class InfoData implements Serializable {
+// @Component
+// @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
+// public class InfoData implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+// private static final long serialVersionUID = 1L;
 
-	private String message;
-	private String email;
+// private String message;
+// private String email;
 
-	public InfoData() {
-		message = "No message";
-		email = "No email";
-	}
-	
-	public String getMessage() {
-		return message;
-	}
+// public InfoData() {
+// message = "No message";
+// email = "No email";
+// }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+// public String getMessage() {
+// return message;
+// }
 
-	public String getEmail() {
-		return email;
-	}
+// public void setMessage(String message) {
+// this.message = message;
+// }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+// public String getEmail() {
+// return email;
+// }
 
-}
+// public void setEmail(String email) {
+// this.email = email;
+// }
+
+// }

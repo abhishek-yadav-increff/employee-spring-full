@@ -30,8 +30,6 @@ public class ProductApiController {
         productDto.add(form);
     }
 
-
-
     @ApiOperation(value = "Gets an product by ID")
     @RequestMapping(path = "/api/product/{id}", method = RequestMethod.GET)
     public ProductData get(@PathVariable int id) throws ApiException {
@@ -44,7 +42,6 @@ public class ProductApiController {
         return productDto.getByBarcode(barcode);
     }
 
-
     @ApiOperation(value = "Gets list of all employees")
     @RequestMapping(path = "/api/product", method = RequestMethod.GET)
     public List<ProductData> getAll() throws ApiException {
@@ -56,6 +53,5 @@ public class ProductApiController {
     public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
         productDto.update(id, f);
     }
-
 
 }

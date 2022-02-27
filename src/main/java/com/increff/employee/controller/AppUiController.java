@@ -14,12 +14,6 @@ public class AppUiController extends AbstractUiController {
 		return mav("home.html");
 	}
 
-
-	// @RequestMapping(value = "/ui/employee")
-	// public ModelAndView employee() {
-	// return mav("employee.html");
-	// }
-
 	@RequestMapping(value = "/ui/brand")
 	public ModelAndView brand() {
 		return mav("brand.html");
@@ -44,7 +38,6 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView orderPreview(@PathVariable String orderId) {
 		ModelAndView mavObject = mav("orderPreview.html");
 		mavObject.addObject("orderId", orderId.toString());
-		// System.out.print(orderId);
 		return mavObject;
 	}
 
@@ -57,7 +50,6 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView orderEdit(@PathVariable String orderId) {
 		ModelAndView mavObject = mav("orderEdit.html");
 		mavObject.addObject("orderId", orderId.toString());
-		// System.out.print(orderId);
 		return mavObject;
 	}
 
@@ -70,12 +62,5 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView salesReport() {
 		return mav("salesReport.html");
 	}
-
-
-
-	// @RequestMapping(value = "/ui/admin")
-	// public ModelAndView admin() {
-	// return mav("user.html");
-	// }
 
 }

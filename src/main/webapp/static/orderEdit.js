@@ -202,7 +202,7 @@ function getOrderItemListByOrderId() {
 }
 function displayCost(data) {
     $label = document.getElementById("show-cost");
-    $label.innerHTML = "Cost: " + data.cost;
+    $label.innerHTML = "<h4><b>Total: " + data.cost + "</b></h4>";
 
 }
 function editOrderItem(id, orderId) {
@@ -326,7 +326,7 @@ function init() {
     if (window.location.hash == '#success') {
         toast(true, "Order created!");
     }
-    $('#add-order-item').click(addOrderItem);
+    $('#order-form').submit(addOrderItem);
     $('#refresh-data').click(refreshOrderItemList);
     $('#update-orderEdit').click(updateOrderEdit);
 }

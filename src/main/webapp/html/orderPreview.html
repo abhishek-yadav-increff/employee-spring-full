@@ -18,8 +18,6 @@
             <label id="headingDate" style="width: max-content;"></label>
         </div>
 
-
-
         <!-- Blank Row -->
         <div class="row">
             &nbsp;
@@ -31,7 +29,9 @@
                 <table class="table table-striped" id="orderPreview-table">
                     <thead>
                         <tr>
+                            <th scope="col">Name</th>
                             <th scope="col">Barcode</th>
+                            <th scope="col">MRP</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Selling Price</th>
                         </tr>
@@ -41,21 +41,16 @@
             </div>
         </div>
 
-
-        <!-- <div class="row">
-            <div class="float-right">
-                <div class="row">
-                    <div class="column" styl>
-                        <label class="col-sm-2 col-form-label" id="show-cost">Cost</label>
-                    </div>
-                    <div class="column" id="buttonElement">
-                        <button type="button" class="btn btn-primary" onclick="sendOrder()">Place</button> -->
-        <!-- </div>                </div>
-            </div>
-        </div> -->
         <div class="row" style="justify-content: space-between; padding-left: 30px; padding-right: 15px;">
-            <h4 class="col-form-label" id="show-cost">Cost</h4>
-            <div id="buttonElement">
+            <div class="row">
+                <div class="col-9"></div>
+                <div class="col">
+                    <div id="show-cost"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="buttonElement">
+                </div>
             </div>
         </div>
 

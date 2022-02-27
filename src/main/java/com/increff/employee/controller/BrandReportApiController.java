@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.increff.employee.dto.BrandReportDto;
-import com.increff.employee.model.BrandData;
+import com.increff.employee.model.BrandForm;
 import com.increff.employee.service.ApiException;
 
 import io.swagger.annotations.Api;
@@ -21,9 +21,8 @@ public class BrandReportApiController {
 
     @ApiOperation(value = "Gets list of all order")
     @RequestMapping(path = "/api/brandreport", method = RequestMethod.GET)
-    public List<BrandData> getAll() throws ApiException {
+    public List<BrandForm> getAll() throws ApiException {
         return brandReportDto.getAll();
     }
-
 
 }

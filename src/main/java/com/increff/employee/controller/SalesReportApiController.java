@@ -20,7 +20,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class SalesReportApiController {
 
-
     @Autowired
     private SalesReportDto salesReportDto;
 

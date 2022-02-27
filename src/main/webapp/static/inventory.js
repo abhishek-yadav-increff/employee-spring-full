@@ -43,7 +43,7 @@ function validateForm() {
 }
 //BUTTON ACTIONS
 function addInventory(event) {
-    if (!validateForm()) { return; }
+    // if (!validateForm()) { return; }
     //Set the values to update
     var $form = $("#inventory-form");
     var json = toJson($form);
@@ -280,8 +280,8 @@ function resetInputInventory() {
 }
 //INITIALIZATION CODE
 function init() {
-    $('#add-inventory').click(addInventory);
-    $('#update-inventory').click(updateInventory);
+    $('#inventory-form').submit(addInventory);
+    $('#inventory-edit-form').submit(updateInventory);
     $('#refresh-data').click(refreshInventoryList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);

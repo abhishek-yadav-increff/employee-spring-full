@@ -16,15 +16,7 @@ function toJson($form) {
 function handleAjaxError(response) {
     var response = JSON.parse(response.responseText);
     if (response != null) {
-        $.toast({
-            heading: 'Failure',
-            text: response.message,
-            // showHideTransition: 'slide',
-            hideAfter: false,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'error'
-        });
+        toast(false, response.message);
     }
 }
 

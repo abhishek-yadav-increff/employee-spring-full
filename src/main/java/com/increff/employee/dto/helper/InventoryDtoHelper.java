@@ -20,8 +20,12 @@ public class InventoryDtoHelper {
     public static InventoryPojo convert(InventoryForm f) {
         InventoryPojo p = new InventoryPojo();
         p.setQuantity(f.getQuantity());
-        p.setBarcode(f.getBarcode());
+        p.setBarcode(normalize(f.getBarcode()));
         return p;
+    }
+
+    private static String normalize(String barcode) {
+        return barcode.trim();
     }
 
 }

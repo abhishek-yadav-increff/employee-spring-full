@@ -49,7 +49,7 @@ function displayResults(data) {
         var row = '<tr>'
             + '<td>' + e.category + '</td>'
             + '<td>' + e.quantity + '</td>'
-            + '<td>' + e.revenue + '</td>'
+            + '<td>' + e.revenue.toFixed(2) + '</td>'
             + '</tr>';
         $tbody.append(row);
     }

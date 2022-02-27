@@ -20,16 +20,16 @@
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputBrand" class="col-form-label justify-content-start">Brand</label>
                 <input type="text" class="col form-control" name="brand" id="inputBrand" placeholder="Enter Brand"
-                    required="true">
+                    required>
             </div>
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputCategory" class="col-form-label justify-content-start">Category</label>
                 <input type="text" class="col form-control" name="category" id="inputCategory"
-                    placeholder="Enter Category" required="true">
+                    placeholder="Enter Category" required>
             </div>
             <div class="row">
                 <div class="col text-right">
-                    <button type="button" class="btn btn-primary btn-sm" id="add-brand">Add</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="add-brand" form="brand-form">Add</button>
                     &nbsp;
                     <button type="button" class="btn btn-primary btn-sm" id="refresh-data">Refresh</button>
                     &nbsp;
@@ -79,19 +79,21 @@
                         <form id="brand-edit-form">
                             <div class="row">
                                 <label for="inputBrand" class="col-form-label justify-content-start">Brand</label>
-                                <input type="text" class="col form-control" name="brand" placeholder="Enter Brand">
+                                <input type="text" class="col form-control" name="brand" placeholder="Enter Brand"
+                                    required>
                             </div>
                             <div class="row">
                                 <label for="inputCategory" class="col-form-label justify-content-start">Category</label>
-                                <input type="text" class="col form-control" name="category"
-                                    placeholder="Enter Category">
+                                <input type="text" class="col form-control" name="category" placeholder="Enter Category"
+                                    required>
                             </div>
                             <input type="hidden" name="id">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="update-brand">Update</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="update-brand"
+                            form="brand-edit-form">Update</button>
                     </div>
                 </div>
             </div>

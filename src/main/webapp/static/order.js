@@ -66,7 +66,7 @@ function displayOrderList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        // console.log(e.id)
+        console.log(e.cost);
         var invoiceButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="showInvoice(' + e.id + ')">Invoice</button>'
         var editButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="editOrder(' + e.id + ')">Edit</button>'
         var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
@@ -74,7 +74,7 @@ function displayOrderList(data) {
         var row = '<tr>'
             + '<td> <a href="http://localhost:9000/employee/ui/orderPreview/' + e.id + '">' + e.id + '</a> </td>'
             + '<td>' + timeStr + '</td>'
-            + '<td>' + e.cost + '</td>'
+            + '<td>' + e.cost.toFixed(2) + '</td>'
             + '<td>' + ((e.complete == 1) ? "Completed" : "In Progress") + '</td>'
             + '<td>' + ((e.complete == 1) ? invoiceButtonHtml : editButtonHtml) + '</td>'
             + '</tr>';

@@ -23,7 +23,7 @@ public class OrderService {
         dao.insert(p);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void delete(Integer id) throws ApiException {
         OrderPojo orderPojo = get(id);
         if (orderPojo.getComplete() == 1) {
@@ -36,12 +36,10 @@ public class OrderService {
         dao.delete(id);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public OrderPojo get(Integer id) throws ApiException {
         return getCheck(id);
     }
 
-    @Transactional
     public List<OrderPojo> getAll() {
         return dao.selectAll();
     }
@@ -54,7 +52,6 @@ public class OrderService {
         dao.update(ex);
     }
 
-    @Transactional
     public OrderPojo getCheck(Integer id) throws ApiException {
         OrderPojo p = dao.select(id);
         if (p == null) {
@@ -71,7 +68,7 @@ public class OrderService {
         return p;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void setComplete(int id) throws ApiException {
         OrderPojo p = get(id);
         if (orderItemService.getByOrderId(p.getId()).size() == 0) {

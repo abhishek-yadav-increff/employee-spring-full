@@ -18,4 +18,8 @@ public class CommonsHelper {
         Double scaledDouble = bigDecimal.doubleValue();
         return scaledDouble;
     }
+
+    public static String doubleToString(Double d) {
+        return String.format("%.2f", d);
+    }
 }

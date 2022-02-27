@@ -13,7 +13,7 @@ public class OrderDtoHelper {
         d.setTime(p.getTime());
         d.setId(p.getId());
         d.setComplete(p.getComplete());
-        d.setCost(p.getCost());
+        d.setCost(CommonsHelper.normalize(p.getCost()));
         return d;
     }
 

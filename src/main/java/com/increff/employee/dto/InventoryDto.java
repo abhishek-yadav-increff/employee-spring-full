@@ -28,10 +28,6 @@ public class InventoryDto {
         inventoryService.add(inventoryPojo);
     }
 
-    public void delete(String barcode) {
-        inventoryService.delete(barcode);
-    }
-
     public InventoryForm get(String barcode) throws ApiException {
         InventoryPojo inventoryPojo = inventoryService.get(barcode);
         ProductPojo productPojo = productService.getByBarcode(barcode);
@@ -52,6 +48,4 @@ public class InventoryDto {
         InventoryPojo inventoryPojo = InventoryDtoHelper.convert(inventoryForm);
         inventoryService.update(barcode, inventoryPojo);
     }
-
-
 }

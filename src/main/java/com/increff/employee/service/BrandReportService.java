@@ -1,22 +1,22 @@
-package com.increff.employee.service;
+// package com.increff.employee.service;
 
-import java.util.List;
+// import java.util.List;
 
-import javax.transaction.Transactional;
+// import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.increff.employee.pojo.BrandPojo;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Service;
+// import com.increff.employee.pojo.BrandPojo;
 
-@Service
-public class BrandReportService {
+// @Service
+// public class BrandReportService {
 
-    @Autowired
-    private BrandService brandService;
+// @Autowired
+// private BrandService brandService;
 
-    @Transactional(rollbackOn = ApiException.class)
-    public List<BrandPojo> get() throws ApiException {
-        return brandService.getAll();
-    }
+// @Transactional(rollbackOn = ApiException.class)
+// public List<BrandPojo> get() throws ApiException {
+// return brandService.getAll();
+// }
 
-}
+// }

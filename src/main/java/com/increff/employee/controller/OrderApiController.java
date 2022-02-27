@@ -32,7 +32,6 @@ public class OrderApiController {
         return orderDto.get();
     }
 
-
     @ApiOperation(value = "Deletes and order")
     @RequestMapping(path = "/api/order/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable int id) throws ApiException {

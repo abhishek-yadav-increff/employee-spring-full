@@ -34,17 +34,14 @@ public class ProductService {
         dao.insert(p);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public ProductPojo get(int id) throws ApiException {
         return getCheck(id);
     }
 
-    @Transactional
     public List<ProductPojo> getAll() throws ApiException {
         return dao.selectAll();
     }
 
-    @Transactional
     public ProductPojo getByBarcode(String barcode) throws ApiException {
         ProductPojo p = dao.selectByBarcode(barcode);
         if (p == null) {
@@ -60,8 +57,11 @@ public class ProductService {
         }
         brandService.get(p.getBrand_category());
         if (dao.checkIfExists(p)) {
+            System.out.print("Same product already exists!");
             throw new ApiException("Same product already exists!");
         }
+        System.out.print("Same product doesnt already exists!");
+
         ProductPojo ex = getCheck(id);
         ex.setBarcode(p.getBarcode());
         ex.setMrp(p.getMrp());
@@ -70,7 +70,6 @@ public class ProductService {
         dao.update(ex);
     }
 
-    @Transactional
     public ProductPojo getCheck(int id) throws ApiException {
         ProductPojo p = dao.select(id);
         if (p == null) {

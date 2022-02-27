@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.InventoryDao;
-import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 
 @Service
@@ -36,17 +35,10 @@ public class InventoryService {
         }
     }
 
-    @Transactional
-    public void delete(String barcode) {
-        dao.delete(barcode);
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
     public InventoryPojo get(String barcode) throws ApiException {
         return getCheck(barcode);
     }
 
-    @Transactional
     public List<InventoryPojo> getAll() {
         return dao.selectAll();
     }
@@ -62,7 +54,6 @@ public class InventoryService {
         dao.update(ex);
     }
 
-    @Transactional
     public InventoryPojo getCheck(String barcode) throws ApiException {
         InventoryPojo p = dao.select(barcode);
         if (p == null) {
@@ -70,16 +61,5 @@ public class InventoryService {
         }
         return p;
     }
-
-    @Transactional
-    public InventoryForm convert(InventoryPojo p) throws ApiException {
-        InventoryForm d = new InventoryForm();
-        d.setQuantity(p.getQuantity());
-        d.setBarcode(p.getBarcode());
-        String name = productService.getByBarcode(d.getBarcode()).getName();
-        d.setName(name);
-        return d;
-    }
-
 
 }

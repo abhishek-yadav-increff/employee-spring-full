@@ -25,13 +25,13 @@
                 <label for="inputProductBarcode" class="col-form-label justify-content-start"
                     style="width: 150px;">Product Barcode</label>
                 <input type="text" class="col form-control" name="productBarcode" id="inputProductBarcode"
-                    placeholder="Enter Product Barcode">
+                    placeholder="Enter Product Barcode" required>
             </div>
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputQuantity" class="col-form-label justify-content-start"
                     style="width: 150px;">Quantity</label>
                 <input type="number" class="col form-control" name="quantity" id="inputQuantity"
-                    placeholder="Enter Quantity">
+                    placeholder="Enter Quantity" required>
             </div>
 
             <input type="hidden" name="sellingPrice" id="inputSellingPrice">
@@ -39,7 +39,8 @@
             <input type="hidden" name="orderId" value="">
             <div class="row">
                 <div class="col text-right">
-                    <button type="button" class="btn btn-primary btn-sm" id="add-order-item">Add</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="add-order-item"
+                        form="order-form">Add</button>
                     &nbsp;
                     <button type="button" class="btn btn-primary btn-sm" id="refresh-data">Refresh</button>
                 </div>

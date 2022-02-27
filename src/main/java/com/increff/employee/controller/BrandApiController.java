@@ -66,5 +66,4 @@ public class BrandApiController {
         brandDto.update(id, f);
     }
 
-
 }

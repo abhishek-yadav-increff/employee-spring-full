@@ -19,17 +19,18 @@
         <form id="inventory-form">
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputBarcode" class="col-form-label justify-content-start">Barcode</label>
-                <input type="text" class="col form-control" name="barcode" id="inputBarcode"
-                    placeholder="Enter Barcode">
+                <input type="text" class="col form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode"
+                    required>
             </div>
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputQuantity" class="col-form-label justify-content-start">Quantity</label>
                 <input type="number" class="col form-control" name="quantity" id="inputQuantity"
-                    placeholder="Enter Quantity">
+                    placeholder="Enter Quantity" required>
             </div>
             <div class="row">
                 <div class="col text-right">
-                    <button type="button" class="btn btn-primary btn-sm" id="add-inventory">Add</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="add-inventory"
+                        form="inventory-form">Add</button>
                     &nbsp;
                     <button type="button" class="btn btn-primary btn-sm" id="refresh-data">Refresh</button>
                     &nbsp;
@@ -93,13 +94,14 @@
                                 <label for="inputEditQuantity"
                                     class="col-form-label justify-content-start">Quantity</label>
                                 <input type="number" class="col form-control" name="quantity"
-                                    placeholder="Enter Quantity">
+                                    placeholder="Enter Quantity" required>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="update-inventory">Update</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="update-inventory"
+                            form="inventory-edit-form">Update</button>
                     </div>
                 </div>
             </div>

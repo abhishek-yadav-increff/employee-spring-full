@@ -33,12 +33,10 @@ public class BrandService {
         dao.insert(p);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public BrandPojo get(int id) throws ApiException {
         return getCheck(id);
     }
 
-    @Transactional
     public List<BrandPojo> getAll() throws ApiException {
         List<BrandPojo> brandPojos = dao.selectAll();
         if (brandPojos == null) {
@@ -67,7 +65,6 @@ public class BrandService {
             return true;
     }
 
-    @Transactional
     public BrandPojo getCheck(int id) throws ApiException {
         BrandPojo p = dao.select(id);
         if (p == null) {

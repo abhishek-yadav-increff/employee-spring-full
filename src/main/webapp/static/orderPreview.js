@@ -109,7 +109,7 @@ function getOrderItemListByOrderId() {
 }
 function displayCost(data) {
     $label = document.getElementById("show-cost");
-    $label.innerHTML = "Cost: " + data.cost;
+    $label.innerHTML = "<h4><b>Total: " + data.cost + "</b></h4>";
 }
 
 
@@ -118,9 +118,11 @@ function displayOrderItemList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e.id)
+        console.log(e)
         var row = '<tr>'
+            + '<td>' + e.name + '</td>'
             + '<td>' + e.productBarcode + '</td>'
+            + '<td>' + e.mrp + '</td>'
             + '<td>' + e.quantity + '</td>'
             + '<td>' + e.sellingPrice + '</td>'
             + '</tr>';

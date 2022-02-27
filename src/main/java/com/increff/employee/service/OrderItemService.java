@@ -1,6 +1,5 @@
 package com.increff.employee.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,8 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.increff.employee.dao.OrderItemDao;
-import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.model.OrderItemXmlForm;
+import com.increff.employee.dto.helper.CommonsHelper;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
@@ -35,7 +33,7 @@ public class OrderItemService {
         checkValidation(p);
 
         ProductPojo productPojo = productService.getByBarcode(p.getProductBarcode());
-        p.setSellingPrice(p.getQuantity() * productPojo.getMrp());
+        p.setSellingPrice(CommonsHelper.normalize(p.getQuantity() * productPojo.getMrp()));
 
         InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
         if (inventoryPojo.getQuantity() < p.getQuantity()) {
@@ -90,12 +88,12 @@ public class OrderItemService {
         if (p.getQuantity() == null) {
             throw new ApiException("Quantity can not be empty!");
         }
-        if (p.getQuantity() < 0) {
-            throw new ApiException("Quantity can not be negative");
+        if (p.getQuantity() <= 0) {
+            throw new ApiException("Quantity must be positive!");
         }
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void delete(int id) throws ApiException {
 
         OrderItemPojo p = dao.select(id);
@@ -111,22 +109,19 @@ public class OrderItemService {
         dao.delete(id);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void deleteByProductBarcode(String productBarcode) {
         dao.deleteByProductBarcode(productBarcode);
     }
 
-    @Transactional
     public List<OrderItemPojo> getByOrderId(int orderId) {
         return dao.getByOrderId(orderId);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public OrderItemPojo get(int id) throws ApiException {
         return getCheck(id);
     }
 
-    @Transactional
     public List<OrderItemPojo> getAll() {
         return dao.selectAll();
     }
@@ -139,8 +134,8 @@ public class OrderItemService {
         OrderPojo orderPojo = orderService.get(p.getOrderId());
         productService.getByBarcode(p.getProductBarcode());
 
-        if (p.getQuantity() < 0) {
-            throw new ApiException("Quantity can not be negative");
+        if (p.getQuantity() <= 0) {
+            throw new ApiException("Quantity must be positive!");
         }
 
         OrderItemPojo ex = getCheck(id);
@@ -162,50 +157,12 @@ public class OrderItemService {
 
     }
 
-    @Transactional
     public OrderItemPojo getCheck(int id) throws ApiException {
         OrderItemPojo p = dao.select(id);
         if (p == null) {
             throw new ApiException("OrderItem with given ID does not exit, id: " + id);
         }
         return p;
-    }
-
-    @Transactional
-    public OrderItemXmlForm convert(OrderItemPojo p) throws ApiException {
-        OrderItemXmlForm d = new OrderItemXmlForm();
-        d.setId(p.getId());
-        d.setOrderId(p.getOrderId());
-        d.setQuantity(p.getQuantity());
-        d.setProductBarcode(p.getProductBarcode());
-        d.setMrp(
-                String.format("%.2f", productService.getByBarcode(p.getProductBarcode()).getMrp()));
-        d.setSellingPrice(String.format("%.2f", p.getSellingPrice()));
-        d.setName(productService.getByBarcode(p.getProductBarcode()).getName());
-        return d;
-    }
-
-    @Transactional
-    public OrderItemForm convertForm(OrderItemPojo p) throws ApiException {
-        OrderItemForm d = new OrderItemForm();
-        d.setId(p.getId());
-        d.setOrderId(p.getOrderId());
-        d.setQuantity(p.getQuantity());
-        d.setProductBarcode(p.getProductBarcode());
-        d.setMrp(
-                String.format("%.2f", productService.getByBarcode(p.getProductBarcode()).getMrp()));
-        d.setSellingPrice(String.format("%.2f", p.getSellingPrice()));
-        d.setName(productService.getByBarcode(p.getProductBarcode()).getName());
-        return d;
-    }
-
-    @Transactional
-    public List<OrderItemXmlForm> convert(List<OrderItemPojo> orderItemPojos) throws ApiException {
-        List<OrderItemXmlForm> list2 = new ArrayList<OrderItemXmlForm>();
-        for (OrderItemPojo p : orderItemPojos) {
-            list2.add(convert(p));
-        }
-        return list2;
     }
 
 }

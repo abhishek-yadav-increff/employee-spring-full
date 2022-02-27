@@ -62,7 +62,6 @@ public class ProductDto {
         ProductPojo p = ProductDtoHelper.convert(form, brandPojo.getId());
         p = ProductDtoHelper.normalize(p);
         productService.update(id, p);
-
     }
 
 }

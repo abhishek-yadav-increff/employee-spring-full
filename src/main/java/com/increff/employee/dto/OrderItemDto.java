@@ -26,7 +26,6 @@ public class OrderItemDto {
 
     public void add(OrderItemForm form) throws ApiException {
         OrderItemPojo p = OrderItemDtoHelper.convert(form);
-        p = OrderItemDtoHelper.normalize(p);
         orderItemService.add(p);
     }
 

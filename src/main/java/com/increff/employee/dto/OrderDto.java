@@ -6,10 +6,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import javax.transaction.Transactional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -22,13 +21,16 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import com.increff.employee.dto.helper.OrderDtoHelper;
+import com.increff.employee.dto.helper.OrderItemDtoHelper;
 import com.increff.employee.model.OrderForm;
+import com.increff.employee.model.OrderItemXmlForm;
 import com.increff.employee.model.OrderXmlForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderItemService;
 import com.increff.employee.service.OrderService;
+import com.increff.employee.service.ProductService;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -47,6 +49,9 @@ public class OrderDto {
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private ProductService productService;
 
     public Integer get() throws ApiException {
         OrderPojo p = new OrderPojo();
@@ -72,6 +77,7 @@ public class OrderDto {
         return list2;
     }
 
+    @Transactional(rollbackOn = ApiException.class)
     public void storeOrder(Integer id) throws FileNotFoundException, ApiException, JAXBException {
         orderService.setComplete(id);
         OrderXmlForm orderXmlForm = getXmlForm(id);
@@ -134,13 +140,18 @@ public class OrderDto {
     public OrderXmlForm getXmlForm(Integer id) throws ApiException {
         OrderPojo p = orderService.get(id);
         List<OrderItemPojo> orderItemPojos = orderItemService.getByOrderId(id);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-        OrderXmlForm orderXmlForm = new OrderXmlForm();
-        orderXmlForm.setId(p.getId());
-        orderXmlForm.setTotal(String.format("%.2f", p.getCost()));
-        orderXmlForm.setItems(orderItemService.convert(orderItemPojos));
-        orderXmlForm.setDate(simpleDateFormat.format(new Date()));
-        return orderXmlForm;
+        List<OrderItemXmlForm> orderItemXmlForms = convert(orderItemPojos);
+        return OrderItemDtoHelper.convert(p, orderItemXmlForms);
+    }
+
+    private List<OrderItemXmlForm> convert(List<OrderItemPojo> orderItemPojos) throws ApiException {
+        List<OrderItemXmlForm> orderItemXmlForms = new ArrayList<OrderItemXmlForm>();
+        for (OrderItemPojo p : orderItemPojos) {
+            Double mrp = productService.getByBarcode(p.getProductBarcode()).getMrp();
+            String name = productService.getByBarcode(p.getProductBarcode()).getName();
+            orderItemXmlForms.add(OrderItemDtoHelper.convert(p, mrp, name));
+        }
+        return orderItemXmlForms;
     }
 
     public byte[] getPdf(Integer id) {

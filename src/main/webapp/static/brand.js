@@ -41,8 +41,9 @@ function toast(successState, message) {
     }
 }
 //BUTTON ACTIONS
-function addBrand(event) {
-    if (!validateForm()) { return; }
+function addBrand() {
+    // if (!validateForm()) { return; }
+    console.log("in addBrand");
     var $form = $("#brand-form");
     var json = toJson($form);
     var url = getBrandUrl();
@@ -103,7 +104,7 @@ function refreshBrandList() {
 }
 
 function getBrandList() {
-    console.log("getting");
+    // console.log("getting");
     var url = getBrandUrl();
     $.ajax({
         url: url,
@@ -279,8 +280,11 @@ function displayBrand(data) {
 
 //INITIALIZATION CODE
 function init() {
-    $('#add-brand').click(addBrand);
-    $('#update-brand').click(updateBrand);
+    // $('#add-brand').click(addBrand);
+    $('#brand-form').submit(addBrand);
+    $('#brand-edit-form').submit(updateBrand);
+    // $('#update-brand').click(updateBrand);
+
     $('#refresh-data').click(refreshBrandList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);

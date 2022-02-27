@@ -64,21 +64,7 @@ label{
 .icon-size{
 	font-size: 65px;
 }
-a:link {
-  text-decoration: none;
-}
 
-a:visited {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-a:active {
-  text-decoration: none;
-}
 /* #hover-button:hover {
     color: #fff;
     background-color: #d9534f;
