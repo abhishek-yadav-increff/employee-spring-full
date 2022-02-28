@@ -15,16 +15,8 @@ public class BrandPojo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-
     private String brand;
     private String category;
-    // @OneToMany(targetEntity = ProductPojo.class, mappedBy = "brand_category")
-    // private Set<ProductPojo> products;
-    // @OneToMany(mappedBy = "brandPojo", cascade = CascadeType.ALL)
-    // Set<ProductPojo> productPojos = new HashSet<ProductPojo>();
-    // @OneToMany(mappedBy = "brandpojo")
-    // private Set<ProductPojo> items;
 
     public int getId() {
         return id;
@@ -49,7 +41,4 @@ public class BrandPojo {
     public void setCategory(String category) {
         this.category = category;
     }
-
-
-
 }
