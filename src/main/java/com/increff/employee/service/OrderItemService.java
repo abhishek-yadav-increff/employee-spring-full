@@ -84,7 +84,6 @@ public class OrderItemService {
         if (p.getProductBarcode() == null || p.getProductBarcode().isEmpty()) {
             throw new ApiException("Barcode can not be empty!");
         }
-
         if (p.getQuantity() == null) {
             throw new ApiException("Quantity can not be empty!");
         }

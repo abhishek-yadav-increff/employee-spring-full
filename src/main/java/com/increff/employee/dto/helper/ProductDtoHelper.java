@@ -33,7 +33,8 @@ public class ProductDtoHelper {
     public static ProductForm normalize(ProductForm form) {
         form.setBrand(CommonsHelper.normalize(form.getBrand()));
         form.setCategory(CommonsHelper.normalize(form.getCategory()));
-        form.setBarcode(CommonsHelper.normalize(form.getBarcode()));
+        if (form.getBarcode() != null)
+            form.setBarcode(CommonsHelper.normalize(form.getBarcode()));
         form.setName(CommonsHelper.normalize(form.getName()));
         form.setMrp(CommonsHelper.normalize(form.getMrp()));
         return form;
