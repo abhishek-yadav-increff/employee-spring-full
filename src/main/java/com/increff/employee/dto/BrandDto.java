@@ -56,6 +56,11 @@ public class BrandDto {
         return BrandDtoHelper.convert(brandPojos);
     }
 
+    public BrandPojo getByBrandAndCategory(BrandForm brandForm) throws ApiException {
+        brandForm = BrandDtoHelper.normalize(brandForm);
+        return brandService.getByBrandAndCategory(brandForm.getBrand(), brandForm.getCategory());
+    }
+
     public void update(int id, BrandForm f) throws ApiException {
         BrandPojo p = BrandDtoHelper.convert(f);
         p = BrandDtoHelper.normalize(p);

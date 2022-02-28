@@ -20,7 +20,16 @@ public class BrandService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
-        if (dao.checkIfExists(p)) {
+        validateAdd(p);
+        dao.insert(p);
+    }
+
+    public BrandPojo get(int id) throws ApiException {
+        return getCheck(id);
+    }
+
+    public void validateAdd(BrandPojo p) throws ApiException {
+        if (checkIfAlreadyExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
         if (StringUtil.isEmpty(p.getBrand()) && StringUtil.isEmpty(p.getCategory())) {
@@ -30,11 +39,6 @@ public class BrandService {
         } else if (StringUtil.isEmpty(p.getCategory())) {
             throw new ApiException("Category cannot be empty!");
         }
-        dao.insert(p);
-    }
-
-    public BrandPojo get(int id) throws ApiException {
-        return getCheck(id);
     }
 
     public List<BrandPojo> getAll() throws ApiException {
@@ -47,7 +51,7 @@ public class BrandService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandPojo p) throws ApiException {
-        if (dao.checkIfExists(p)) {
+        if (checkIfAlreadyExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
         BrandPojo ex = getCheck(id);

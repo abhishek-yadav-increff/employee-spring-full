@@ -41,4 +41,10 @@ public class BrandDtoHelper {
         return brandPojo;
     }
 
+    public static BrandForm normalize(BrandForm brandForm) {
+        brandForm.setBrand(CommonsHelper.normalize(brandForm.getBrand()));
+        brandForm.setCategory(CommonsHelper.normalize(brandForm.getCategory()));
+        return brandForm;
+    }
+
 }

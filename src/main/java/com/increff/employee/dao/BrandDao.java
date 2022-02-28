@@ -70,16 +70,6 @@ public class BrandDao extends AbstractDao {
         return getSingle(query);
     }
 
-    public boolean checkIfExists(BrandPojo p) {
-        TypedQuery<BrandPojo> query = getQuery(SELECT_BRAND_CATEGORY, BrandPojo.class);
-        query.setParameter("brand", p.getBrand());
-        query.setParameter("category", p.getCategory());
-        if (getSingle(query) != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 
 }
