@@ -9,11 +9,6 @@ import com.increff.employee.pojo.ProductPojo;
  */
 public class ProductDtoHelper {
 
-    public static ProductPojo normalize(ProductPojo productPojo) {
-        productPojo.setName(CommonsHelper.normalize(productPojo.getName()));
-        productPojo.setMrp(CommonsHelper.normalize(productPojo.getMrp()));
-        return productPojo;
-    }
 
     public static ProductData convert(ProductPojo productPojo, String brand, String category) {
         ProductData productData = new ProductData();
@@ -27,7 +22,6 @@ public class ProductDtoHelper {
     }
 
     public static ProductPojo convert(ProductForm f, Integer id) {
-
         ProductPojo p = new ProductPojo();
         p.setBrand_category(id);
         p.setBarcode(f.getBarcode());
@@ -35,4 +29,15 @@ public class ProductDtoHelper {
         p.setMrp(f.getMrp());
         return p;
     }
+
+    public static ProductForm normalize(ProductForm form) {
+        form.setBrand(CommonsHelper.normalize(form.getBrand()));
+        form.setCategory(CommonsHelper.normalize(form.getCategory()));
+        form.setBarcode(CommonsHelper.normalize(form.getBarcode()));
+        form.setName(CommonsHelper.normalize(form.getName()));
+        form.setMrp(CommonsHelper.normalize(form.getMrp()));
+        return form;
+    }
+
+
 }

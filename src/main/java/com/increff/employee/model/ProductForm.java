@@ -8,6 +8,16 @@ public class ProductForm {
     private String name;
     private Double mrp;
 
+    public ProductForm(String barcode, String brand, String category, String name, Double mrp) {
+        this.barcode = barcode;
+        this.brand = brand;
+        this.category = category;
+        this.name = name;
+        this.mrp = mrp;
+    }
+
+    public ProductForm() {}
+
     public String getBarcode() {
         return barcode;
     }

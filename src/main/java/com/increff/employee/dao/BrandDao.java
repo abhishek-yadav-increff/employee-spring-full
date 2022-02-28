@@ -70,6 +70,4 @@ public class BrandDao extends AbstractDao {
         return getSingle(query);
     }
 
-
-
 }

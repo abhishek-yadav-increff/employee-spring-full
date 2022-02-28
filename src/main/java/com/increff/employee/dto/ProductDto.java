@@ -2,6 +2,7 @@ package com.increff.employee.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.increff.employee.dto.helper.CommonsHelper;
 import com.increff.employee.dto.helper.ProductDtoHelper;
 import com.increff.employee.model.ProductData;
 import com.increff.employee.model.ProductForm;
@@ -26,10 +27,10 @@ public class ProductDto {
     private BrandService brandService;
 
     public void add(ProductForm form) throws ApiException {
+        form = ProductDtoHelper.normalize(form);
         BrandPojo brandPojo =
                 brandService.getByBrandAndCategory(form.getBrand(), form.getCategory());
         ProductPojo p = ProductDtoHelper.convert(form, brandPojo.getId());
-        p = ProductDtoHelper.normalize(p);
         productService.add(p);
     }
 
@@ -40,6 +41,7 @@ public class ProductDto {
     }
 
     public ProductData getByBarcode(String barcode) throws ApiException {
+        barcode = CommonsHelper.normalize(barcode);
         ProductPojo p = productService.getByBarcode(barcode);
         BrandPojo brandPojo = brandService.get(p.getBrand_category());
         return ProductDtoHelper.convert(p, brandPojo.getBrand(), brandPojo.getCategory());
@@ -57,10 +59,10 @@ public class ProductDto {
     }
 
     public void update(int id, ProductForm form) throws ApiException {
+        form = ProductDtoHelper.normalize(form);
         BrandPojo brandPojo =
                 brandService.getByBrandAndCategory(form.getBrand(), form.getCategory());
         ProductPojo p = ProductDtoHelper.convert(form, brandPojo.getId());
-        p = ProductDtoHelper.normalize(p);
         productService.update(id, p);
     }
 

@@ -18,6 +18,13 @@ public class BrandPojo {
     private String brand;
     private String category;
 
+    public BrandPojo(String brand, String category) {
+        this.brand = brand;
+        this.category = category;
+    }
+
+    public BrandPojo() {}
+
     public int getId() {
         return id;
     }

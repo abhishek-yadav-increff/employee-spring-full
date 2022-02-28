@@ -29,6 +29,29 @@ public class BrandDtoTest extends AbstractUnitTest {
         assertEquals("chocolate", brandMasterPojo.getCategory());
     }
 
+    @Test(expected = ApiException.class)
+    public void testAddNoBrand() throws ApiException {
+        BrandForm brandForm = BrandUtil.getBrandFormDto("     ", "ChocolatE ");
+        // add
+        brandDto.add(brandForm);
+    }
+
+    @Test(expected = ApiException.class)
+    public void testAddNoCategory() throws ApiException {
+        BrandForm brandForm = BrandUtil.getBrandFormDto("asd     ", null);
+        // add
+        brandDto.add(brandForm);
+    }
+
+    @Test(expected = ApiException.class)
+    public void testDuplicateAdd() throws ApiException {
+        BrandForm brandForm = BrandUtil.getBrandFormDto("     nestLE        ", "ChocolatE ");
+        // add
+        brandDto.add(brandForm);
+        // add duplicate data
+        brandDto.add(brandForm);
+    }
+
     @Test
     public void testGet() throws ApiException {
         // add
@@ -128,6 +151,20 @@ public class BrandDtoTest extends AbstractUnitTest {
         // test update
         assertEquals("amul", brandPojoNew.getBrand());
         assertEquals("food", brandPojoNew.getCategory());
+    }
+
+    @Test(expected = ApiException.class)
+    public void testUpdateDuplicateBrand() throws ApiException {
+        // add
+        BrandForm brandForm = BrandUtil.getBrandFormDto(" AmuL ", "DairY ");
+        brandDto.add(brandForm);
+        brandForm = BrandUtil.getBrandFormDto(" AmuL ", "food ");
+        brandDto.add(brandForm);
+        BrandPojo brandPojo = brandDto.getByBrandAndCategory(brandForm);
+
+        // update amul-food to amul-dairy
+        BrandForm brandFormUpdate = BrandUtil.getBrandFormDto("amul", "daiRy ");
+        brandDto.update(brandPojo.getId(), brandFormUpdate);
     }
 
 }

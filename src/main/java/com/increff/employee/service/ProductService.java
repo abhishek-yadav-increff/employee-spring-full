@@ -57,15 +57,13 @@ public class ProductService {
         }
         brandService.get(p.getBrand_category());
         if (dao.checkIfExists(p)) {
-            System.out.print("Same product already exists!");
             throw new ApiException("Same product already exists!");
         }
-        System.out.print("Same product doesnt already exists!");
-
         ProductPojo ex = getCheck(id);
-        ex.setBarcode(p.getBarcode());
+        if (ex.getBrand_category() != p.getBrand_category()) {
+            throw new ApiException("Changing brand or category is not allowed!");
+        }
         ex.setMrp(p.getMrp());
-        ex.setBrand_category(p.getBrand_category());
         ex.setName(p.getName());
         dao.update(ex);
     }

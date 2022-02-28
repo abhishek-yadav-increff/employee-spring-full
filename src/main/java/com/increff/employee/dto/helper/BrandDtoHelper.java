@@ -36,8 +36,10 @@ public class BrandDtoHelper {
     }
 
     public static BrandPojo normalize(BrandPojo brandPojo) {
-        brandPojo.setBrand(CommonsHelper.normalize(brandPojo.getBrand()));
-        brandPojo.setCategory(CommonsHelper.normalize(brandPojo.getCategory()));
+        if (brandPojo.getBrand() != null)
+            brandPojo.setBrand(CommonsHelper.normalize(brandPojo.getBrand()));
+        if (brandPojo.getCategory() != null)
+            brandPojo.setCategory(CommonsHelper.normalize(brandPojo.getCategory()));
         return brandPojo;
     }
 

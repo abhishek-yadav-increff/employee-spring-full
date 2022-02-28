@@ -32,11 +32,12 @@ public class BrandService {
         if (checkIfAlreadyExists(p)) {
             throw new ApiException("Same brand-category already exists!");
         }
-        if (StringUtil.isEmpty(p.getBrand()) && StringUtil.isEmpty(p.getCategory())) {
+        if ((p.getBrand() == null || StringUtil.isEmpty(p.getBrand()))
+                && (p.getCategory() == null || StringUtil.isEmpty(p.getCategory()))) {
             throw new ApiException("Brand and Category cannot be empty!");
-        } else if (StringUtil.isEmpty(p.getBrand())) {
+        } else if (p.getBrand() == null || StringUtil.isEmpty(p.getBrand())) {
             throw new ApiException("Brand cannot be empty!");
-        } else if (StringUtil.isEmpty(p.getCategory())) {
+        } else if (p.getCategory() == null || StringUtil.isEmpty(p.getCategory())) {
             throw new ApiException("Category cannot be empty!");
         }
     }

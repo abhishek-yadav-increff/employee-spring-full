@@ -1,6 +1,7 @@
 package com.increff.employee.util;
 
 import com.increff.employee.model.BrandForm;
+import com.increff.employee.pojo.BrandPojo;
 
 /**
  * BrandUtil
@@ -12,5 +13,12 @@ public class BrandUtil {
         brandForm.setBrand(brand);
         brandForm.setCategory(category);
         return brandForm;
+    }
+
+    public static BrandPojo getBrandPojo(String brand, String category) {
+        BrandPojo brandPojo = new BrandPojo();
+        brandPojo.setBrand(brand);
+        brandPojo.setCategory(category);
+        return brandPojo;
     }
 }
