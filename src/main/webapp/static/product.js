@@ -268,6 +268,7 @@ function updateUploadDialog() {
 function updateFileName() {
     var $file = $('#productFile');
     var fileName = $file.val();
+    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1)
     $('#productFileName').html(fileName);
 }
 
@@ -313,7 +314,7 @@ async function getBrandOptions(category, brandElement, categoryElement) {
         success: async function (data) {
             await updateDropDowns(data, which, brandElement, categoryElement);
         },
-        error: handleAjaxError
+        error: function () { }
     });
 }
 async function getCategoryOptions(brand, brandElement, categoryElement) {
@@ -332,7 +333,7 @@ async function getCategoryOptions(brand, brandElement, categoryElement) {
         success: function (data) {
             updateDropDowns(data, which, brandElement, categoryElement);
         },
-        error: handleAjaxError
+        error: function () { }
     });
 }
 async function updateDropDowns(data, which, brandElement, categoryElement) {

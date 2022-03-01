@@ -2,11 +2,11 @@ package com.increff.employee.model;
 
 public class InventoryReportData {
 
+    private String name;
+    private String barcode;
     private String brand;
     private String category;
-    private String barcode;
     private Integer quantity;
-    private String name;
 
 
     public String getBrand() {

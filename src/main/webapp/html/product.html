@@ -9,6 +9,10 @@
     <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
     <div class="container">
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
 
         <h3>Product</h3>
         <!-- Blank Row -->
@@ -30,15 +34,15 @@
                 </select>
             </div>
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
+                <label for="inputName" class="col-form-label justify-content-start">Name</label>
+                <input type="text" class="col form-control" name="name" id="inputName" placeholder="Enter Name"
+                    required>
+            </div>
+            <div class="row" style="padding-left: 30px; padding-right: 15px;">
 
                 <label for="inputMrp" class="col-form-label justify-content-start">MRP</label>
                 <input type="number" step="0.01" class="col form-control" name="mrp" id="inputMrp"
                     placeholder="Enter MRP" required>
-            </div>
-            <div class="row" style="padding-left: 30px; padding-right: 15px;">
-                <label for="inputName" class="col-form-label justify-content-start">Name</label>
-                <input type="text" class="col form-control" name="name" id="inputName" placeholder="Enter Name"
-                    required>
             </div>
             <div class="row">
                 <div class="col text-right">
@@ -106,14 +110,14 @@
                                     Label</label>
                             </div>
                             <div class="row">
-                                <label for="inputEditMrp" class="col-form-label justify-content-start">MRP</label>
-                                <input type="number" step="0.01" class="col form-control" name="mrp" id="inputEditMrp"
-                                    placeholder="Enter MRP" required>
-                            </div>
-                            <div class="row">
                                 <label for="inputEditName" class="col-form-label justify-content-start">Name</label>
                                 <input type="text" class="col form-control" name="name" id="inputEditName"
                                     placeholder="Enter Name" required>
+                            </div>
+                            <div class="row">
+                                <label for="inputEditMrp" class="col-form-label justify-content-start">MRP</label>
+                                <input type="number" step="0.01" class="col form-control" name="mrp" id="inputEditMrp"
+                                    placeholder="Enter MRP" required>
                             </div>
                         </form>
                     </div>
@@ -146,7 +150,7 @@
                                 style="width: 100%;">Choose
                                 file</label>
                         </div>
-                        <a th:href="@{/sample/product.tsv}" target="_blank">Download Sample</a>
+                        <a th:href="@{/sample/Product_Sample.tsv}" target="_blank">Download Sample</a>
                         <br>
                         Rows: <span id="rowCount">0</span>,
                         Processed: <span id="processCount">0</span>,

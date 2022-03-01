@@ -262,6 +262,7 @@ function updateUploadDialog() {
 function updateFileName() {
     var $file = $('#brandFile');
     var fileName = $file.val();
+    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
     $('#brandFileName').html(fileName);
 }
 

@@ -9,8 +9,13 @@
     <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
     <div class="container">
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
 
         <h3>Brand</h3>
+
         <!-- Blank Row -->
         <div class="row">
             &nbsp;
@@ -119,7 +124,7 @@
                                 style="width: 100%;">Choose
                                 file</label>
                         </div>
-                        <a th:href="@{/sample/brand.tsv}" target="_blank">Download Sample</a>
+                        <a th:href="@{/sample/Brand_Sample.tsv}" target="_blank">Download Sample</a>
                         <br>
                         Rows: <span id="rowCount">0</span>,
                         Processed: <span id="processCount">0</span>,

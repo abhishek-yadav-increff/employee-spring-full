@@ -251,6 +251,7 @@ function updateUploadDialog() {
 function updateFileName() {
     var $file = $('#inventoryFile');
     var fileName = $file.val();
+    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1)
     $('#inventoryFileName').html(fileName);
 }
 
@@ -265,6 +266,7 @@ function displayInventory(data) {
     $("#inventory-edit-form input[name=barcode]").val(data.barcode);
     $("#inventory-edit-form input[name=name]").val(data.name);
     document.getElementById('inputEditName').innerHTML = data.name;
+    document.getElementById('inputEditBarcode').innerHTML = data.barcode;
 
     $('#edit-inventory-modal').modal('toggle');
 }
