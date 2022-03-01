@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BrandReportDto {
-    // @Autowired
-    // private BrandReportService brandReportService;
-
     @Autowired
     private BrandService brandService;
 

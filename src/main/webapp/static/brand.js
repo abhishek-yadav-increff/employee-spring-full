@@ -13,37 +13,13 @@ function validateForm() {
 }
 
 // Utility
-function getBrandUrl() {
-    var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/brand";
-}
 
-function toast(successState, message) {
-    if (successState == true) {
-        $.toast({
-            heading: 'Success',
-            text: message,
-            showHideTransition: 'slide',
-            hideAfter: 3000,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'success'
-        });
-    } else {
-        $.toast({
-            heading: 'Failure',
-            text: message,
-            hideAfter: false,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'error'
-        });
-    }
-}
+
+
 //BUTTON ACTIONS
 function addBrand() {
-    // if (!validateForm()) { return; }
-    console.log("in addBrand");
+
+
     var $form = $("#brand-form");
     var json = toJson($form);
     var url = getBrandUrl();
@@ -104,7 +80,7 @@ function refreshBrandList() {
 }
 
 function getBrandList() {
-    // console.log("getting");
+
     var url = getBrandUrl();
     $.ajax({
         url: url,
@@ -213,7 +189,7 @@ function displayBrandList(data) {
     data.reverse();
     for (var i in data) {
         var e = data[i];
-        // var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">Edit</button>'
+
         var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
         var row = '<tr>'
             + '<td>' + e.brand + '</td>'
@@ -281,10 +257,10 @@ function displayBrand(data) {
 
 //INITIALIZATION CODE
 function init() {
-    // $('#add-brand').click(addBrand);
+
     $('#brand-form').submit(addBrand);
     $('#brand-edit-form').submit(updateBrand);
-    // $('#update-brand').click(updateBrand);
+
 
     $('#refresh-data').click(refreshBrandList);
     $('#upload-data').click(displayUploadData);

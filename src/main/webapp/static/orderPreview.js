@@ -26,7 +26,6 @@ function getOrderEditUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/orderItem";
 }
-//BUTTON ACTIONS
 
 
 //UI DISPLAY METHODS
@@ -35,7 +34,7 @@ function getOrderEditUrl() {
 
 function getOrderId() {
     var tempArr = document.getElementById('orderIdSelect').innerHTML.split(" ");
-    console.log(tempArr);
+
     return tempArr[tempArr.length - 1];
 }
 function getOrderUrl() {
@@ -69,7 +68,7 @@ function displayButton(data) {
         document.getElementById("editButton").onclick = function () {
             window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + data.id);
         };
-        console.log("http://localhost:9000/employee/ui/orderEdit/" + data.id);
+
     }
 }
 function displayOrder(data) {
@@ -118,7 +117,7 @@ function displayOrderItemList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e)
+
         var row = '<tr>'
             + '<td>' + e.name + '</td>'
             + '<td>' + e.productBarcode + '</td>'
@@ -147,7 +146,7 @@ function getBytePdf(orderId) {
 function init() {
     orderId = getOrderId();
 
-    // console.log(orderId);
+
     if (isNaN(orderId)) {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }

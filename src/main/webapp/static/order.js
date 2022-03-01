@@ -10,7 +10,7 @@ function addOrder(event) {
     var $form = $("#order-form");
     var json = toJson($form);
     var url = getOrderUrl();
-    console.log(json)
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -26,9 +26,6 @@ function addOrder(event) {
 
     return false;
 }
-
-
-
 
 function getOrderList() {
     var url = getOrderUrl();
@@ -66,7 +63,7 @@ function displayOrderList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e.cost);
+
         var invoiceButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="showInvoice(' + e.id + ')">Invoice</button>'
         var editButtonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="editOrder(' + e.id + ')">Edit</button>'
         var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
@@ -123,7 +120,7 @@ function createNewOrder() {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            console.log(data)
+
             window.location.replace("http://localhost:9000/employee/ui/orderEdit/" + data + "#success");
         },
         error: function (err) {
@@ -133,15 +130,9 @@ function createNewOrder() {
     return false;
 }
 
-
-
 //INITIALIZATION CODE
 function init() {
     $('#create-new-order-button').click(createNewOrder);
-
-    // $('#add-order').click(addOrder);
-    // $('#update-order').click(updateOrder);
-    // $('#refresh-data').click(getOrderList);
 }
 
 $(document).ready(init);

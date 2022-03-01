@@ -21,7 +21,7 @@ function getResults() {
         brand: inputBrand,
         category: inputCategory,
     }
-    console.log(JSON.stringify(json))
+
     url = getSalesReportUrl() + "/" + JSON.stringify(json);
     $.ajax({
         url: url,
@@ -39,13 +39,13 @@ function getResults() {
 
 function displayResults(data) {
     tocsv = data;
-    console.log(data);
+
 
     var $tbody = $('#sales-table').find('tbody');
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e)
+
         var row = '<tr>'
             + '<td>' + e.category + '</td>'
             + '<td>' + e.quantity + '</td>'
@@ -56,27 +56,19 @@ function displayResults(data) {
 }
 function downloadReport() {
     if (tocsv.length == 0) {
-        $.toast({
-            heading: 'Failure',
-            text: 'No data to download!',
-            // showHideTransition: 'slide',
-            hideAfter: false,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'error'
-        });
+        toast(false, 'No data to download!');
     } else {
         generateReport(tocsv, "sales_report.csv")
     }
 }
 function generateReport(items, filename) {
-    console.log(items);
+
     let csv = "";
     let keysCounter = 0;
     let row = 0;
     let keysAmount = Object.keys(items[row]).length;
     for (let key in items[row]) {
-        // This is to not add a comma at the last cell
+
         // The '\r\n' adds a new line
         csv += key + (keysCounter + 1 < keysAmount ? ',' : '\r\n')
         keysCounter++
@@ -113,7 +105,7 @@ function resetForm() {
     $.toast({
         heading: 'Success',
         text: 'Refreshed!',
-        // showHideTransition: 'slide',
+
         hideAfter: 3000,
         allowToastClose: true,
         position: 'top-right',
@@ -124,7 +116,7 @@ function init() {
 
     $(".datepicker").datepicker({
         clearBtn: true,
-        // onsele
+
         autoclose: true,
         format: "dd/mm/yyyy",
     });

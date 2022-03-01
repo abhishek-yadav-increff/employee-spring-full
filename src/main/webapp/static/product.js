@@ -51,7 +51,7 @@ function addProduct(event) {
     var $form = $("#product-form");
     var json = toJson($form);
     var url = getProductUrl();
-    // console.log(json)
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -72,7 +72,7 @@ function addProduct(event) {
 }
 
 function updateProduct(event) {
-    console.log("in updateProduct");
+
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
     var url = getProductUrl() + "/" + id;
@@ -81,7 +81,7 @@ function updateProduct(event) {
     var $form = $("#product-edit-form");
 
     var json = toJson($form);
-    console.log(json)
+
     $.ajax({
         url: url,
         type: 'PUT',
@@ -90,7 +90,7 @@ function updateProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            // console.log(response)sssss
+
             $('#edit-product-modal').modal('toggle');
             getProductList();
             toast(true, 'Successfully updated product!');
@@ -100,7 +100,6 @@ function updateProduct(event) {
 
     return false;
 }
-
 
 function getProductList() {
     var url = getProductUrl();
@@ -217,7 +216,7 @@ function displayProductList(data) {
     data.reverse();
     for (var i in data) {
         var e = data[i];
-        // console.log(e);
+
         var buttonHtml = ' <button type="button" class="btn btn-secondary btn-sm" onclick="displayEditProduct(' + e.id + ')">Edit</button>'
 
         var row = '<tr>'
@@ -286,23 +285,14 @@ async function displayOrderItem(data) {
     $("#product-edit-form input[name=id]").val(data.id);
     document.getElementById('inputEditBrand').innerHTML = data.brand;
     document.getElementById('inputEditCategory').innerHTML = data.category;
-
-    // var $selectBrand = document.getElementById("inputBrand");
-    // // var $selectCategory = document.getElementById("inputCategory");
-    // // console.log("updating edit select");
-    // await getBrandOptions("None of the options", "inputEditBrand", "inputEditCategory");
-    // console.log("inting edit by brand" + $selectBrand.value)
-    // document.getElementById("inputEditBrand").value = $selectBrand.value;
-    // console.log("edit initial brand set as :" + document.getElementById("inputEditBrand").value);
-    // getCategoryOptions($selectBrand.value, "inputEditBrand", "inputEditCategory");
     $('#edit-product-modal').modal('toggle');
 }
 
 async function getBrandOptions(category, brandElement, categoryElement) {
-    // console.log("in getBrandOptions :" + category)
+
     var which = "brand"
     if (category == "None of the options") {
-        // console.log("inside if")
+
         var url = getBrandUrl()
         which = "both"
     } else {
@@ -318,7 +308,6 @@ async function getBrandOptions(category, brandElement, categoryElement) {
     });
 }
 async function getCategoryOptions(brand, brandElement, categoryElement) {
-    // console.log("in getCategoryOptions :" + brand)
 
     var which = "category"
     if (brand == "None of the options") {
@@ -337,7 +326,7 @@ async function getCategoryOptions(brand, brandElement, categoryElement) {
     });
 }
 async function updateDropDowns(data, which, brandElement, categoryElement) {
-    // console.log(data)
+
     data.sort(function (a, b) { return a.id - b.id; });
     const categories = new Set();
     const brands = new Set();
@@ -402,11 +391,11 @@ async function init() {
     var $selectBrand = document.getElementById("inputBrand");
     $selectBrand.addEventListener("change", function () {
         var strUser = $selectBrand.value;
-        // console.log(strUser)
+
         getCategoryOptions(strUser, "inputBrand", "inputCategory");
     });
     await getBrandOptions("None of the options", "inputBrand", "inputCategory");
-    // console.log("initing categories by brand: " + $selectBrand.value);
+
     getCategoryOptions($selectBrand.value, "inputBrand", "inputCategory");
 
     var $selectEditBrand = document.getElementById("inputEditBrand");

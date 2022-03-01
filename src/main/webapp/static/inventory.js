@@ -1,31 +1,6 @@
 
-function getInventoryUrl() {
-    var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/inventory";
-}
 
-function toast(successState, message) {
-    if (successState == true) {
-        $.toast({
-            heading: 'Success',
-            text: message,
-            showHideTransition: 'slide',
-            hideAfter: 3000,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'success'
-        });
-    } else {
-        $.toast({
-            heading: 'Failure',
-            text: message,
-            hideAfter: false,
-            allowToastClose: true,
-            position: 'top-right',
-            icon: 'error'
-        });
-    }
-}
+
 
 //VALIDATION
 function validateForm() {
@@ -43,7 +18,7 @@ function validateForm() {
 }
 //BUTTON ACTIONS
 function addInventory(event) {
-    // if (!validateForm()) { return; }
+
     //Set the values to update
     var $form = $("#inventory-form");
     var json = toJson($form);
@@ -109,7 +84,7 @@ function getInventoryList() {
 
 function deleteInventory(barcode) {
     var url = getInventoryUrl() + "/" + barcode;
-    console.log('inside deleteInventory');
+
     $.ajax({
         url: url,
         type: 'DELETE',
@@ -261,7 +236,7 @@ function displayUploadData() {
 }
 
 function displayInventory(data) {
-    console.log(data, "in displayInventory")
+
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
     $("#inventory-edit-form input[name=barcode]").val(data.barcode);
     $("#inventory-edit-form input[name=name]").val(data.name);
@@ -276,7 +251,7 @@ function refreshInventoryList() {
     toast(true, 'Refreshed!');
 }
 function resetInputInventory() {
-    console.log("reloading");
+
     document.getElementById('inputBarcode').value = '';
     document.getElementById('inputQuantity').value = '';
 }

@@ -31,7 +31,7 @@ function genInventoryReport() {
 }
 
 function generateReport(items, filename) {
-    console.log(items);
+
     let csv = "";
     let keysCounter = 0;
     let row = 0;

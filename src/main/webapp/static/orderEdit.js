@@ -50,7 +50,7 @@ function addOrderEdit(event) {
     var $form = $("#orderEdit-form");
     var json = toJson($form);
     var url = getOrderEditUrl();
-    console.log(json)
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -82,7 +82,7 @@ function getOrderEditList() {
 
 function deleteOrder() {
     var url = getOrderUrl() + "/" + orderId;
-    // console.log('inside deleteOrder');
+
     $.ajax({
         url: url,
         type: 'DELETE',
@@ -110,7 +110,7 @@ function sendOrder() {
 
 
 function deleteOrderItem(id, orderId) {
-    console.log("inside deleteOrderItem");
+
     var url = getOrderEditUrl() + "/" + id;
 
     $.ajax({
@@ -127,7 +127,7 @@ function deleteOrderItem(id, orderId) {
 
 function getOrderId() {
     var tempArr = document.getElementById('orderIdSelect').innerHTML.split(" ");
-    console.log(tempArr);
+
     return tempArr[tempArr.length - 1];
 }
 function getOrderUrl() {
@@ -151,16 +151,16 @@ function getOrder(orderId) {
 }
 function displayOrder(data) {
     var $headingDate = $('#headingDate');
-    // var $id = document.getElementById('order-form').querySelector('input[name="id"]');
+
     var $orderIdElement = document.getElementById('order-form').querySelector('input[name="orderId"]');
-    // console.log($headingDate)
-    // console.log($orderIdElement)
-    // console.log(data)
+
+
+
     var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
     var timeStr = new Date(data.time).toLocaleString(undefined, options);
 
     $headingDate.text(timeStr);
-    // $id.setAttribute('value', data.id);
+
     $orderIdElement.setAttribute('value', data.id);
 }
 function addOrderItem() {
@@ -168,8 +168,8 @@ function addOrderItem() {
 
     var $form = $("#order-form");
     var json = toJson($form);
-    console.log("in addOrderItem")
-    console.log(json)
+
+
     var url = getOrderEditUrl();
 
     $.ajax({
@@ -230,12 +230,12 @@ function displayOrderItem(data) {
     $('#edit-orderEdit-modal').modal('toggle');
 }
 function displayOrderItemList(data) {
-    // $tbody.appendChild();
+
     var $tbody = $('#orderEdit-table').find('tbody');
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        console.log(e.id)
+
         var buttonHtml = ` <button type="button" class="btn btn-sm" style="color: rgb(0, 0, 0); background-color: #ffffff; border-color: #d9534f;" onclick="deleteOrderItem(` + e.id + `,` + e.orderId + `)">Delete</button>`
         buttonHtml += ' <button type="button" class="btn btn-secondary btn-sm"  onclick="editOrderItem(' + e.id + ',' + e.orderId + ')">Edit</button>'
 
@@ -255,10 +255,10 @@ function getProduct(evt) {
     iQE = String(evt.currentTarget.inputQuantityElement);
     iSPE = String(evt.currentTarget.inputSellingPriceElement);
     iPBE = String(evt.currentTarget.inputProductBarcodeElement);
-    console.log(iQE, iSPE, iPBE);
+
     var $barcodeElement = document.getElementById(iPBE);
     var url = getProductUrl() + "/byBarcode/" + $barcodeElement.value;
-    // console.log($barcodeElement.value);
+
     $.ajax({
         url: url,
         type: 'GET',
@@ -270,7 +270,7 @@ function getProduct(evt) {
 }
 function displayProduct(data, inputQE, inputSPE) {
     var $productQuantityElement = document.getElementById(inputQE);
-    // console.log($productQuantityElement.value);
+
     if (!isNaN($productQuantityElement.value)) {
         var $sellingPriceElement = document.getElementById(inputSPE);
         $sellingPriceElement.value = parseInt(data.mrp) * parseInt($productQuantityElement.value);
@@ -285,7 +285,7 @@ function updateOrderEdit() {
     //Set the values to update
     var $form = $("#orderEdit-edit-form");
     var json = toJson($form);
-    console.log(json)
+
 
     $.ajax({
         url: url,
@@ -318,7 +318,7 @@ function resetInputOrderEdit() {
 function init() {
     orderId = getOrderId();
 
-    console.log(orderId);
+
     if (isNaN(orderId)) {
         window.location.replace("http://localhost:9000/employee/ui/order");
     }

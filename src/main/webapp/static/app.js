@@ -2,7 +2,7 @@
 //HELPER METHOD
 function toJson($form) {
     var serialized = $form.serializeArray();
-    console.log(serialized);
+
     var s = '';
     var data = {};
     for (s in serialized) {
@@ -105,5 +105,9 @@ function getBrandReportUrl() {
 function getInventoryReportUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/inventoryreport";
+}
+function getInventoryUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/inventory";
 }
 $(document).ready(init);

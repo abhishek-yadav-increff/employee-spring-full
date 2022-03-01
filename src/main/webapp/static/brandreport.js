@@ -5,17 +5,17 @@ function getBrandUrl() {
 function getData(brand, category) {
     var url;
     if (!brand && !category) {
-        console.log("byall")
+
         url = getBrandUrl();
     } else if (!brand) {
-        console.log("bycat")
+
         url = getBrandUrl() + "/byCategory/" + category;
     } else if (!category) {
-        console.log("bybrand")
+
 
         url = getBrandUrl() + "/byBrand/" + brand;
     } else {
-        console.log("byboth")
+
         url = getBrandUrl() + "/search/" + brand + "/" + category;
     }
     $.ajax({
@@ -45,7 +45,7 @@ function displayBrandCategoryList(data) {
 function display() {
     brand = document.getElementById("inputBrand").value;
     category = document.getElementById("inputCategory").value;
-    console.log("listening", brand, category);
+
     getData(brand, category);
 }
 function init() {
