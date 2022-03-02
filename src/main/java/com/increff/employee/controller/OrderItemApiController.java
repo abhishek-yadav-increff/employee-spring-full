@@ -30,7 +30,7 @@ public class OrderItemApiController {
         orderItemDto.add(form);
     }
 
-    @ApiOperation(value = "Deletes and orderItem")
+    @ApiOperation(value = "Deletes an orderItem")
     @RequestMapping(path = "/api/orderItem/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable int id) throws ApiException {
         orderItemDto.delete(id);
@@ -42,13 +42,13 @@ public class OrderItemApiController {
         return orderItemDto.get(id);
     }
 
-    @ApiOperation(value = "Gets an orderItem by ID")
+    @ApiOperation(value = "Gets an orderItem by orderId")
     @RequestMapping(path = "/api/orderItem/orderId/{id}", method = RequestMethod.GET)
     public List<OrderItemXmlForm> getByOrderId(@PathVariable int id) throws ApiException {
         return orderItemDto.getByOrderId(id);
     }
 
-    @ApiOperation(value = "Gets list of all employees")
+    @ApiOperation(value = "Gets list of all orderItem")
     @RequestMapping(path = "/api/orderItem", method = RequestMethod.GET)
     public List<OrderItemXmlForm> getAll() throws ApiException {
         return orderItemDto.getAll();

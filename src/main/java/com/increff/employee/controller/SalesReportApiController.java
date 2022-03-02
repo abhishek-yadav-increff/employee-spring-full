@@ -23,7 +23,7 @@ public class SalesReportApiController {
     @Autowired
     private SalesReportDto salesReportDto;
 
-    @ApiOperation(value = "Gets list of all order")
+    @ApiOperation(value = "Gets sales report according to given constraint")
     @RequestMapping(path = "/api/reportsSales/{jsonData}", method = RequestMethod.GET)
     public List<SalesReportData> getAll(@PathVariable String jsonData)
             throws ApiException, JsonParseException, JsonMappingException, IOException {

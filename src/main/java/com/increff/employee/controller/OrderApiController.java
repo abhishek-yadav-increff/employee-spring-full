@@ -32,7 +32,7 @@ public class OrderApiController {
         return orderDto.get();
     }
 
-    @ApiOperation(value = "Deletes and order")
+    @ApiOperation(value = "Deletes an order")
     @RequestMapping(path = "/api/order/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable int id) throws ApiException {
         orderDto.delete(id);
@@ -50,14 +50,14 @@ public class OrderApiController {
         return orderDto.getAll();
     }
 
-    @ApiOperation(value = "Stores order as xml object")
+    @ApiOperation(value = "Checkout order and generate pdf")
     @RequestMapping(path = "/api/order/sendOrder/{id}", method = RequestMethod.PUT)
     public void storeOrder(@PathVariable Integer id)
             throws JAXBException, FileNotFoundException, ApiException {
         orderDto.storeOrder(id);
     }
 
-    @ApiOperation(value = "Gets pdf order Invoice")
+    @ApiOperation(value = "Gets pdf of order Invoice")
     @RequestMapping(path = "/api/order/getPdf/{id}", method = RequestMethod.GET)
     public @ResponseBody byte[] getPdf(@PathVariable Integer id) throws ApiException, IOException {
         return orderDto.getPdf(id);

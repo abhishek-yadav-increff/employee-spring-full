@@ -19,7 +19,7 @@ public class BrandReportApiController {
     @Autowired
     private BrandReportDto brandReportDto;
 
-    @ApiOperation(value = "Gets list of all order")
+    @ApiOperation(value = "Gets list of all brands")
     @RequestMapping(path = "/api/brandreport", method = RequestMethod.GET)
     public List<BrandForm> getAll() throws ApiException {
         return brandReportDto.getAll();

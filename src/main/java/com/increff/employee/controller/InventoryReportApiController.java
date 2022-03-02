@@ -19,7 +19,7 @@ public class InventoryReportApiController {
     @Autowired
     private InventoryReportDto inventoryReportDto;
 
-    @ApiOperation(value = "Gets list of all order")
+    @ApiOperation(value = "Gets report of items in inventory")
     @RequestMapping(path = "/api/inventoryreport", method = RequestMethod.GET)
     public List<InventoryReportData> getAll() throws ApiException {
         return inventoryReportDto.getAll();
