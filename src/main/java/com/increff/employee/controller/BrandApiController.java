@@ -23,13 +23,13 @@ public class BrandApiController {
     @Autowired
     private BrandDto brandDto;
 
-    @ApiOperation(value = "Adds an Brand")
+    @ApiOperation(value = "Adds a Brand")
     @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException {
         brandDto.add(form);
     }
 
-    @ApiOperation(value = "Gets an Brand by ID")
+    @ApiOperation(value = "Gets a Brand by ID")
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.GET)
     public BrandData get(@PathVariable int id) throws ApiException {
         return brandDto.get(id);
@@ -41,26 +41,26 @@ public class BrandApiController {
         return brandDto.getAll();
     }
 
-    @ApiOperation(value = "Gets an Brand by category")
+    @ApiOperation(value = "Gets list of Brands by category")
     @RequestMapping(path = "/api/brand/byCategory/{category}", method = RequestMethod.GET)
     public List<BrandData> getByCategory(@PathVariable String category) throws ApiException {
         return brandDto.getByCategory(category);
     }
 
-    @ApiOperation(value = "Gets an Brand by brand")
+    @ApiOperation(value = "Gets list of Brands by brand")
     @RequestMapping(path = "/api/brand/byBrand/{brand}", method = RequestMethod.GET)
     public List<BrandData> getByBrand(@PathVariable String brand) throws ApiException {
         return brandDto.getByBrand(brand);
     }
 
-    @ApiOperation(value = "Gets a Brand by brand and category")
+    @ApiOperation(value = "Gets list of Brand by brand and category with no constraints on input")
     @RequestMapping(path = "/api/brand/search/{brand}/{category}", method = RequestMethod.GET)
     public List<BrandData> getListByBrandAndCategory(@PathVariable String brand,
             @PathVariable String category) throws ApiException {
         return brandDto.getListByBrandAndCategory(brand, category);
     }
 
-    @ApiOperation(value = "Updates an Brand")
+    @ApiOperation(value = "Updates a Brand")
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
         brandDto.update(id, f);

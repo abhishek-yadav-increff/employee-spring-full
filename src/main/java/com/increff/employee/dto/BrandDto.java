@@ -50,8 +50,10 @@ public class BrandDto {
 
     public List<BrandData> getListByBrandAndCategory(String brand, String category)
             throws ApiException {
-        category = CommonsHelper.normalize(category);
-        brand = CommonsHelper.normalize(brand);
+        if (category != null)
+            category = CommonsHelper.normalize(category);
+        if (brand != null)
+            brand = CommonsHelper.normalize(brand);
         List<BrandPojo> brandPojos = brandService.getListByBrandAndCategory(brand, category);
         return BrandDtoHelper.convert(brandPojos);
     }
