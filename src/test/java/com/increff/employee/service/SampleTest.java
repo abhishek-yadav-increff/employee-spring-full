@@ -11,11 +11,11 @@ public class SampleTest {
 	@Test
 	public void testFiles() {
 		InputStream is = null;
-		is = SampleTest.class.getResourceAsStream("/com/increff/employee/brand.tsv");
+		is = SampleTest.class.getResourceAsStream("/com/increff/employee/Brand_Sample.tsv");
 		assertNotNull(is);
-		is = SampleTest.class.getResourceAsStream("/com/increff/employee/product.tsv");
+		is = SampleTest.class.getResourceAsStream("/com/increff/employee/Product_Sample.tsv");
 		assertNotNull(is);
-		is = SampleTest.class.getResourceAsStream("/com/increff/employee/inventory.tsv");
+		is = SampleTest.class.getResourceAsStream("/com/increff/employee/Inventory_Sample.tsv");
 		assertNotNull(is);
 	}
 

@@ -30,7 +30,7 @@
             <div class="row" style="padding-left: 30px; padding-right: 15px;">
                 <label for="inputQuantity" class="col-form-label justify-content-start"
                     style="width: 150px;">Quantity</label>
-                <input type="number" class="col form-control" name="quantity" id="inputQuantity"
+                <input type="number" min="1" class="col form-control" name="quantity" id="inputQuantity"
                     placeholder="Enter Quantity" required>
             </div>
 
@@ -113,7 +113,7 @@
                             <div class="row">
                                 <label for="inputQuantityEdit"
                                     class="col-form-label justify-content-start">Quantity</label>
-                                <input type="number" class="col form-control" name="quantity"
+                                <input type="number" min="1" class="col form-control" name="quantity"
                                     placeholder="Enter Quantity" id="inputQuantityEdit">
                             </div>
                             <input type="hidden" name="productBarcode" id="inputProductBarcodeSet">
