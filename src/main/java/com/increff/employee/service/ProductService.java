@@ -52,14 +52,15 @@ public class ProductService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, ProductPojo p) throws ApiException {
+        ProductPojo ex = getCheck(id);
+
+        brandService.get(p.getBrand_category());
         if (p.getMrp() <= 0) {
             throw new ApiException("MRP must be positive!");
         }
-        brandService.get(p.getBrand_category());
         if (dao.checkIfExists(p)) {
             throw new ApiException("Same product already exists!");
         }
-        ProductPojo ex = getCheck(id);
         if (ex.getBrand_category() != p.getBrand_category()) {
             throw new ApiException("Changing brand or category is not allowed!");
         }

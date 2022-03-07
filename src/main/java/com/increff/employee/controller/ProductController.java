@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class ProductApiController {
+public class ProductController {
 
 
     @Autowired
@@ -37,7 +37,7 @@ public class ProductApiController {
     }
 
     @ApiOperation(value = "Gets a product by Product Barcode")
-    @RequestMapping(path = "/api/product/byBarcode/{barcode}", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/product/barcode/{barcode}", method = RequestMethod.GET)
     public ProductData getByProductBarcode(@PathVariable String barcode) throws ApiException {
         return productDto.getByBarcode(barcode);
     }

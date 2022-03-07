@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class InventoryApiController {
+public class InventoryController {
 
     @Autowired
     private InventoryDto inventoryDto;

@@ -1,6 +1,5 @@
 package com.increff.employee.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -20,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class OrderApiController {
+public class OrderController {
 
     @Autowired
     private OrderDto orderDto;
@@ -51,14 +50,14 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "Checkout order and generate pdf")
-    @RequestMapping(path = "/api/order/sendOrder/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/order/checkout/{id}", method = RequestMethod.PUT)
     public void storeOrder(@PathVariable Integer id)
-            throws JAXBException, FileNotFoundException, ApiException {
+            throws JAXBException, ApiException, IOException {
         orderDto.storeOrder(id);
     }
 
     @ApiOperation(value = "Gets pdf of order Invoice")
-    @RequestMapping(path = "/api/order/getPdf/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/order/pdf/{id}", method = RequestMethod.GET)
     public @ResponseBody byte[] getPdf(@PathVariable Integer id) throws ApiException, IOException {
         return orderDto.getPdf(id);
     }

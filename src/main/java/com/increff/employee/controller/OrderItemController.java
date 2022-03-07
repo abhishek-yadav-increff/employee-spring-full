@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class OrderItemApiController {
+public class OrderItemController {
 
 
     @Autowired
@@ -43,7 +43,7 @@ public class OrderItemApiController {
     }
 
     @ApiOperation(value = "Gets an orderItem by orderId")
-    @RequestMapping(path = "/api/orderItem/orderId/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/orderItem/order/{id}", method = RequestMethod.GET)
     public List<OrderItemXmlForm> getByOrderId(@PathVariable int id) throws ApiException {
         return orderItemDto.getByOrderId(id);
     }

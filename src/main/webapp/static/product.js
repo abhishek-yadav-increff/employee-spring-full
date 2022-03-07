@@ -296,7 +296,7 @@ async function getBrandOptions(category, brandElement, categoryElement) {
         var url = getBrandUrl()
         which = "both"
     } else {
-        var url = getBrandUrl() + "/byCategory/" + category;
+        var url = getBrandUrl() + "/category/" + category;
     }
     await $.ajax({
         url: url,
@@ -314,7 +314,7 @@ async function getCategoryOptions(brand, brandElement, categoryElement) {
         var url = getBrandUrl()
         which = "both"
     } else {
-        var url = getBrandUrl() + "/byBrand/" + brand;
+        var url = getBrandUrl() + "/brand/" + brand;
     }
     $.ajax({
         url: url,

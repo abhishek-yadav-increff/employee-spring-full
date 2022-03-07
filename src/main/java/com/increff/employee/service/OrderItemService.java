@@ -30,6 +30,7 @@ public class OrderItemService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(OrderItemPojo p) throws ApiException {
+
         checkValidation(p);
 
         ProductPojo productPojo = productService.getByBarcode(p.getProductBarcode());
@@ -37,7 +38,7 @@ public class OrderItemService {
 
         InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
         if (inventoryPojo.getQuantity() < p.getQuantity()) {
-            throw new ApiException("Your order exceeds inventory quantity(max: "
+            throw new ApiException("Your order item exceeds inventory quantity(max: "
                     + inventoryPojo.getQuantity() + ")!");
         }
 
@@ -61,6 +62,8 @@ public class OrderItemService {
 
     @Transactional(rollbackOn = ApiException.class)
     private void updateOnAddition(OrderItemPojo pp, OrderItemPojo p) throws ApiException {
+        orderService.getCheck(p.getOrderId());
+
         InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
         OrderPojo orderPojo = orderService.get(p.getOrderId());
 
@@ -81,6 +84,9 @@ public class OrderItemService {
     }
 
     private void checkValidation(OrderItemPojo p) throws ApiException {
+        if (orderService.getCheck(p.getOrderId()).getComplete() == 1) {
+            throw new ApiException("Can not do this operation on completed order!");
+        }
         if (p.getProductBarcode() == null || p.getProductBarcode().isEmpty()) {
             throw new ApiException("Barcode can not be empty!");
         }
@@ -96,6 +102,9 @@ public class OrderItemService {
     public void delete(int id) throws ApiException {
 
         OrderItemPojo p = dao.select(id);
+        if (p != null && orderService.getCheck(p.getOrderId()).getComplete() == 1) {
+            throw new ApiException("Can not do this operation on completed order!");
+        }
         InventoryPojo inventoryPojo = inventoryService.get(p.getProductBarcode());
         OrderPojo orderPojo = orderService.get(p.getOrderId());
 
@@ -106,11 +115,6 @@ public class OrderItemService {
         orderService.update(orderPojo.getId(), orderPojo);
 
         dao.delete(id);
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public void deleteByProductBarcode(String productBarcode) {
-        dao.deleteByProductBarcode(productBarcode);
     }
 
     public List<OrderItemPojo> getByOrderId(int orderId) {
@@ -127,6 +131,9 @@ public class OrderItemService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, OrderItemPojo p) throws ApiException {
+        if (orderService.getCheck(p.getOrderId()).getComplete() == 1) {
+            throw new ApiException("Can not do this operation on completed order!");
+        }
         ProductPojo productPojo = productService.getByBarcode(p.getProductBarcode());
         p.setSellingPrice(p.getQuantity() * productPojo.getMrp());
 

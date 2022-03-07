@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class BrandApiController {
+public class BrandController {
 
     @Autowired
     private BrandDto brandDto;
@@ -42,13 +42,13 @@ public class BrandApiController {
     }
 
     @ApiOperation(value = "Gets list of Brands by category")
-    @RequestMapping(path = "/api/brand/byCategory/{category}", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/brand/category/{category}", method = RequestMethod.GET)
     public List<BrandData> getByCategory(@PathVariable String category) throws ApiException {
         return brandDto.getByCategory(category);
     }
 
     @ApiOperation(value = "Gets list of Brands by brand")
-    @RequestMapping(path = "/api/brand/byBrand/{brand}", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/brand/brand/{brand}", method = RequestMethod.GET)
     public List<BrandData> getByBrand(@PathVariable String brand) throws ApiException {
         return brandDto.getByBrand(brand);
     }
@@ -59,6 +59,8 @@ public class BrandApiController {
             @PathVariable String category) throws ApiException {
         return brandDto.getListByBrandAndCategory(brand, category);
     }
+
+
 
     @ApiOperation(value = "Updates a Brand")
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)

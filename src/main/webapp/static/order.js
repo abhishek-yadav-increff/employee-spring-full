@@ -97,7 +97,7 @@ function saveByteArray(reportName, byte) {
     link.click();
 };
 function showInvoice(orderId) {
-    var url = getOrderUrl() + "/getPdf/" + orderId;
+    var url = getOrderUrl() + "/pdf/" + orderId;
     $.ajax({
         url: url,
         type: 'GET',

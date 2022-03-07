@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -77,8 +76,7 @@ public class OrderDto {
         return list2;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
-    public void storeOrder(Integer id) throws FileNotFoundException, ApiException, JAXBException {
+    public void storeOrder(Integer id) throws ApiException, JAXBException, IOException {
         orderService.setComplete(id);
         OrderXmlForm orderXmlForm = getXmlForm(id);
         String fname = generateXML(id, orderXmlForm);
@@ -97,7 +95,8 @@ public class OrderDto {
         return strings;
     }
 
-    public void generatePdf(String fname, List<String> paths) throws ApiException {
+    public void generatePdf(String fname, List<String> paths) throws ApiException, IOException {
+        OutputStream out = null;
         try {
             File xmlfile = new File(fname);
             File xsltfile = new File(paths.get(0));
@@ -106,23 +105,25 @@ public class OrderDto {
             File pdfFile = new File(pdfDir, paths.get(2));
             final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
             FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-            OutputStream out = new FileOutputStream(pdfFile);
+            out = new FileOutputStream(pdfFile);
             out = new java.io.BufferedOutputStream(out);
-            try {
-                Fop fop;
-                fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
-                TransformerFactory factory = TransformerFactory.newInstance();
-                Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
-                Source src = new StreamSource(xmlfile);
-                Result res = new SAXResult(fop.getDefaultHandler());
-                transformer.transform(src, res);
-            } catch (FOPException | TransformerException e) {
-                throw new ApiException("Error generating pdf!");
-            } finally {
-                out.close();
-            }
-        } catch (IOException exp) {
-            throw new ApiException("Error writing to file!");
+
+            Fop fop;
+            fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
+            Source src = new StreamSource(xmlfile);
+            Result res = new SAXResult(fop.getDefaultHandler());
+            transformer.transform(src, res);
+            // } catch (FOPException | TransformerException e) {
+            // throw new ApiException("Error generating pdf!");
+            // } finally {
+            // out.close();
+            // }
+        } catch (IOException | FOPException | TransformerException exp) {
+            throw new ApiException("Error generating pdf!");
+        } finally {
+            out.close();
         }
     }
 

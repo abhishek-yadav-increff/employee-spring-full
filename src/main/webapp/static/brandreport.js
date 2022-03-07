@@ -5,17 +5,12 @@ function getBrandUrl() {
 function getData(brand, category) {
     var url;
     if (!brand && !category) {
-
         url = getBrandUrl();
     } else if (!brand) {
-
-        url = getBrandUrl() + "/byCategory/" + category;
+        url = getBrandUrl() + "/category/" + category;
     } else if (!category) {
-
-
-        url = getBrandUrl() + "/byBrand/" + brand;
+        url = getBrandUrl() + "/brand/" + brand;
     } else {
-
         url = getBrandUrl() + "/search/" + brand + "/" + category;
     }
     $.ajax({

@@ -94,7 +94,7 @@ function deleteOrder() {
     });
 }
 function sendOrder() {
-    var url = getOrderUrl() + "/sendOrder/" + orderId;
+    var url = getOrderUrl() + "/checkout/" + orderId;
 
     $.ajax({
         url: url,
@@ -190,7 +190,7 @@ function addOrderItem() {
     return false;
 }
 function getOrderItemListByOrderId() {
-    var url = getOrderEditUrl() + "/orderId/" + orderId;
+    var url = getOrderEditUrl() + "/order/" + orderId;
     $.ajax({
         url: url,
         type: 'GET',
@@ -257,7 +257,7 @@ function getProduct(evt) {
     iPBE = String(evt.currentTarget.inputProductBarcodeElement);
 
     var $barcodeElement = document.getElementById(iPBE);
-    var url = getProductUrl() + "/byBarcode/" + $barcodeElement.value;
+    var url = getProductUrl() + "/barcode/" + $barcodeElement.value;
 
     $.ajax({
         url: url,

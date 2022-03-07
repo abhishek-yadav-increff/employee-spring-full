@@ -45,7 +45,7 @@ public class BrandService {
     public List<BrandPojo> getAll() throws ApiException {
         List<BrandPojo> brandPojos = dao.selectAll();
         if (brandPojos == null) {
-            throw new ApiException("No brand-category in database!");
+            throw new ApiException("No Brand Category Pair in database!");
         }
         return brandPojos;
     }
@@ -53,7 +53,7 @@ public class BrandService {
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandPojo p) throws ApiException {
         if (checkIfAlreadyExists(p)) {
-            throw new ApiException("Same brand-category already exists!");
+            throw new ApiException("Same Brand Category Pair already exists!");
         }
         BrandPojo ex = getCheck(id);
         ex.setBrand(p.getBrand());
@@ -90,7 +90,8 @@ public class BrandService {
     public List<BrandPojo> getByBrand(String brand) throws ApiException {
         List<BrandPojo> p = dao.selectByBrand(brand);
         if (p == null) {
-            throw new ApiException("Brand Pair with given brand:" + brand + " does not exist");
+            throw new ApiException(
+                    "Brand Category Pair with given brand:" + brand + " does not exist");
         }
         return p;
     }

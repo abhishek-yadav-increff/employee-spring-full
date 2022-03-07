@@ -130,7 +130,7 @@ function displayOrderItemList(data) {
 }
 
 function getBytePdf(orderId) {
-    var url = getOrderUrl() + "/getPdf/" + orderId;
+    var url = getOrderUrl() + "/pdf/" + orderId;
     $.ajax({
         url: url,
         type: 'GET',

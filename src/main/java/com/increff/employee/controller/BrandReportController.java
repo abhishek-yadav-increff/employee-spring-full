@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class BrandReportApiController {
+public class BrandReportController {
 
     @Autowired
     private BrandReportDto brandReportDto;
